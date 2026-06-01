@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>5月促销 · 政策发展组</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== 侧边菜单 ===== */
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            background: linear-gradient(180deg, #1a2a4a 0%, #243556 100%);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 24px 20px 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-logo h1 {
+            font-size: 18px;
+            color: #fff;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .sidebar-logo p {
+            font-size: 11px;
+            color: rgba(255,255,255,0.55);
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 12px 0 20px;
+        }
+
+        .nav-item-1 {
+            padding: 11px 20px;
+            color: rgba(255,255,255,0.85);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            user-select: none;
+            justify-content: space-between;
+        }
+
+        .nav-item-1 .left {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex: 1;
+        }
+
+        .nav-item-1:hover {
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+        }
+        .nav-item-1.active {
+            background: rgba(102,126,234,0.25);
+            border-left-color: #667eea;
+            color: #fff;
+        }
+
+        .nav-arrow {
+            margin-left: auto;
+            font-size: 10px;
+            transition: transform 0.25s;
+            opacity: 0.6;
+        }
+        .nav-item-1.expanded .nav-arrow { transform: rotate(90deg); }
+
+        .nav-sub {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease;
+            margin-left: 12px;
+            border-left: 1px dashed rgba(255,255,255,0.2);
+            margin-bottom: 4px;
+        }
+        .nav-sub.open { max-height: 800px; }
+
+        .nav-item-2 {
+            padding: 8px 12px 8px 32px;
+            color: rgba(255,255,255,0.65);
+            cursor: pointer;
+            font-size: 12.5px;
+            transition: all 0.2s;
+            border-left: 2px solid transparent;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .nav-item-2 .left {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex: 1;
+        }
+        .nav-item-2 .del-icon {
+            opacity: 0;
+            background: rgba(220,53,69,0.8);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .nav-item-2:hover .del-icon { opacity: 1; }
+        .nav-item-2:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.85); }
+        .nav-item-2.active {
+            background: rgba(102,126,234,0.2);
+            border-left-color: #a78bfa;
+            color: #c4b5fd;
+        }
+
+        /* ===== 主内容区 ===== */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: auto;
+            background: #f0f2f5;
+        }
+
+        /* 顶部常驻工具栏 */
+        .top-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            background: white;
+            border-bottom: 1px solid #e8ecf1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .tb-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: white;
+            transition: all 0.2s;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+        .tb-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .tb-btn:active { transform: translateY(0); }
+
+        .tb-btn-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .tb-btn-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .tb-btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        /* 内容卡片区 */
+        .content-card {
+            background: white;
+            margin: 20px;
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* 信息头部卡片 */
+        .header-info-card {
+            background: linear-gradient(135deg, #6366f1, #4f46e5, #7c3aed);
+            color: white;
+            padding: 24px 32px;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-info-card .info-left h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-info-card .info-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            opacity: 0.9;
+            flex-wrap: wrap;
+        }
+
+        .header-info-card .info-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header-info-card .info-right {
+            text-align: right;
+            font-size: 12px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* iframe容器 */
+        .iframe-container {
+            flex: 1;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 0 0 24px 24px;
+            overflow: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        iframe {
+            width: 100%;
+            flex: 1;
+            border: none;
+            display: block;
+            background: white;
+            min-height: 100%;
+        }
+
+        .empty-state {
+            padding: 60px 24px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 14px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* ===== 弹窗遮罩 ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal-dialog {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            width: 520px;
+            max-width: 90vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .modal-header h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-close {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #f1f5f9;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            transition: 0.2s;
+        }
+        .modal-close:hover { background: #e2e8f0; color: #1e293b; }
+
+        .modal-body { padding: 24px; }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .form-group select,
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #1e293b;
+            background: #f8fafc;
+            transition: 0.2s;
+            outline: none;
+            font-family: inherit;
+        }
+        .form-group select:focus,
+        .form-group input[type="text"]:focus {
+            border-color: #8b5cf6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+        }
+
+        .file-upload-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .file-upload-btn {
+            background: #f1f5f9;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #475569;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .file-upload-btn:hover { background: #e2e8f0; }
+        .file-name-display {
+            font-size: 13px;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+        }
+        .btn-submit:hover { background: linear-gradient(135deg, #7c3aed, #6d28d9); transform: translateY(-1px); }
+
+        /* ===== 管理HTML面板 ===== */
+        .manage-panel {
+            position: fixed;
+            top: 0; right: 0; bottom: 0;
+            width: 480px;
+            max-width: 90vw;
+            background: white;
+            z-index: 300;
+            box-shadow: -8px 0 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .manage-panel.active { transform: translateX(0); }
+
+        .manage-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 299;
+            display: none;
+        }
+        .manage-bg.active { display: block; }
+
+        .manage-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .manage-header h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .manage-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 0;
+        }
+
+        .manage-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            border-bottom: 1px solid #f8fafc;
+            transition: 0.15s;
+            gap: 12px;
+        }
+        .manage-item:hover { background: #f8fafc; }
+
+        .manage-item-index {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+        .manage-item-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .manage-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .manage-item-category {
+            font-size: 12px;
+            color: #8b5cf6;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .manage-item-name {
+            font-size: 13px;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
+        }
+
+        .manage-item-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-hide {
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: none;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+        }
+        .btn-hide:hover { background: #fde68a; }
+
+        .btn-delete-item {
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: none;
+            background: none;
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+        }
+        .btn-delete-item:hover { background: #fef2f2; }
+
+        .manage-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            display: none;
+            animation: toastIn 0.3s ease;
+        }
+        .toast.show { display: block; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #eef2f6; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<!-- 侧边菜单 -->
+<nav class="sidebar">
+    <div class="sidebar-logo">
+        <h1>📊 26年5月政策进度盘点 <br> 促销活动 </h1>
+        <p>--政策发展组</p>
+    </div>
+    <div class="sidebar-nav" id="sidebarNav"></div>
+</nav>
+
+<!-- 主内容区 -->
+<div class="main-content">
+    <div class="top-toolbar" id="topToolbar">
+        <button class="tb-btn tb-btn-orange" onclick="openUploadModal()">📄 上传HTML到菜单</button>
+        <button class="tb-btn tb-btn-red" onclick="openManagePanel()">📁 管理HTML</button>
+        <button class="tb-btn tb-btn-purple" onclick="handleDataDownload()">📥 数据下载</button>
+        <button class="tb-btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="exportStandaloneHtml()">🚀 导出完整版网页分享</button>
+    </div>
+
+    <div class="content-card" id="mainContentCard">
+        <div class="header-info-card" id="headerInfoCard">
+            <div class="info-left">
+                <h2>📊 26年5月政策盘点</h2>
+                <div class="info-meta">
+                    <span>📅 报告期: <strong>2026年5月</strong></span>
+                    <span>🕐 更新时间: <strong id="updateTimeDisplay">2026/05/28 18:03:56</strong></span>
+                    <span>🔄 数据更新: <strong>每周 · 基于Q2真实活动数据</strong></span>
+                </div>
+            </div>
+            <div class="info-right">政策发展组<br>自动监控 · 每周更新</div>
+        </div>
+        <div class="iframe-container" id="iframeContainer"></div>
+    </div>
+</div>
+
+<!-- 上传HTML到菜单弹窗 -->
+<div class="modal-overlay" id="uploadModal">
+    <div class="modal-dialog">
+        <div class="modal-header"><h3>📄 上传HTML到菜单</h3><button class="modal-close" onclick="closeUploadModal()">✕</button></div>
+        <div class="modal-body">
+            <div class="form-group"><label>选择菜单分类</label><select id="uploadCategory"><option value="dashboard">🏠 仪表盘</option><option value="small_medium">📦 中小客户策略盘点</option><option value="big_customer">🏢 大客户策略盘点</option></select></div>
+            <div class="form-group"><label>菜单显示名称</label><input type="text" id="uploadMenuName" placeholder="例如：XX活动周报"></div>
+            <div class="form-group"><label>选择HTML文件</label><div class="file-upload-row"><input type="file" id="uploadFileInput" accept=".html,.htm" style="display:none" onchange="onUploadFileSelected(event)"><button class="file-upload-btn" onclick="document.getElementById('uploadFileInput').click()">📂 选择文件</button><span class="file-name-display" id="fileNameDisplay">未选择任何文件</span></div></div>
+            <button class="btn-submit" onclick="confirmUploadHtml()">✅ 确认上传</button>
+        </div>
+    </div>
+</div>
+
+<!-- 管理HTML侧边面板 -->
+<div class="manage-bg" id="manageBg" onclick="closeManagePanel()"></div>
+<div class="manage-panel" id="managePanel"><div class="manage-header"><h3>📁 已上传HTML管理</h3><button class="modal-close" onclick="closeManagePanel()">✕</button></div><div class="manage-list" id="manageList"></div></div>
+
+<div class="toast" id="toast">✅ 操作成功</div>
+
+<script>
+    // ==================== 核心数据管理 (与之前一致，但修复了导出乱码) ====================
+    const DEFAULT_MENU = {
+        "dashboard": { id: "dashboard", title: "🏠 仪表盘", order: 1, children: [ { id: "dash_overview", title: "📈 数据概览", contentBlobUrl: null, originalHtml: null } ] },
+        "small_medium": { id: "small_medium", title: "📦 中小客户策略盘点", order: 2, children: [] },
+        "big_customer": { id: "big_customer", title: "🏢 大客户策略盘点", order: 3, children: [] }
+    };
+    const CATEGORY_NAMES = { "dashboard": "🏠 仪表盘", "small_medium": "📦 中小客户策略盘点", "big_customer": "🏢 大客户策略盘点" };
+    let menuStructure = null;
+    let activeBlobUrls = new Set();
+    let uploadedHtmlRecords = [];
+
+    function generateId(prefix) { return prefix + "_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6); }
+    function revokeBlobUrl(url) { if(url && url.startsWith('blob:')) { URL.revokeObjectURL(url); activeBlobUrls.delete(url); } }
+    function clearAllBlobUrls() { activeBlobUrls.forEach(url => URL.revokeObjectURL(url)); activeBlobUrls.clear(); }
+    function saveHtmlAsBlob(htmlString) { const blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' }); const url = URL.createObjectURL(blob); activeBlobUrls.add(url); return url; }
+
+    function loadMenuStructure() {
+        if (window.__INJECTED_DATA__ && window.__INJECTED_DATA__.menuStructure) { menuStructure = window.__INJECTED_DATA__.menuStructure; saveMenuStructure(); return; }
+        const stored = localStorage.getItem("policy_report_menu_v5");
+        if (stored) try { const parsed = JSON.parse(stored); if (parsed.dashboard && parsed.small_medium && parsed.big_customer) { menuStructure = parsed; return; } } catch(e) {}
+        menuStructure = JSON.parse(JSON.stringify(DEFAULT_MENU)); saveMenuStructure();
+    }
+    function saveMenuStructure() { const toStore = JSON.parse(JSON.stringify(menuStructure)); function clean(obj) { if(!obj) return; if(Array.isArray(obj)) obj.forEach(clean); else if(typeof obj === 'object') { if(obj.contentBlobUrl) obj.contentBlobUrl = null; Object.values(obj).forEach(clean); } } clean(toStore); localStorage.setItem("policy_report_menu_v5", JSON.stringify(toStore)); }
+    function loadUploadedRecords() {
+        if (window.__INJECTED_DATA__ && window.__INJECTED_DATA__.uploadedRecords) { uploadedHtmlRecords = window.__INJECTED_DATA__.uploadedRecords; saveUploadedRecords(); return; }
+        const stored = localStorage.getItem("policy_report_uploaded_v2");
+        if (stored) try { const parsed = JSON.parse(stored); if (Array.isArray(parsed)) uploadedHtmlRecords = parsed; } catch(e) {}
+    }
+    function saveUploadedRecords() { const toStore = uploadedHtmlRecords.map(r => ({ ...r, blobUrl: null, htmlContent: null })); localStorage.setItem("policy_report_uploaded_v2", JSON.stringify(toStore)); }
+
+    function getTopLevelMenus() { return Object.values(menuStructure).sort((a,b)=> (a.order||0)-(b.order||0)); }
+    function addChildMenu(parentId, title, htmlContent, fileName) { if(!title.trim()) title="新策略页面"; const newId = generateId("sub"); const newChild = { id: newId, title: title.trim(), contentBlobUrl: null, originalHtml: null }; menuStructure[parentId].children.push(newChild); saveMenuStructure(); if(htmlContent) saveHtmlToMenuItem(parentId, newId, htmlContent); renderSidebar(); selectMenuItem(parentId, newId); if(htmlContent && fileName) addUploadedRecord(parentId, title, fileName, htmlContent, newChild); return newChild; }
+    function addUploadedRecord(categoryId, menuName, fileName, htmlContent, childObj) { const record = { id: generateId("rec"), categoryId, categoryName: CATEGORY_NAMES[categoryId] || categoryId, menuName, fileName, blobUrl: childObj?.contentBlobUrl || saveHtmlAsBlob(htmlContent), hidden: false, createdAt: new Date().toISOString(), menuChildId: childObj?.id }; uploadedHtmlRecords.unshift(record); saveUploadedRecords(); }
+    function deleteChildMenu(parentId, childId) { const children = menuStructure[parentId]?.children; if(!children) return; const idx = children.findIndex(c => c.id === childId); if(idx !== -1) { const child = children[idx]; if(child.contentBlobUrl) revokeBlobUrl(child.contentBlobUrl); children.splice(idx,1); saveMenuStructure(); renderSidebar(); const cur = getCurrentSelected(); if(cur && cur.childId === childId) { setEmptyContent(); setCurrentSelected(null,null); } uploadedHtmlRecords = uploadedHtmlRecords.filter(r => r.menuChildId !== childId); saveUploadedRecords(); } }
+    function saveHtmlToMenuItem(parentId, childId, htmlContent) { const child = menuStructure[parentId]?.children.find(c => c.id === childId); if(!child) return false; if(child.contentBlobUrl) revokeBlobUrl(child.contentBlobUrl); child.originalHtml = htmlContent; child.contentBlobUrl = saveHtmlAsBlob(htmlContent); saveMenuStructure(); const cur = getCurrentSelected(); if(cur && cur.parentId === parentId && cur.childId === childId) renderContentByMenuItem(child); return true; }
+    let currentParentId = null, currentChildId = null;
+    function getCurrentSelected() { return (currentParentId && currentChildId) ? { parentId: currentParentId, childId: currentChildId } : null; }
+    function setCurrentSelected(parentId, childId) { currentParentId = parentId; currentChildId = childId; }
+    function setEmptyContent() { document.getElementById("iframeContainer").innerHTML = ""; }
+    function renderContentByMenuItem(child) { const container = document.getElementById("iframeContainer"); if(!container) return; if(child.contentBlobUrl && child.originalHtml) container.innerHTML = `<iframe src="${child.contentBlobUrl}" style="width:100%; height:100%; border:none; background:#fff;" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-popups-to-escape-sandbox"></iframe>`; else container.innerHTML = ""; }
+    function selectMenuItem(parentId, childId) { setCurrentSelected(parentId, childId); renderSidebar(); const childItem = menuStructure[parentId]?.children.find(c => c.id === childId); if(childItem) renderContentByMenuItem(childItem); else setEmptyContent(); }
+
+    function renderSidebar() {
+        const container = document.getElementById("sidebarNav"); if(!container) return;
+        let html = "";
+        for(let menu of getTopLevelMenus()) {
+            const activeClass = (menu.id === currentParentId) ? "active" : "";
+            html += `<div class="nav-item-1 ${activeClass} expanded" data-parent-id="${menu.id}"><div class="left"><span>${menu.title}</span></div><span class="nav-arrow">▶</span></div><div class="nav-sub open" data-sub-parent="${menu.id}" id="sub-${menu.id}">`;
+            for(let child of (menu.children || [])) {
+                const isHidden = uploadedHtmlRecords.some(r => r.menuChildId === child.id && r.hidden);
+                if(isHidden) continue;
+                const isActive = (currentParentId === menu.id && currentChildId === child.id);
+                html += `<div class="nav-item-2 ${isActive ? 'active' : ''}" data-parent-id="${menu.id}" data-child-id="${child.id}"><div class="left"><span>${escapeHtml(child.title)}</span></div><span class="del-icon" data-parent="${menu.id}" data-child="${child.id}">🗑️</span></div>`;
+            }
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+        // 绑定事件...
+        document.querySelectorAll('.nav-item-1').forEach(el => { const pid = el.getAttribute('data-parent-id'); const sub = document.getElementById(`sub-${pid}`); const left = el.querySelector('.left'); const arrow = el.querySelector('.nav-arrow'); const toggle = () => { sub?.classList.toggle('open'); el.classList.toggle('expanded'); }; left?.addEventListener('click', (e) => { e.stopPropagation(); toggle(); }); arrow?.addEventListener('click', (e) => { e.stopPropagation(); toggle(); }); });
+        document.querySelectorAll('.nav-item-2').forEach(el => { const pid = el.getAttribute('data-parent-id'); const cid = el.getAttribute('data-child-id'); const leftDiv = el.querySelector('.left'); leftDiv?.addEventListener('click', () => { selectMenuItem(pid, cid); }); const delBtn = el.querySelector('.del-icon'); if(delBtn) delBtn.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("确定删除吗？")) deleteChildMenu(pid, cid); }); });
+        if(!currentParentId || !currentChildId) { const firstTop = getTopLevelMenus()[0]; if(firstTop?.children?.length) selectMenuItem(firstTop.id, firstTop.children[0].id); else setEmptyContent(); }
+    }
+    function escapeHtml(str) { if(!str) return ""; return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    function openUploadModal() { document.getElementById("uploadModal").classList.add("active"); document.getElementById("uploadMenuName").value = ""; document.getElementById("fileNameDisplay").textContent = "未选择任何文件"; window.pendingUploadFile = null; window.pendingUploadFileName = ""; }
+    function closeUploadModal() { document.getElementById("uploadModal").classList.remove("active"); }
+    function onUploadFileSelected(event) { const file = event.target.files[0]; if(file && (file.type === "text/html" || file.name.endsWith(".html") || file.name.endsWith(".htm"))) { window.pendingUploadFile = file; window.pendingUploadFileName = file.name; document.getElementById("fileNameDisplay").textContent = file.name; } else { alert("请选择 .html 或 .htm 文件"); window.pendingUploadFile = null; window.pendingUploadFileName = ""; document.getElementById("fileNameDisplay").textContent = "未选择任何文件"; } event.target.value = ""; }
+    function confirmUploadHtml() { const category = document.getElementById("uploadCategory").value; const menuName = document.getElementById("uploadMenuName").value.trim(); if(!menuName) { alert("请输入菜单显示名称"); return; } if(!window.pendingUploadFile) { alert("请先选择HTML文件"); return; } const reader = new FileReader(); reader.onload = function(ev) { addChildMenu(category, menuName, ev.target.result, window.pendingUploadFileName); showToast(`✅ HTML「${menuName}」已上传`); }; reader.readAsText(window.pendingUploadFile, "UTF-8"); closeUploadModal(); }
+    function openManagePanel() { document.getElementById("manageBg").classList.add("active"); document.getElementById("managePanel").classList.add("active"); renderManageList(); }
+    function closeManagePanel() { document.getElementById("manageBg").classList.remove("active"); document.getElementById("managePanel").classList.remove("active"); }
+    function renderManageList() { const items = []; for(const parent of Object.values(menuStructure)) for(const child of (parent.children || [])) if(child.originalHtml) items.push({ menuChildId: child.id, parentId: parent.id, categoryName: CATEGORY_NAMES[parent.id] || parent.title, menuName: child.title, fileName: uploadedHtmlRecords.find(r=>r.menuChildId===child.id)?.fileName || child.title+".html", hidden: uploadedHtmlRecords.find(r=>r.menuChildId===child.id)?.hidden || false }); if(items.length===0) { document.getElementById("manageList").innerHTML='<div class="manage-empty">📭 暂无已上传的HTML文件</div>'; return; } let html=""; items.forEach((item,idx)=>{ const hideLabel = item.hidden ? "👁 取消隐藏" : "👤 隐藏"; html += `<div class="manage-item" id="manageItem_${item.menuChildId}"><div class="manage-item-index">${idx+1}</div><div class="manage-item-icon">📄</div><div class="manage-item-info"><div class="manage-item-category">📂 ${escapeHtml(item.categoryName)}</div><div class="manage-item-name">${escapeHtml(item.fileName)}</div></div><div class="manage-item-actions"><button class="btn-hide" onclick="toggleHideItem('${item.menuChildId}')">${hideLabel}</button><button class="btn-delete-item" onclick="deleteManageItem('${item.menuChildId}', '${item.parentId}')">删除</button></div></div>`; }); document.getElementById("manageList").innerHTML = html; }
+    function toggleHideItem(childId) { let record = uploadedHtmlRecords.find(r=>r.menuChildId===childId); if(!record) { for(const parent of Object.values(menuStructure)) { const child = parent.children.find(c=>c.id===childId); if(child) { record = { id: generateId("rec"), categoryId: parent.id, categoryName: CATEGORY_NAMES[parent.id]||parent.title, menuName: child.title, fileName: child.title+".html", blobUrl: null, hidden: false, createdAt: new Date().toISOString(), menuChildId: childId }; uploadedHtmlRecords.push(record); break; } } } if(record) { record.hidden = !record.hidden; saveUploadedRecords(); showToast(`✅ 已${record.hidden?"隐藏":"取消隐藏"}: ${record.menuName}`); renderManageList(); renderSidebar(); } }
+    function deleteManageItem(childId, parentId) { if(confirm("确定删除吗？")) { deleteChildMenu(parentId, childId); renderManageList(); showToast("🗑️ 已删除"); } }
+    function showToast(msg) { const toast = document.getElementById("toast"); toast.textContent = msg; toast.classList.add("show"); clearTimeout(toast._timeout); toast._timeout = setTimeout(()=>toast.classList.remove("show"),2500); }
+    function handleDataDownload() { const exportData = { menuStructure: JSON.parse(JSON.stringify(menuStructure)), uploadedRecords: uploadedHtmlRecords.map(r=>({...r, blobUrl:null, htmlContent:null})), exportTime: new Date().toISOString() }; function clean(obj) { if(!obj) return; if(Array.isArray(obj)) obj.forEach(clean); else if(typeof obj==='object') { if(obj.contentBlobUrl) obj.contentBlobUrl=null; Object.values(obj).forEach(clean); } } clean(exportData.menuStructure); const blob = new Blob([JSON.stringify(exportData,null,2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = `政策促销活动数据_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url); showToast("📥 数据已下载"); }
+    function restoreBlobUrlsFromOriginal(obj) { if(!obj) return; if(Array.isArray(obj)) obj.forEach(restoreBlobUrlsFromOriginal); else if(typeof obj==='object') { if(obj.originalHtml && typeof obj.originalHtml==='string' && obj.originalHtml.length>0) { if(obj.contentBlobUrl) revokeBlobUrl(obj.contentBlobUrl); obj.contentBlobUrl = saveHtmlAsBlob(obj.originalHtml); } Object.values(obj).forEach(restoreBlobUrlsFromOriginal); } }
+    function initDefaultDashboardHtml() { const dash = menuStructure.dashboard; if(dash?.children.length && !dash.children[0].originalHtml) { const defaultHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>策略数据看板</title><style>body{font-family:sans-serif;padding:24px;background:#f4f7fc;}</style></head><body><div style="max-width:1000px;margin:0 auto;"><div style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:28px;border-radius:32px;"><h1>📊 策略数据看板</h1><p>通过「上传HTML到菜单」可添加完整HTML报告</p></div><div style="margin-top:28px;background:#fff;border-radius:28px;padding:28px;box-shadow:0 10px 25px -5px rgba(0,0,0,0.05);"><p>✅ 当前为默认看板，请上传您的分析页面。</p></div></div></body></html>`; saveHtmlToMenuItem("dashboard", dash.children[0].id, defaultHtml); } }
+    
+    function exportStandaloneHtml() {
+        // 全新导出函数：保证正确编码 + 完整保留所有 HTML 内容
+        const exportData = {
+            menuStructure: JSON.parse(JSON.stringify(menuStructure)),
+            uploadedRecords: uploadedHtmlRecords.map(r => ({ ...r, blobUrl: null, htmlContent: null }))
+        };
+        function cleanBlob(obj) {
+            if (!obj) return;
+            if (Array.isArray(obj)) obj.forEach(cleanBlob);
+            else if (typeof obj === 'object') {
+                if (obj.contentBlobUrl) obj.contentBlobUrl = null;
+                Object.values(obj).forEach(cleanBlob);
+            }
+        }
+        cleanBlob(exportData.menuStructure);
+        
+        // 克隆文档并重新构建完整html串
+        const docClone = document.documentElement.cloneNode(true);
+        // 移除原有的注入脚本，避免重复
+        const oldInject = docClone.querySelector('#injected-data');
+        if (oldInject) oldInject.remove();
+        // 创建新的注入脚本，使用正确的转义序列（避免乱码）
+        const newScript = docClone.ownerDocument.createElement('script');
+        newScript.id = 'injected-data';
+        // 重点：使用 JSON.stringify 时保证中文及特殊字符不丢失，且不会破坏html结构。
+        // 并且将数据以变量形式赋值，避免因为内容中包含特殊字符导致页面解析错误。
+        const serializedData = JSON.stringify(exportData).replace(/<\//g, '<\\/'); // 防止闭合script标签打断脚本
+        newScript.textContent = `window.__INJECTED_DATA__ = ${serializedData};`;
+        docClone.querySelector('head').insertBefore(newScript, docClone.querySelector('head').firstChild);
+        
+        // 生成最终 HTML，强制声明 utf-8 编码
+        const finalHtml = '<!DOCTYPE html>\n' + docClone.outerHTML;
+        // 使用 utf-8 编码的 blob，确保导出的文件打开不乱码
+        const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `政策促销盘点(完整版)_${new Date().toISOString().slice(0,10)}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast("🚀 包含所有数据的完整版网页已导出（UTF-8 编码，无乱码）！");
+    }
+    
+    function updateHeaderTime() { document.getElementById("updateTimeDisplay").textContent = new Date().toLocaleString('zh-CN'); }
+    function init() { loadMenuStructure(); loadUploadedRecords(); restoreBlobUrlsFromOriginal(menuStructure); initDefaultDashboardHtml(); updateHeaderTime(); const top = getTopLevelMenus(); if(top.length && top[0].children.length) { currentParentId = top[0].id; currentChildId = top[0].children[0].id; } else { currentParentId = null; currentChildId = null; } renderSidebar(); if(currentParentId && currentChildId) { const child = menuStructure[currentParentId]?.children.find(c=>c.id===currentChildId); if(child) renderContentByMenuItem(child); } else setEmptyContent(); document.getElementById("uploadModal").addEventListener("click", function(e){ if(e.target===this) closeUploadModal(); }); }
+    window.addEventListener('beforeunload', ()=>clearAllBlobUrls());
+    init();
+</script>
+</body>
+</html>
