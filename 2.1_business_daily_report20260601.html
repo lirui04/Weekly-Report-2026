@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业分析日报 · 2026-06-01 13:31</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif; background: #f0f2f8; color: #1a1a2e; min-width: 1000px; }
+  
+  /* ===== 顶部标题栏 ===== */
+  .header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 50%, #7c3aed 100%);
+    padding: 22px 48px;
+    color: white;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 4px 20px rgba(79,70,229,0.35);
+  }
+  .header-left h1 { font-size: 26px; font-weight: 800; letter-spacing: 1px; display: flex; align-items: center; gap: 12px; }
+  .header-left .subtitle { 
+    font-size: 13px; margin-top: 8px; opacity: 0.9;
+    background: rgba(255,255,255,0.15); padding: 5px 14px; border-radius: 20px;
+    display: inline-flex; align-items: center; gap: 8px; backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .header-right { text-align: right; font-size: 12px; opacity: 0.85; line-height: 1.8; }
+  .header-right .gentime { font-size: 13px; font-weight: 600; }
+  
+  /* ===== 主体 ===== */
+  .container { max-width: 1480px; margin: 0 auto; padding: 28px 32px; }
+  
+  /* ===== 章节标题 ===== */
+  .section-title {
+    display: flex; align-items: center; gap: 14px;
+    margin: 36px 0 18px;
+    font-size: 19px; font-weight: 800; color: #1e293b;
+    padding-bottom: 12px; border-bottom: 2px solid #e2e8f0;
+  }
+  .section-num {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white; font-size: 16px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(79,70,229,0.3);
+  }
+  .section-date { margin-left: auto; font-size: 12px; color: #64748b; font-weight: 500; background:#f1f5f9; padding:3px 10px; border-radius:8px; }
+  
+  /* ===== 核心数据卡片 ===== */
+  .core-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 22px; }
+  .core-card {
+    background: white; border-radius: 18px; padding: 22px 20px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    border-top: 4px solid; position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .core-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.11); }
+  .card-icon { position: absolute; top: 16px; right: 16px; font-size: 28px; opacity: 0.1; }
+  .card-blue { border-top-color: #4f46e5; }
+  .card-green { border-top-color: #10b981; }
+  .card-orange { border-top-color: #f59e0b; }
+  .card-red { border-top-color: #ef4444; }
+  .card-title { font-size: 12px; color: #64748b; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .card-value { font-size: 34px; font-weight: 900; color: #1e293b; line-height: 1.1; letter-spacing: -1px; }
+  .card-value .unit { font-size: 15px; font-weight: 600; color: #64748b; margin-left: 4px; }
+  .card-yoy { margin: 10px 0; font-size: 13px; color: #64748b; display: flex; align-items: center; gap: 6px; }
+  .card-split { display: flex; gap: 14px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed #e2e8f0; }
+  .split-item { flex: 1; min-width: 0; }
+  .split-label { font-size: 10px; color: white; padding: 2px 7px; border-radius: 10px; display: inline-block; margin-bottom: 5px; font-weight: 600; }
+  .label-cxz { background: #4f46e5; }
+  .label-mem { background: #10b981; }
+  .split-value { font-size: 16px; font-weight: 800; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .split-yoy { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+  
+  /* ===== AI发现框 ===== */
+  .ai-box {
+    background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+    border: 1px solid #c7d2fe; border-radius: 18px; padding: 20px 26px; margin: 18px 0;
+    position: relative;
+  }
+  .ai-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #4f46e5, #7c3aed); border-radius: 18px 18px 0 0; }
+  .ai-box-title { font-size: 14px; font-weight: 800; color: #4338ca; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .ai-box ul { padding-left: 0; list-style: none; }
+  .ai-box li { font-size: 13px; color: #334155; margin-bottom: 10px; line-height: 1.7; padding-left: 4px; }
+  .ai-box li:last-child { margin-bottom: 0; }
+  
+  /* ===== 通用卡片 ===== */
+  .card { background: white; border-radius: 18px; padding: 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); margin-bottom: 18px; }
+  .card-header { font-size: 15px; font-weight: 800; color: #1e293b; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-header .icon { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #4f46e5, #7c3aed); display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; flex-shrink: 0; }
+  .card-note { font-size: 11px; color: #94a3b8; margin-left: auto; }
+  
+  /* ===== 表格 ===== */
+  .table-wrap { overflow-x: auto; border-radius: 12px; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+  thead tr { background: linear-gradient(90deg, #f8fafc, #f1f5f9); }
+  th { color: #475569; font-weight: 700; padding: 11px 13px; text-align: center; border-bottom: 2px solid #e2e8f0; white-space: nowrap; font-size: 12px; letter-spacing: 0.3px; }
+  td { padding: 10px 13px; text-align: center; border-bottom: 1px solid #f1f5f9; color: #334155; }
+  tr:hover td { background: #f8faff; }
+  tr:last-child td { border-bottom: none; }
+  .pos { color: #ef4444; font-weight: 700; }
+  .neg { color: #22c55e; font-weight: 700; }
+  .neutral { color: #64748b; }
+  .money-cell { font-variant-numeric: tabular-nums; }
+  .price-cell { font-weight: 700; color: #4f46e5; }
+  .highlight-col { background: #fafbff; }
+  .arpu-cell { font-size: 12px; color: #475569; }
+  
+  /* ===== 爆款标签徽章 ===== */
+  .bk-badge { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .tag-yd { background: #dbeafe; color: #1d4ed8; }
+  .tag-gj { background: #d1fae5; color: #065f46; }
+  .tag-gjbk { background: #e0e7ff; color: #3730a3; }
+  .tag-58yl { background: #fce7f3; color: #9d174d; }
+  .tag-58bk { background: #fef3c7; color: #78350f; }
+  .tag-other { background: #f1f5f9; color: #475569; }
+  
+  /* ===== 爆款占比布局 ===== */
+  .bk-pct-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+  
+  /* ===== 图表 ===== */
+  .chart-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .chart-box { background: white; border-radius: 18px; padding: 22px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); margin-bottom: 18px; }
+  .chart-box-inner { background: white; border-radius: 18px; padding: 22px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+  .chart-title { font-size: 14px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+  .chart-subtitle { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
+  .chart-area { width: 100%; height: 240px; }
+  .chart-area-tall { width: 100%; height: 260px; }
+  .chart-area-sm { width: 100%; height: 220px; }
+  .chart-area-xl { width: 100%; height: 500px; }
+  .chart-divider { border-top: 1px dashed #e2e8f0; margin: 16px 0; }
+  
+  /* ===== 重点客户 ===== */
+  .customer-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
+  .customer-card { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); display: flex; flex-direction: column; min-height: 460px; min-width: 0; overflow: hidden; }
+  .customer-card-title { font-size: 14px; font-weight: 800; color: #1e293b; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .customer-card-date { font-size: 11px; color: #94a3b8; margin-left: auto; }
+  .customer-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f1f5f9; }
+  .customer-item:last-child { border-bottom: none; }
+  .rank { min-width: 26px; }
+  .rank-1, .rank-2, .rank-3, .rank-n { width: 24px; height: 24px; border-radius: 50%; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .rank-1 { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; box-shadow: 0 2px 6px rgba(245,158,11,0.4); }
+  .rank-2 { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; }
+  .rank-3 { background: linear-gradient(135deg, #cd7c3b, #a16207); color: white; }
+  .rank-n { background: #f1f5f9; color: #64748b; }
+  .cust-name { flex: 1; font-size: 13px; color: #334155; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+  .city-tag { font-size: 10px; background: #eef2ff; color: #4f46e5; padding: 1px 6px; border-radius: 8px; margin-left: 6px; font-weight: 600; }
+  .cust-value { font-size: 14px; font-weight: 800; white-space: nowrap; }
+  .cust-value.pos { color: #ef4444; }
+  .cust-value.neg { color: #22c55e; }
+  .cust-value.neutral { color: #64748b; }
+  .card-body { flex: 1; overflow-y: auto; padding-right: 4px; }
+  .card-empty { display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-size: 13px; }
+  
+  /* ===== 滚动条 ===== */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  
+  /* ===== 响应式 ===== */
+  @media (max-width: 1200px) {
+    .core-cards { grid-template-columns: repeat(2, 1fr); }
+    .customer-cards { grid-template-columns: repeat(2, 1fr); }
+    .chart-grid-2 { grid-template-columns: 1fr; }
+    .chart-grid-3 { grid-template-columns: 1fr; }
+    .bk-pct-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .core-cards { grid-template-columns: 1fr; }
+    .customer-cards { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 14px; padding: 16px; }
+    .container { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部标题栏 ===== -->
+<div class="header">
+  <div class="header-left">
+    <h1>📊 商业分析日报</h1>
+    <div class="subtitle">
+      📅 统计周期：2026年5月1日—31日 &nbsp;|&nbsp; 同比基准：2025年5月1日—31日
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="gentime">🕐 2026-06-01 13:31</div>
+    <div>数据来源：AI测试_套餐&个人超值明细_0601.xlsx</div>
+    <div>自动生成 · 析数数日报引擎 v2.0</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== 1. 核心数据 ===== -->
+<div class="section-title">
+  <div class="section-num">1</div>
+  核心数据
+  <span class="section-date">2026年5月 截至31日</span>
+</div>
+
+<div class="core-cards">
+  <div class="core-card card-blue">
+    <div class="card-icon">📦</div>
+    <div class="card-title">当月订单总量</div>
+    <div class="card-value">19,903<span class="unit">个</span></div>
+    <div class="card-yoy"><span style="color:#ef4444;font-size:13px;font-weight:700;">▼3.2%</span> &nbsp;同比 20,559个</div>
+    <div class="card-split">
+      <div class="split-item">
+        <div><span class="split-label label-cxz">个人超值</span></div>
+        <div class="split-value">12,415</div>
+        <div class="split-yoy">25年 16,738个</div>
+      </div>
+      <div class="split-item">
+        <div><span class="split-label label-mem">会员</span></div>
+        <div class="split-value">7,488</div>
+        <div class="split-yoy">25年 3,821个</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="core-card card-green">
+    <div class="card-icon">💰</div>
+    <div class="card-title">当月订单回款</div>
+    <div class="card-value">3660.26<span class="unit">万元</span></div>
+    <div class="card-yoy"><span style="color:#ef4444;font-size:13px;font-weight:700;">▼18.4%</span> &nbsp;同比 4484.48万元</div>
+    <div class="card-split">
+      <div class="split-item">
+        <div><span class="split-label label-cxz">个人超值</span></div>
+        <div class="split-value">627.29万</div>
+        <div class="split-yoy">25年 3118.85万</div>
+      </div>
+      <div class="split-item">
+        <div><span class="split-label label-mem">会员</span></div>
+        <div class="split-value">3032.98万</div>
+        <div class="split-yoy">25年 1365.64万</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="core-card card-orange">
+    <div class="card-icon">📊</div>
+    <div class="card-title">当月订单 ARPU</div>
+    <div class="card-value">1,839<span class="unit">元</span></div>
+    <div class="card-yoy"><span style="color:#ef4444;font-size:13px;font-weight:700;">▼15.7%</span> &nbsp;同比 2,181元</div>
+    <div class="card-split">
+      <div class="split-item">
+        <div><span class="split-label label-cxz">个人超值</span></div>
+        <div class="split-value">505元</div>
+        <div class="split-yoy">25年 1,863元</div>
+      </div>
+      <div class="split-item">
+        <div><span class="split-label label-mem">会员</span></div>
+        <div class="split-value">4,050元</div>
+        <div class="split-yoy">25年 3,574元</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="core-card card-red">
+    <div class="card-icon">🏷️</div>
+    <div class="card-title">当月打折占比（实付/应付）</div>
+    <div class="card-value">96.0<span class="unit">%</span></div>
+    <div class="card-yoy">25年同期 93.4%</div>
+    <div class="card-split">
+      <div class="split-item">
+        <div><span class="split-label label-cxz">超值 &lt;100%</span></div>
+        <div class="split-value">1.5%</div>
+        <div class="split-yoy">25年 29.3%</div>
+      </div>
+      <div class="split-item">
+        <div><span class="split-label label-mem">会员 &lt;100%</span></div>
+        <div class="split-value">40.6%</div>
+        <div class="split-yoy">25年 60.8%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ai-box">
+  <div class="ai-box-title">🤖 AI 核心发现</div>
+  <ul>
+    <li>📦 订单量：26年5月累计 <strong>19,903单</strong>，同比<span style="color:#ef4444;font-size:13px;font-weight:700;">▼3.2%</span>；个人超值贡献 12,415单（占62.4%），会员贡献 7,488单。</li>
+    <li>💰 回款：5月累计 <strong>3660.26万元</strong>，同比<span style="color:#ef4444;font-size:13px;font-weight:700;">▼18.4%</span>；会员回款 3032.98万占比82.9%。</li>
+    <li>📊 ARPU：整体 <strong>1,839元</strong>，同比<span style="color:#ef4444;font-size:13px;font-weight:700;">▼15.7%</span>；会员ARPU（4,050元）是个人超值（505元）的 8.0x，产品分层效果明显。</li>
+    <li>🏷️ 打折：整体折扣率 96.0%，会员打折订单占比 40.6%（25年同期 60.8%），折扣依赖度收窄，健康改善中。</li>
+    </ul>
+</div>
+
+
+<!-- ===== 2. 爆款数据 ===== -->
+<div class="section-title">
+  <div class="section-num">2</div>
+  爆款数据分析
+  <span class="section-date">2026年5月 截至31日</span>
+</div>
+
+<!-- 2.1 爆款标签占比 -->
+<div class="card">
+  <div class="card-header">
+    <div class="icon">📌</div>
+    2.1 爆款标签在当期的订单占比
+  </div>
+  <div class="bk-pct-grid">
+    <div>
+      <table>
+        <thead><tr><th>爆款标签</th><th>25年占比</th><th>26年占比</th><th>同比变化</th></tr></thead>
+        <tbody><tr><td><span class="bk-badge tag-yd">月度爆款</span></td><td>49.62%</td><td>57.05%</td><td><span style="color:#22c55e;font-weight:600;">+7.43%</span></td></tr><tr><td><span class="bk-badge tag-gj">赶集引流款</span></td><td>2.45%</td><td>2.53%</td><td><span style="color:#22c55e;font-weight:600;">+0.08%</span></td></tr><tr><td><span class="bk-badge tag-gjbk">赶集爆款</span></td><td>0.00%</td><td>1.94%</td><td><span style="color:#22c55e;font-weight:600;">+1.94%</span></td></tr><tr><td><span class="bk-badge tag-58yl">58引流款</span></td><td>24.13%</td><td>24.67%</td><td><span style="color:#22c55e;font-weight:600;">+0.54%</span></td></tr><tr><td><span class="bk-badge tag-58bk">58爆款</span></td><td>2.91%</td><td>2.63%</td><td><span style="color:#ef4444;font-weight:600;">-0.28%</span></td></tr><tr><td><span class="bk-badge tag-other">其他</span></td><td>20.89%</td><td>11.18%</td><td><span style="color:#ef4444;font-weight:600;">-9.71%</span></td></tr></tbody>
+      </table>
+    </div>
+    <div class="chart-area" id="bkPctChart"></div>
+  </div>
+  <div class="ai-box" style="margin-top:16px;">
+    <div class="ai-box-title">🤖 爆款占比 AI 总结</div>
+    <ul>
+    <li>爆款集中度：25年爆款（含月度爆款/赶集/58系列）占当月订单总量 <strong>79.1%</strong>，26年同期提升至 <strong>88.8%</strong>，说明爆款策略吸引力持续增强。</li>
+    <li>当前最大爆款品类：<strong>「月度爆款」</strong>占26年订单比重 57.0%，是核心流量引擎；建议持续强化该品类定价竞争力。</li>
+    <li>爆款渗透率提升。建议持续优化爆款标签归类，确保核心引流款定价稳定。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 2.2 爆款定价明细 -->
+<div class="card">
+  <div class="card-header">
+    <div class="icon">💰</div>
+    2.2 爆款套餐定价明细对比
+    <span class="card-note">* 同期截止：与26年累计相同自然日 | 差额 = 26年实付 − 25年同期实付</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>爆款标签</th><th>套餐定价</th>
+        <th>25年整月订单量</th><th>25年整月实付(元)</th>
+        <th>25年同期订单量</th><th>25年同期实付(元)</th>
+        <th style="background:#f0f4ff;">26年订单量</th><th style="background:#f0f4ff;">26年实付(元)</th>
+        <th>回款差额(元)</th><th>ARPU变化(元)</th>
+      </tr></thead>
+      <tbody><tr>
+            <td><span class="bk-badge tag-yd">月度爆款</span></td>
+            <td class="price-cell">月度爆款499</td>
+            <td>10,143</td>
+            <td class="money-cell">5,003,006</td>
+            <td>10,143</td>
+            <td class="money-cell">5,003,006</td>
+            <td class="highlight-col">10,833</td>
+            <td class="money-cell highlight-col">5,399,347</td>
+            <td class="pos money-cell">+396,341</td>
+            <td class="arpu-cell">493 → 498 <span class="pos">+5</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-yd" style="opacity:0.3">月度爆款</span></td>
+            <td class="price-cell">月度爆款599</td>
+            <td>59</td>
+            <td class="money-cell">34,661</td>
+            <td>59</td>
+            <td class="money-cell">34,661</td>
+            <td class="highlight-col">521</td>
+            <td class="money-cell highlight-col">311,939</td>
+            <td class="pos money-cell">+277,278</td>
+            <td class="arpu-cell">587 → 599 <span class="pos">+12</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-gj">赶集引流款</span></td>
+            <td class="price-cell">赶集引流款1680</td>
+            <td>28</td>
+            <td class="money-cell">47,040</td>
+            <td>28</td>
+            <td class="money-cell">47,040</td>
+            <td class="highlight-col">0</td>
+            <td class="money-cell highlight-col">0</td>
+            <td class="neg money-cell">-47,040</td>
+            <td class="arpu-cell">1,680 → 0 <span class="neg">-1680</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-gj" style="opacity:0.3">赶集引流款</span></td>
+            <td class="price-cell">赶集引流款1899</td>
+            <td>0</td>
+            <td class="money-cell">0</td>
+            <td>0</td>
+            <td class="money-cell">0</td>
+            <td class="highlight-col">136</td>
+            <td class="money-cell highlight-col">258,264</td>
+            <td class="pos money-cell">+258,264</td>
+            <td class="arpu-cell">0 → 1,899 <span class="pos">+1899</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-gj" style="opacity:0.3">赶集引流款</span></td>
+            <td class="price-cell">赶集引流款3000</td>
+            <td>475</td>
+            <td class="money-cell">1,331,400</td>
+            <td>475</td>
+            <td class="money-cell">1,331,400</td>
+            <td class="highlight-col">368</td>
+            <td class="money-cell highlight-col">1,052,400</td>
+            <td class="neg money-cell">-279,000</td>
+            <td class="arpu-cell">2,803 → 2,860 <span class="pos">+57</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-gjbk">赶集爆款</span></td>
+            <td class="price-cell">赶集爆款3980</td>
+            <td>1</td>
+            <td class="money-cell">3,680</td>
+            <td>1</td>
+            <td class="money-cell">3,680</td>
+            <td class="highlight-col">380</td>
+            <td class="money-cell highlight-col">1,460,050</td>
+            <td class="pos money-cell">+1,456,370</td>
+            <td class="arpu-cell">3,680 → 3,842 <span class="pos">+162</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-gjbk" style="opacity:0.3">赶集爆款</span></td>
+            <td class="price-cell">赶集爆款8800</td>
+            <td>0</td>
+            <td class="money-cell">0</td>
+            <td>0</td>
+            <td class="money-cell">0</td>
+            <td class="highlight-col">7</td>
+            <td class="money-cell highlight-col">57,104</td>
+            <td class="pos money-cell">+57,104</td>
+            <td class="arpu-cell">0 → 8,158 <span class="pos">+8158</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-58yl">58引流款</span></td>
+            <td class="price-cell">58引流款1680</td>
+            <td>534</td>
+            <td class="money-cell">896,952</td>
+            <td>534</td>
+            <td class="money-cell">896,952</td>
+            <td class="highlight-col">0</td>
+            <td class="money-cell highlight-col">0</td>
+            <td class="neg money-cell">-896,952</td>
+            <td class="arpu-cell">1,680 → 0 <span class="neg">-1680</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-58yl" style="opacity:0.3">58引流款</span></td>
+            <td class="price-cell">58引流款1980</td>
+            <td>0</td>
+            <td class="money-cell">0</td>
+            <td>0</td>
+            <td class="money-cell">0</td>
+            <td class="highlight-col">745</td>
+            <td class="money-cell highlight-col">1,475,100</td>
+            <td class="pos money-cell">+1,475,100</td>
+            <td class="arpu-cell">0 → 1,980 <span class="pos">+1980</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-58yl" style="opacity:0.3">58引流款</span></td>
+            <td class="price-cell">58引流款3000</td>
+            <td>1,662</td>
+            <td class="money-cell">4,632,870</td>
+            <td>1,662</td>
+            <td class="money-cell">4,632,870</td>
+            <td class="highlight-col">1,468</td>
+            <td class="money-cell highlight-col">4,186,106</td>
+            <td class="neg money-cell">-446,764</td>
+            <td class="arpu-cell">2,788 → 2,852 <span class="pos">+64</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-58yl" style="opacity:0.3">58引流款</span></td>
+            <td class="price-cell">58引流款3980</td>
+            <td>2,764</td>
+            <td class="money-cell">10,217,207</td>
+            <td>2,764</td>
+            <td class="money-cell">10,217,207</td>
+            <td class="highlight-col">2,697</td>
+            <td class="money-cell highlight-col">10,304,283</td>
+            <td class="pos money-cell">+87,076</td>
+            <td class="arpu-cell">3,697 → 3,821 <span class="pos">+124</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-58bk">58爆款</span></td>
+            <td class="price-cell">58爆款6180</td>
+            <td>176</td>
+            <td class="money-cell">981,716</td>
+            <td>176</td>
+            <td class="money-cell">981,716</td>
+            <td class="highlight-col">239</td>
+            <td class="money-cell highlight-col">1,364,667</td>
+            <td class="pos money-cell">+382,951</td>
+            <td class="arpu-cell">5,578 → 5,710 <span class="pos">+132</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-58bk" style="opacity:0.3">58爆款</span></td>
+            <td class="price-cell">58爆款12500</td>
+            <td>356</td>
+            <td class="money-cell">4,112,345</td>
+            <td>356</td>
+            <td class="money-cell">4,112,345</td>
+            <td class="highlight-col">225</td>
+            <td class="money-cell highlight-col">2,583,654</td>
+            <td class="neg money-cell">-1,528,691</td>
+            <td class="arpu-cell">11,552 → 11,483 <span class="neg">-69</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-58bk" style="opacity:0.3">58爆款</span></td>
+            <td class="price-cell">58爆款15800</td>
+            <td>67</td>
+            <td class="money-cell">1,012,520</td>
+            <td>67</td>
+            <td class="money-cell">1,012,520</td>
+            <td class="highlight-col">59</td>
+            <td class="money-cell highlight-col">932,200</td>
+            <td class="neg money-cell">-80,320</td>
+            <td class="arpu-cell">15,112 → 15,800 <span class="pos">+688</span></td>
+        </tr><tr>
+            <td><span class="bk-badge tag-other">其他</span></td>
+            <td class="price-cell">其他</td>
+            <td>4,294</td>
+            <td class="money-cell">16,571,438</td>
+            <td>4,294</td>
+            <td class="money-cell">16,571,438</td>
+            <td class="highlight-col">2,225</td>
+            <td class="money-cell highlight-col">7,217,513</td>
+            <td class="neg money-cell">-9,353,925</td>
+            <td class="arpu-cell">3,859 → 3,244 <span class="neg">-615</span></td>
+        </tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 2.3 瀑布图A -->
+<div class="chart-box">
+  <div class="chart-title">2.3 瀑布图A · 爆款标签归因对比</div>
+  <div class="chart-subtitle">25年同期 → 26年，按爆款标签拆解回款差额、订单量差额、ARPU差额</div>
+  <div class="chart-grid-3">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">📉 回款差额（万元）</div>
+      <div class="chart-area-sm" id="wfARevChart"></div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">📦 订单量差额（单）</div>
+      <div class="chart-area-sm" id="wfAOrderChart"></div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">📊 ARPU差额（元）</div>
+      <div class="chart-area-sm" id="wfAArpuChart"></div>
+    </div>
+  </div>
+  <div class="ai-box" style="margin-top:18px;">
+    <div class="ai-box-title">🤖 瀑布图A · AI 重点解读</div>
+    <ul>
+    <li>📊 整体回款差额：26年同期 <strong>3660.26万</strong> vs 25年 4484.48万，差额 <strong style="color:#ef4444">-824.22万（-18.4%）</strong>。</li>
+    <li>🚀 增长驱动：「赶集爆款」+151.3万、「月度爆款」+67.4万、「58引流款」+21.8万，是核心增量来源。建议持续投入资源强化爆款运营和定价稳定性。</li>
+    <li>⚠️ 拖累警示：「其他」-935.4万（订单差-2069单，ARPU差-615元）、「58爆款」-122.6万（订单差-76单，ARPU差-863元）、「赶集引流款」-6.8万（订单差+1单，ARPU差-140元）。订单量下滑是主因，需检查是否有竞品分流或客户续费意愿下降。</li>
+    <li>💡 ARPU洞察：「月度爆款」ARPU同比+9元、「赶集爆款」ARPU同比+240元、「58引流款」ARPU同比+77元；「赶集引流款」ARPU同比-140元（定价下移，需关注）、「58爆款」ARPU同比-863元（定价下移，需关注）、「其他」ARPU同比-615元（定价下移，需关注）。ARPU下滑品类应优先排查是否存在低价套餐过度销售或高价产品流失问题。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 2.4 瀑布图B -->
+<div class="chart-box">
+  <div class="chart-title">2.4 瀑布图B · 套餐定价折分</div>
+  <div class="chart-subtitle">25年同期 → 26年，按爆款定价档位拆解差额；右侧含订单缺口补足最低ARPU建议</div>
+  <div class="chart-grid-3">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">📉 回款差额（万元）</div>
+      <div class="chart-area-sm" id="wfBRevChart"></div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">📦 订单量差额（单）</div>
+      <div class="chart-area-sm" id="wfBOrderChart"></div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#475569;margin-bottom:6px;">📊 ARPU差额（元）</div>
+      <div class="chart-area-sm" id="wfBArpuChart"></div>
+    </div>
+  </div>
+  <div class="ai-box" style="margin-top:18px;">
+    <div class="ai-box-title">🤖 瀑布图B · AI 重点解读</div>
+    <ul>
+    <li>📊 定价结构：共分析 15 个爆款定价档位，增长档位：「58引流款1980」+147.5万、「赶集爆款3980」+145.6万、「月度爆款499」+39.6万；下滑档位：「其他」-935.4万、「58爆款12500」-152.9万、「58引流款1680」-89.7万。</li>
+    <li>⚠️ 核心问题：其他档位回款下滑最为突出，原因可能是该价格带订单量萎缩（+2069单）且ARPU同比-615元，建议针对性制定拉升策略。</li>
+    <li>💡 补足建议：「其他」需补回款935.4万（缺口2069单），补量最低ARPU≥4,521元（建议调整至4,973元）；「58爆款12500」需补回款152.9万（缺口131单），补量最低ARPU≥11,669元（建议调整至12,835元）；「58引流款1680」需补回款89.7万（缺口534单），补量最低ARPU≥1,680元（建议调整至1,848元）。针对高价档位订单缺口，可考虑推出专属权益或限时优惠活动。</li>
+    <li>📈 ARPU牵引：「赶集爆款8800」ARPU+8158元，说明该价格带升单效果明显、「58引流款1980」ARPU+1980元，说明该价格带升单效果明显。建议将高ARPU档位设为销售首推套餐。</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ===== 3. 定价归因 ===== -->
+<div class="section-title">
+  <div class="section-num">3</div>
+  定价归因
+</div>
+
+<!-- 3.1 桑基图 -->
+<div class="card">
+  <div class="card-header">
+    <div class="icon">🔀</div>
+    3.1 桑基图 · 爆款定价流向（25年→26年→续约状态）
+  </div>
+  <div class="chart-area-xl" id="sankeyChart"></div>
+</div>
+
+<!-- 3.2 爆款热度分布 -->
+<div class="card">
+  <div class="card-header">
+    <div class="icon">🔥</div>
+    3.2 爆款热度分布与年度转移（标签 × 定价区间 · 25年 vs 26年）
+  </div>
+  <div class="chart-area-tall" id="heatChart"></div>
+</div>
+
+<!-- 3.3 定价迁移弦图 -->
+<div class="card">
+  <div class="card-header">
+    <div class="icon">🎻</div>
+    3.3 定价迁移路径 · 关系图
+    <span class="card-note">弧线宽度/节点大小代表流量规模；可拖拽节点探索迁移关系</span>
+  </div>
+  <div class="chart-area-xl" id="chordChart"></div>
+</div>
+
+
+<!-- ===== 4. 重点日关注客户 ===== -->
+<div class="section-title">
+  <div class="section-num">4</div>
+  重点日关注客户
+  <span class="section-date">最新数据日：2026-05-31</span>
+</div>
+
+<div class="customer-cards">
+  <div class="customer-card">
+    <div class="customer-card-title">🏆 新签单量 TOP5 销售<span class="customer-card-date">31日当天</span></div>
+    <div class="card-body"><div class="customer-item"><div class="rank"><span class="rank-1">1</span></div><div class="cust-name">裴丽<span class="city-tag">柳州</span></div><div class="cust-value">6单</div></div><div class="customer-item"><div class="rank"><span class="rank-2">2</span></div><div class="cust-name">李美健<span class="city-tag">黄冈</span></div><div class="cust-value">5单</div></div><div class="customer-item"><div class="rank"><span class="rank-3">3</span></div><div class="cust-name">黄磊<span class="city-tag">西安</span></div><div class="cust-value">5单</div></div><div class="customer-item"><div class="rank"><span class="rank-n">4</span></div><div class="cust-name">张平<span class="city-tag">黄骅</span></div><div class="cust-value">3单</div></div><div class="customer-item"><div class="rank"><span class="rank-n">5</span></div><div class="cust-name">秦安辉<span class="city-tag">新乡</span></div><div class="cust-value">3单</div></div></div>
+  </div>
+  <div class="customer-card">
+    <div class="customer-card-title">📈 续大 Top5 客户</div>
+    <div class="card-body"><div class="customer-item"><div class="rank"><span class="rank-1">1</span></div><div class="cust-name">贵州梵诗艺术文化有限公司</div><div class="cust-value pos">+13,212</div></div><div class="customer-item"><div class="rank"><span class="rank-2">2</span></div><div class="cust-name">鹤壁龙德人力资源服务有限公司</div><div class="cust-value pos">+12,120</div></div><div class="customer-item"><div class="rank"><span class="rank-3">3</span></div><div class="cust-name">德州泓盛皓物流有限公司</div><div class="cust-value pos">+7,917</div></div><div class="customer-item"><div class="rank"><span class="rank-n">4</span></div><div class="cust-name">湖南豪婕电子商务有限公司</div><div class="cust-value pos">+7,820</div></div><div class="customer-item"><div class="rank"><span class="rank-n">5</span></div><div class="cust-name">滨州天宝生物科技有限公司</div><div class="cust-value pos">+7,320</div></div></div>
+  </div>
+  <div class="customer-card">
+    <div class="customer-card-title">📉 续小 Top5 客户</div>
+    <div class="card-body"><div class="customer-item"><div class="rank"><span class="rank-1">1</span></div><div class="cust-name">温州市瓯海仙岩秦风古韵足浴店</div><div class="cust-value neg">-18,100</div></div><div class="customer-item"><div class="rank"><span class="rank-2">2</span></div><div class="cust-name">中国平安人寿保险股份有限公司温州中心支公司</div><div class="cust-value neg">-14,250</div></div><div class="customer-item"><div class="rank"><span class="rank-3">3</span></div><div class="cust-name">南阳市七一路大河书社</div><div class="cust-value neg">-13,800</div></div><div class="customer-item"><div class="rank"><span class="rank-n">4</span></div><div class="cust-name">遵义市卡个麦文化传媒有限公司</div><div class="cust-value neg">-13,400</div></div><div class="customer-item"><div class="rank"><span class="rank-n">5</span></div><div class="cust-name">徐州玖隆信息科技有限公司</div><div class="cust-value neg">-13,120</div></div></div>
+  </div>
+  <div class="customer-card">
+    <div class="customer-card-title">⚠️ 续费流失 Top5 客户</div>
+    <div class="card-body"><div class="customer-item"><div class="rank"><span class="rank-1">1</span></div><div class="cust-name">安徽诚服企业管理有限公司</div><div class="cust-value neutral">25,800</div></div><div class="customer-item"><div class="rank"><span class="rank-2">2</span></div><div class="cust-name">河北浩发人力资源有限公司</div><div class="cust-value neutral">25,800</div></div><div class="customer-item"><div class="rank"><span class="rank-3">3</span></div><div class="cust-name">安徽省沁润人力资源管理有限责任公司</div><div class="cust-value neutral">25,800</div></div><div class="customer-item"><div class="rank"><span class="rank-n">4</span></div><div class="cust-name">嘉兴人才无忧信息科技集团有限公司</div><div class="cust-value neutral">23,800</div></div><div class="customer-item"><div class="rank"><span class="rank-n">5</span></div><div class="cust-name">连云港鼎顺人力资源有限公司</div><div class="cust-value neutral">23,800</div></div></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ============================================================
+// 全局数据
+// ============================================================
+const rev25Total = 4484.4835;
+const rev26Total = 3660.2627;
+const arpuBase25 = 2181;
+const arpuBase26 = 1839;
+const wfALabels = ["月度爆款", "赶集引流款", "赶集爆款", "58引流款", "58爆款", "其他"];
+const wfARevDiffs = [67.3619, -6.7776, 151.3474, 21.846, -122.606, -935.3925100000001];
+const wfAOrderDiffs = [1152, 1, 386, -50, -76, -2069];
+const wfAArpuDiffs = [9, -140, 240, 77, -863, -615];
+const wfBLabels = ["其他", "月度爆款499", "月度爆款599", "赶集引流款1680", "赶集引流款1899", "赶集引流款3000", "赶集爆款3980", "赶集爆款8800", "58引流款1680", "58引流款1980", "58引流款3000", "58引流款3980", "58爆款6180", "58爆款12500", "58爆款15800"];
+const wfBRevDiffs = [-935.3925100000001, 39.6341, 27.7278, -4.704, 25.8264, -27.9, 145.637, 5.7104, -89.6952, 147.51, -44.6764, 8.7076, 38.2951, -152.8691, -8.032];
+const wfBOrderDiffs = [-2069, 690, 462, -28, 136, -107, 379, 7, -534, 745, -194, -67, 63, -131, -8];
+const wfBArpuDiffs = [-615, 5, 11, -1680, 1899, 57, 162, 8158, -1680, 1980, 64, 124, 132, -69, 688];
+const wfBFillMinArpu = [4521, 0, 0, 1680, 0, 2607, 0, 0, 1680, 0, 2303, 0, 0, 11669, 10040];
+const sankeyNodes = [{"name": "25年-58引流款1680", "depth": 0}, {"name": "25年-58引流款3000", "depth": 0}, {"name": "25年-58引流款3980", "depth": 0}, {"name": "25年-58爆款12500", "depth": 0}, {"name": "25年-58爆款15800", "depth": 0}, {"name": "25年-58爆款6180", "depth": 0}, {"name": "25年-新签入口", "depth": 0}, {"name": "25年-月度爆款499", "depth": 0}, {"name": "25年-月度爆款599", "depth": 0}, {"name": "25年-赶集引流款1680", "depth": 0}, {"name": "25年-赶集引流款3000", "depth": 0}, {"name": "25年-赶集爆款3980", "depth": 0}, {"name": "26年-58引流款1980", "depth": 1}, {"name": "26年-58引流款3000", "depth": 1}, {"name": "26年-58引流款3980", "depth": 1}, {"name": "26年-58爆款12500", "depth": 1}, {"name": "26年-58爆款15800", "depth": 1}, {"name": "26年-58爆款6180", "depth": 1}, {"name": "26年-月度爆款499", "depth": 1}, {"name": "26年-月度爆款599", "depth": 1}, {"name": "26年-流失出口", "depth": 1}, {"name": "26年-赶集引流款1899", "depth": 1}, {"name": "26年-赶集引流款3000", "depth": 1}, {"name": "26年-赶集爆款3980", "depth": 1}, {"name": "26年-赶集爆款8800", "depth": 1}, {"name": "状态-平续", "depth": 2}, {"name": "状态-新签", "depth": 2}, {"name": "状态-续大", "depth": 2}, {"name": "状态-续小", "depth": 2}];
+const sankeyLinks = [{"source": "25年-58引流款1680", "target": "26年-58引流款1980", "value": 1}, {"source": "25年-58引流款1680", "target": "26年-58引流款3000", "value": 1}, {"source": "25年-58引流款1680", "target": "26年-58引流款3980", "value": 1}, {"source": "25年-58引流款1680", "target": "26年-月度爆款499", "value": 4}, {"source": "25年-58引流款1680", "target": "26年-流失出口", "value": 525}, {"source": "25年-58引流款3000", "target": "26年-58引流款3000", "value": 236}, {"source": "25年-58引流款3000", "target": "26年-58引流款3980", "value": 22}, {"source": "25年-58引流款3000", "target": "26年-流失出口", "value": 1384}, {"source": "25年-58引流款3000", "target": "26年-赶集引流款3000", "value": 4}, {"source": "25年-58引流款3000", "target": "26年-赶集爆款3980", "value": 2}, {"source": "25年-58引流款3980", "target": "26年-58引流款3000", "value": 106}, {"source": "25年-58引流款3980", "target": "26年-58引流款3980", "value": 319}, {"source": "25年-58引流款3980", "target": "26年-58爆款12500", "value": 3}, {"source": "25年-58引流款3980", "target": "26年-58爆款15800", "value": 1}, {"source": "25年-58引流款3980", "target": "26年-58爆款6180", "value": 1}, {"source": "25年-58引流款3980", "target": "26年-月度爆款499", "value": 1}, {"source": "25年-58引流款3980", "target": "26年-流失出口", "value": 2281}, {"source": "25年-58引流款3980", "target": "26年-赶集引流款3000", "value": 6}, {"source": "25年-58引流款3980", "target": "26年-赶集爆款3980", "value": 20}, {"source": "25年-58爆款12500", "target": "26年-58引流款3000", "value": 2}, {"source": "25年-58爆款12500", "target": "26年-58引流款3980", "value": 9}, {"source": "25年-58爆款12500", "target": "26年-58爆款12500", "value": 32}, {"source": "25年-58爆款12500", "target": "26年-58爆款6180", "value": 5}, {"source": "25年-58爆款12500", "target": "26年-流失出口", "value": 306}, {"source": "25年-58爆款15800", "target": "26年-58爆款15800", "value": 7}, {"source": "25年-58爆款15800", "target": "26年-流失出口", "value": 60}, {"source": "25年-58爆款6180", "target": "26年-58引流款3000", "value": 1}, {"source": "25年-58爆款6180", "target": "26年-58引流款3980", "value": 1}, {"source": "25年-58爆款6180", "target": "26年-58爆款6180", "value": 19}, {"source": "25年-58爆款6180", "target": "26年-流失出口", "value": 154}, {"source": "25年-新签入口", "target": "26年-58引流款1980", "value": 736}, {"source": "25年-新签入口", "target": "26年-58引流款3000", "value": 1022}, {"source": "25年-新签入口", "target": "26年-58引流款3980", "value": 2315}, {"source": "25年-新签入口", "target": "26年-58爆款12500", "value": 190}, {"source": "25年-新签入口", "target": "26年-58爆款15800", "value": 51}, {"source": "25年-新签入口", "target": "26年-58爆款6180", "value": 213}, {"source": "25年-新签入口", "target": "26年-月度爆款499", "value": 10630}, {"source": "25年-新签入口", "target": "26年-月度爆款599", "value": 513}, {"source": "25年-新签入口", "target": "26年-赶集引流款1899", "value": 133}, {"source": "25年-新签入口", "target": "26年-赶集引流款3000", "value": 350}, {"source": "25年-新签入口", "target": "26年-赶集爆款3980", "value": 354}, {"source": "25年-新签入口", "target": "26年-赶集爆款8800", "value": 7}, {"source": "25年-月度爆款499", "target": "26年-58引流款1980", "value": 1}, {"source": "25年-月度爆款499", "target": "26年-58引流款3000", "value": 13}, {"source": "25年-月度爆款499", "target": "26年-58引流款3980", "value": 10}, {"source": "25年-月度爆款499", "target": "26年-58爆款6180", "value": 1}, {"source": "25年-月度爆款499", "target": "26年-月度爆款499", "value": 112}, {"source": "25年-月度爆款499", "target": "26年-月度爆款599", "value": 5}, {"source": "25年-月度爆款499", "target": "26年-流失出口", "value": 9897}, {"source": "25年-月度爆款499", "target": "26年-赶集引流款1899", "value": 3}, {"source": "25年-月度爆款499", "target": "26年-赶集引流款3000", "value": 3}, {"source": "25年-月度爆款599", "target": "26年-流失出口", "value": 56}, {"source": "25年-赶集引流款1680", "target": "26年-流失出口", "value": 28}, {"source": "25年-赶集引流款3000", "target": "26年-58引流款1980", "value": 1}, {"source": "25年-赶集引流款3000", "target": "26年-58引流款3000", "value": 84}, {"source": "25年-赶集引流款3000", "target": "26年-58引流款3980", "value": 8}, {"source": "25年-赶集引流款3000", "target": "26年-月度爆款499", "value": 1}, {"source": "25年-赶集引流款3000", "target": "26年-流失出口", "value": 374}, {"source": "25年-赶集引流款3000", "target": "26年-赶集引流款3000", "value": 2}, {"source": "25年-赶集引流款3000", "target": "26年-赶集爆款3980", "value": 2}, {"source": "25年-赶集爆款3980", "target": "26年-流失出口", "value": 1}, {"source": "26年-58引流款1980", "target": "状态-新签", "value": 735}, {"source": "26年-58引流款1980", "target": "状态-续大", "value": 2}, {"source": "26年-58引流款1980", "target": "状态-续小", "value": 2}, {"source": "26年-58引流款3000", "target": "状态-平续", "value": 169}, {"source": "26年-58引流款3000", "target": "状态-新签", "value": 930}, {"source": "26年-58引流款3000", "target": "状态-续大", "value": 161}, {"source": "26年-58引流款3000", "target": "状态-续小", "value": 205}, {"source": "26年-58引流款3980", "target": "状态-平续", "value": 141}, {"source": "26年-58引流款3980", "target": "状态-新签", "value": 2168}, {"source": "26年-58引流款3980", "target": "状态-续大", "value": 175}, {"source": "26年-58引流款3980", "target": "状态-续小", "value": 201}, {"source": "26年-58爆款12500", "target": "状态-平续", "value": 9}, {"source": "26年-58爆款12500", "target": "状态-新签", "value": 181}, {"source": "26年-58爆款12500", "target": "状态-续大", "value": 19}, {"source": "26年-58爆款12500", "target": "状态-续小", "value": 16}, {"source": "26年-58爆款15800", "target": "状态-平续", "value": 4}, {"source": "26年-58爆款15800", "target": "状态-新签", "value": 49}, {"source": "26年-58爆款15800", "target": "状态-续大", "value": 6}, {"source": "26年-58爆款6180", "target": "状态-平续", "value": 8}, {"source": "26年-58爆款6180", "target": "状态-新签", "value": 181}, {"source": "26年-58爆款6180", "target": "状态-续大", "value": 24}, {"source": "26年-58爆款6180", "target": "状态-续小", "value": 26}, {"source": "26年-月度爆款499", "target": "状态-平续", "value": 98}, {"source": "26年-月度爆款499", "target": "状态-新签", "value": 10624}, {"source": "26年-月度爆款499", "target": "状态-续大", "value": 17}, {"source": "26年-月度爆款499", "target": "状态-续小", "value": 9}, {"source": "26年-月度爆款599", "target": "状态-新签", "value": 513}, {"source": "26年-月度爆款599", "target": "状态-续大", "value": 5}, {"source": "26年-赶集引流款1899", "target": "状态-新签", "value": 133}, {"source": "26年-赶集引流款1899", "target": "状态-续大", "value": 3}, {"source": "26年-赶集引流款3000", "target": "状态-平续", "value": 2}, {"source": "26年-赶集引流款3000", "target": "状态-新签", "value": 347}, {"source": "26年-赶集引流款3000", "target": "状态-续大", "value": 6}, {"source": "26年-赶集引流款3000", "target": "状态-续小", "value": 10}, {"source": "26年-赶集爆款3980", "target": "状态-平续", "value": 4}, {"source": "26年-赶集爆款3980", "target": "状态-新签", "value": 342}, {"source": "26年-赶集爆款3980", "target": "状态-续大", "value": 19}, {"source": "26年-赶集爆款3980", "target": "状态-续小", "value": 13}, {"source": "26年-赶集爆款8800", "target": "状态-新签", "value": 7}];
+const bkPctData = [{"爆款标签": "月度爆款", "25年": 49.62, "26年": 57.05}, {"爆款标签": "赶集引流款", "25年": 2.45, "26年": 2.53}, {"爆款标签": "赶集爆款", "25年": 0.0, "26年": 1.94}, {"爆款标签": "58引流款", "25年": 24.13, "26年": 24.67}, {"爆款标签": "58爆款", "25年": 2.91, "26年": 2.63}, {"爆款标签": "其他", "25年": 20.89, "26年": 11.18}];
+const priceLabels = ["月度爆款499", "月度爆款599", "赶集引流款1680", "赶集引流款1899", "赶集引流款3000", "赶集爆款3980", "赶集爆款8800", "58引流款1680", "58引流款1980", "58引流款3000", "58引流款3980", "58爆款6180", "58爆款12500", "58爆款15800"];
+const dist25 = [10143, 59, 28, 0, 475, 1, 0, 534, 0, 1662, 2764, 176, 356, 67];
+const dist26 = [10833, 521, 0, 136, 368, 380, 7, 0, 745, 1468, 2697, 239, 225, 59];
+const chordFlow = [{"source": "58引流款1680", "target": "58引流款1980", "value": 1}, {"source": "58引流款1680", "target": "58引流款3000", "value": 1}, {"source": "58引流款1680", "target": "58引流款3980", "value": 1}, {"source": "58引流款1680", "target": "月度爆款499", "value": 4}, {"source": "58引流款1680", "target": "流失出口", "value": 525}, {"source": "58引流款3000", "target": "58引流款3000", "value": 236}, {"source": "58引流款3000", "target": "58引流款3980", "value": 22}, {"source": "58引流款3000", "target": "流失出口", "value": 1384}, {"source": "58引流款3000", "target": "赶集引流款3000", "value": 4}, {"source": "58引流款3000", "target": "赶集爆款3980", "value": 2}, {"source": "58引流款3980", "target": "58引流款3000", "value": 106}, {"source": "58引流款3980", "target": "58引流款3980", "value": 319}, {"source": "58引流款3980", "target": "58爆款12500", "value": 3}, {"source": "58引流款3980", "target": "58爆款15800", "value": 1}, {"source": "58引流款3980", "target": "58爆款6180", "value": 1}, {"source": "58引流款3980", "target": "月度爆款499", "value": 1}, {"source": "58引流款3980", "target": "流失出口", "value": 2281}, {"source": "58引流款3980", "target": "赶集引流款3000", "value": 6}, {"source": "58引流款3980", "target": "赶集爆款3980", "value": 20}, {"source": "58爆款12500", "target": "58引流款3000", "value": 2}, {"source": "58爆款12500", "target": "58引流款3980", "value": 9}, {"source": "58爆款12500", "target": "58爆款12500", "value": 32}, {"source": "58爆款12500", "target": "58爆款6180", "value": 5}, {"source": "58爆款12500", "target": "流失出口", "value": 306}, {"source": "58爆款15800", "target": "58爆款15800", "value": 7}, {"source": "58爆款15800", "target": "流失出口", "value": 60}, {"source": "58爆款6180", "target": "58引流款3000", "value": 1}, {"source": "58爆款6180", "target": "58引流款3980", "value": 1}, {"source": "58爆款6180", "target": "58爆款6180", "value": 19}, {"source": "58爆款6180", "target": "流失出口", "value": 154}, {"source": "新签入口", "target": "58引流款1980", "value": 736}, {"source": "新签入口", "target": "58引流款3000", "value": 1022}, {"source": "新签入口", "target": "58引流款3980", "value": 2315}, {"source": "新签入口", "target": "58爆款12500", "value": 190}, {"source": "新签入口", "target": "58爆款15800", "value": 51}, {"source": "新签入口", "target": "58爆款6180", "value": 213}, {"source": "新签入口", "target": "月度爆款499", "value": 10630}, {"source": "新签入口", "target": "月度爆款599", "value": 513}, {"source": "新签入口", "target": "赶集引流款1899", "value": 133}, {"source": "新签入口", "target": "赶集引流款3000", "value": 350}, {"source": "新签入口", "target": "赶集爆款3980", "value": 354}, {"source": "新签入口", "target": "赶集爆款8800", "value": 7}, {"source": "月度爆款499", "target": "58引流款1980", "value": 1}, {"source": "月度爆款499", "target": "58引流款3000", "value": 13}, {"source": "月度爆款499", "target": "58引流款3980", "value": 10}, {"source": "月度爆款499", "target": "58爆款6180", "value": 1}, {"source": "月度爆款499", "target": "月度爆款499", "value": 112}, {"source": "月度爆款499", "target": "月度爆款599", "value": 5}, {"source": "月度爆款499", "target": "流失出口", "value": 9897}, {"source": "月度爆款499", "target": "赶集引流款1899", "value": 3}, {"source": "月度爆款499", "target": "赶集引流款3000", "value": 3}, {"source": "月度爆款599", "target": "流失出口", "value": 56}, {"source": "赶集引流款1680", "target": "流失出口", "value": 28}, {"source": "赶集引流款3000", "target": "58引流款1980", "value": 1}, {"source": "赶集引流款3000", "target": "58引流款3000", "value": 84}, {"source": "赶集引流款3000", "target": "58引流款3980", "value": 8}, {"source": "赶集引流款3000", "target": "月度爆款499", "value": 1}, {"source": "赶集引流款3000", "target": "流失出口", "value": 374}, {"source": "赶集引流款3000", "target": "赶集引流款3000", "value": 2}, {"source": "赶集引流款3000", "target": "赶集爆款3980", "value": 2}, {"source": "赶集爆款3980", "target": "流失出口", "value": 1}];
+const tagBucket25 = {"月度爆款": [10202, 0, 0, 0, 0, 0, 0, 0, 0], "赶集引流款": [28, 0, 475, 0, 0, 0, 0, 0, 0], "赶集爆款": [0, 0, 0, 1, 0, 0, 0, 0, 0], "58引流款": [534, 0, 1662, 2764, 0, 0, 0, 0, 0], "58爆款": [0, 0, 0, 0, 0, 176, 0, 423, 0], "其他": [0, 0, 0, 0, 0, 0, 0, 0, 0]};
+const tagBucket26 = {"月度爆款": [11354, 0, 0, 0, 0, 0, 0, 0, 0], "赶集引流款": [136, 0, 368, 0, 0, 0, 0, 0, 0], "赶集爆款": [0, 0, 0, 380, 0, 0, 7, 0, 0], "58引流款": [745, 0, 1468, 2697, 0, 0, 0, 0, 0], "58爆款": [0, 0, 0, 0, 0, 239, 0, 284, 0], "其他": [0, 0, 0, 0, 0, 0, 0, 0, 0]};
+const buckets = ["(0,1980]", "(1980,2580]", "(2580,3000]", "(3000,3980]", "(3980,4980]", "(4980,6180]", "(6180,10000]", "(10000,20000]", "20000+"];
+const tagOrder = ["月度爆款", "赶集引流款", "赶集爆款", "58引流款", "58爆款", "其他"];
+const tagColors = {"月度爆款": "#f59e0b", "赶集引流款": "#14b8a6", "赶集爆款": "#06b6d4", "58引流款": "#3b82f6", "58爆款": "#8b5cf6", "其他": "#94a3b8"};
+
+// ============================================================
+// 颜色
+// ============================================================
+const C = {
+  up: '#ef4444', down: '#22c55e',
+  base: '#4f46e5', base2: '#7c3aed',
+  blue: '#3b82f6', green: '#10b981', orange: '#f59e0b',
+  purple: '#8b5cf6', pink: '#ec4899', gray: '#94a3b8',
+  teal: '#14b8a6', amber: '#f59e0b',
+};
+
+// ============================================================
+// 标签缩短辅助（防止X轴溢出）
+// ============================================================
+function shortenLabel(l) {
+  return l.replace('月度爆款', '月爆')
+          .replace('赶集引流款', '赶引')
+          .replace('赶集爆款', '赶爆')
+          .replace('58引流款', '58引')
+          .replace('58爆款', '58爆');
+}
+
+// ============================================================
+// 瀑布图工具
+// ============================================================
+function buildWaterfall(domId, baseVal, diffs, labels, unit) {
+  const el = document.getElementById(domId);
+  if (!el) return;
+  const chart = echarts.init(el);
+  
+  const shortLabels = labels.map(shortenLabel);
+  const fullLabels = ['25年同期', ...shortLabels, '26年实际'];
+  let running = baseVal;
+  const bases = [0], bars = [baseVal];
+  for (let d of diffs) {
+    bases.push(Math.min(running, running+d));
+    bars.push(Math.abs(d));
+    running += d;
+  }
+  bases.push(0); bars.push(running);
+  
+  const isWan = unit === '万';
+  const fmt = v => isWan ? v.toFixed(1) + '万' : v.toFixed(0);
+  const colors = [C.base, ...diffs.map(d => d >= 0 ? C.up : C.down), C.base2];
+  
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis', axisPointer: {type: 'shadow'},
+      formatter: params => {
+        const idx = params[0].dataIndex;
+        const v = bars[idx];
+        const d = idx === 0 || idx === fullLabels.length - 1 ? null : diffs[idx-1];
+        return `<b>${fullLabels[idx]}</b><br/>${d !== null ? (d>=0?'<span style="color:#ef4444">▲</span>':'<span style="color:#22c55e">▼</span>') + ' ' : ''}${fmt(d !== null ? Math.abs(d) : v)}${unit}`;
+      }
+    },
+    grid: {left: 50, right: 12, top: 22, bottom: 56},
+    xAxis: { type: 'category', data: fullLabels, axisLabel: {
+      interval: 0, fontSize: 9, color: '#475569',
+      formatter: (value, index) => {
+        if (index === 0 || index === fullLabels.length - 1) return value;
+        return (index - 1) % 2 === 1 ? '{down|' + value + '}' : value;
+      },
+      rich: { down: { padding: [12, 0, 0, 0], fontSize: 9, color: '#475569' } }
+    } },
+    yAxis: { type: 'value', axisLabel: {formatter: v => fmt(v), fontSize: 10, color: '#94a3b8'}, splitLine: {lineStyle: {type: 'dashed', color: '#f1f5f9'}} },
+    series: [
+      {type:'bar', stack:'wf', data: bases, itemStyle:{opacity:0}, emphasis:{itemStyle:{opacity:0}}, tooltip:{show:false}},
+      {type:'bar', stack:'wf', barMaxWidth: 36, data: bars,
+        label: {show:true, position:'top', fontSize:9, color:'#475569',
+          formatter: p => {
+            const idx = p.dataIndex;
+            if (idx===0 || idx===fullLabels.length-1) return fmt(bars[idx]);
+            const d = diffs[idx-1]; return (d>=0?'+':'')+fmt(d);
+          }
+        },
+        itemStyle: {
+          color: p => colors[p.dataIndex],
+          borderRadius: [4,4,0,0]
+        }
+      }
+    ]
+  });
+  return chart;
+}
+
+// ============================================================
+// 补量最低ARPU柱状图（需补回款/需补单数，每个柱子独立）
+// ============================================================
+function buildFillArpuBar(domId, fillArpus, labels) {
+  const el = document.getElementById(domId);
+  if (!el) return;
+  const chart = echarts.init(el);
+  const shortLabels = labels.map(shortenLabel);
+
+  // tooltip包含需补回款和需补单数信息
+  const fillData = fillArpus.map((v, i) => ({
+    value: v,
+    itemStyle: { color: v > 0 ? '#ed7d31' : '#e2e8f0', borderRadius: [3,3,0,0] }
+  }));
+
+  chart.setOption({
+    title: { text: '补量最低ARPU', left: 'center', top: 2, textStyle: { fontSize: 12, fontWeight: 600, color: '#1e293b' } },
+    tooltip: {
+      trigger: 'axis', axisPointer: {type: 'shadow'},
+      formatter: params => {
+        const p = params[0];
+        const v = p.value;
+        if (v <= 0) return `<b>${shortLabels[p.dataIndex]}</b><br/>无缺口`;
+        return `<b>${shortLabels[p.dataIndex]}</b><br/>补量最低ARPU: <b>${Math.round(v).toLocaleString()}</b>元<br/><span style="color:#94a3b8;font-size:11px;">= 需补回款 / 需补单数</span>`;
+      }
+    },
+    grid: {left: 50, right: 14, top: 28, bottom: 56},
+    xAxis: { type: 'category', data: shortLabels, axisLabel: {
+      interval: 0, fontSize: 9, color: '#475569',
+      formatter: (value, index) => index % 2 === 1 ? '{down|' + value + '}' : value,
+      rich: { down: { padding: [12, 0, 0, 0], fontSize: 9, color: '#475569' } }
+    } },
+    yAxis: { type: 'value', name: '元', nameTextStyle:{fontSize:10,color:'#94a3b8'}, axisLabel: {formatter: v => v.toLocaleString(), fontSize: 10, color: '#94a3b8'}, splitLine: {lineStyle: {type: 'dashed', color: '#f1f5f9'}} },
+    series: [{
+      type: 'bar', barMaxWidth: 36,
+      data: fillData,
+      label: { show: true, position: 'top', fontSize: 9, color: '#475569',
+        formatter: p => p.value > 0 ? Math.round(p.value).toLocaleString() : ''
+      }
+    }]
+  });
+  return chart;
+}
+function buildArpuWaterfall(domId, baseVal, diffs, labels, endVal, title) {
+  const el = document.getElementById(domId);
+  if (!el) return;
+  const chart = echarts.init(el);
+  const shortLabels = labels.map(shortenLabel);
+  const fullLabels = ['25年5月实际', ...shortLabels, '26年5月实际'];
+
+  let running = baseVal;
+  const bases = [0], bars = [baseVal];
+  for (let d of diffs) {
+    bases.push(Math.min(running, running + d));
+    bars.push(Math.abs(d));
+    running += d;
+  }
+  bases.push(0); bars.push(endVal);
+
+  const ARPU_COLORS = ['#4b8bf5', ...diffs.map(d => d >= 0 ? '#4b8bf5' : '#ed7d31'), '#9ca3af'];
+
+  // 连接线数据：柱顶到下一柱底
+  const markLines = [];
+  for (let i = 0; i < fullLabels.length - 1; i++) {
+    const y1 = i === 0 ? bars[0] : bases[i] + bars[i];
+    const y2 = i + 1 === fullLabels.length - 1 ? 0 : bases[i + 1];
+    markLines.push([{ coord: [i, y1], symbol: 'none' }, { coord: [i + 1, y2], symbol: 'none' }]);
+  }
+
+  chart.setOption({
+    title: { text: title, left: 'center', top: 2, textStyle: { fontSize: 12, fontWeight: 600, color: '#1e293b' } },
+    tooltip: {
+      trigger: 'axis', axisPointer: {type: 'shadow'},
+      formatter: params => {
+        const idx = params[0].dataIndex;
+        const v = bars[idx];
+        if (idx === 0) return `<b>${fullLabels[idx]}</b><br/>${v.toLocaleString()}元`;
+        if (idx === fullLabels.length - 1) return `<b>${fullLabels[idx]}</b><br/>${v.toLocaleString()}元`;
+        const d = diffs[idx - 1];
+        return `<b>${fullLabels[idx]}</b><br/>${d >= 0 ? '<span style="color:#4b8bf5">▲ 增加</span>' : '<span style="color:#ed7d31">▼ 减少</span>'}<br/>${Math.abs(d).toLocaleString()}元`;
+      }
+    },
+    legend: { data: ['增加', '减少', '汇总'], top: 24, textStyle: {fontSize: 10} },
+    grid: {left: 50, right: 14, top: 48, bottom: 56},
+    xAxis: { type: 'category', data: fullLabels, axisLabel: {
+      interval: 0, fontSize: 9, color: '#475569',
+      formatter: (value, index) => {
+        if (index === 0 || index === fullLabels.length - 1) return value;
+        return (index - 1) % 2 === 1 ? '{down|' + value + '}' : value;
+      },
+      rich: { down: { padding: [12, 0, 0, 0], fontSize: 9, color: '#475569' } }
+    } },
+    yAxis: { type: 'value', name: 'ARPU(元)', nameTextStyle:{fontSize:11,color:'#94a3b8'}, axisLabel: {formatter: v => v.toLocaleString(), fontSize: 11, color: '#94a3b8'}, splitLine: {lineStyle: {type: 'dashed', color: '#f1f5f9'}} },
+    series: [
+      { name: '辅助', type: 'bar', stack: 'wf', data: bases, itemStyle:{opacity:0}, emphasis:{itemStyle:{opacity:0}}, tooltip:{show:false} },
+      {
+        name: '差额', type: 'bar', stack: 'wf', barMaxWidth: 44,
+        data: bars.map((v, i) => ({ value: v, itemStyle: { color: ARPU_COLORS[i], borderRadius: [3,3,0,0] } } )),
+        label: { show: true, position: 'top', fontSize: 10, color: '#475569',
+          formatter: p => {
+            const idx = p.dataIndex;
+            if (idx === 0 || idx === fullLabels.length - 1) return p.value.toLocaleString();
+            const d = diffs[idx - 1];
+            return (d >= 0 ? '+' : '') + d.toLocaleString();
+          }
+        },
+        markLine: {
+          symbol: ['none', 'none'],
+          lineStyle: { type: 'solid', color: '#94a3b8', width: 1 },
+          label: { show: false },
+          data: markLines
+        }
+      }
+    ]
+  });
+  return chart;
+}
+
+// ============================================================
+// 初始化所有图表
+// ============================================================
+
+// 爆款标签占比横向条形图
+const bkPctEl = document.getElementById('bkPctChart');
+if (bkPctEl) {
+  const bkPctChart = echarts.init(bkPctEl);
+  const bkLabels = bkPctData.map(r => r['爆款标签'] || '');
+  const bkPct25 = bkPctData.map(r => r['25年'] || 0);
+  const bkPct26 = bkPctData.map(r => r['26年'] || 0);
+  bkPctChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: {type:'shadow'}, formatter: p => `<b>${p[0].name}</b><br/>25年: ${p[0].value.toFixed(2)}%<br/>26年: ${p[1].value.toFixed(2)}%` },
+    legend: { top: 0, data: ['25年','26年'], textStyle:{fontSize:12} },
+    grid: {left: 90, right: 30, top: 36, bottom: 20},
+    xAxis: { type: 'value', axisLabel: { formatter: v => v.toFixed(1)+'%', fontSize: 11 } },
+    yAxis: { type: 'category', data: bkLabels, axisLabel: {fontSize: 12, color: '#334155', fontWeight: 600} },
+    series: [
+      { name:'25年', type:'bar', data: bkPct25, itemStyle:{color: C.gray, borderRadius:[0,4,4,0]}, barMaxWidth:22, label:{show:true, position:'right', fontSize:10, formatter:v=>v.value.toFixed(1)+'%'} },
+      { name:'26年', type:'bar', data: bkPct26, itemStyle:{color: C.base, borderRadius:[0,4,4,0]}, barMaxWidth:22, label:{show:true, position:'right', fontSize:10, color:'#4f46e5', formatter:v=>v.value.toFixed(1)+'%'} },
+    ]
+  });
+}
+
+// 瀑布图A
+const wfAOrder25 = wfALabels.map((_,i) => { const o25 = [10202, 503, 1, 4960, 599, 4294]; return o25[i]; });
+buildWaterfall('wfARevChart', rev25Total, wfARevDiffs, wfALabels, '万');
+buildWaterfall('wfAOrderChart', wfAOrder25.reduce((s,v)=>s+v,0), wfAOrderDiffs, wfALabels, '单');
+buildArpuWaterfall('wfAArpuChart', arpuBase25, wfAArpuDiffs, wfALabels, arpuBase26, 'ARPU差额');
+
+// 瀑布图B
+const wfBOrder25 = [4294, 10143, 59, 28, 0, 475, 1, 0, 534, 0, 1662, 2764, 176, 356, 67];
+buildWaterfall('wfBRevChart', rev25Total, wfBRevDiffs, wfBLabels, '万');
+buildWaterfall('wfBOrderChart', wfBOrder25.reduce((s,v)=>s+v,0), wfBOrderDiffs, wfBLabels, '单');
+buildFillArpuBar('wfBArpuChart', wfBFillMinArpu, wfBLabels);
+
+// ============================================================
+// 桑基图（三层：25年定价 → 26年定价 → 合作状态）
+// ============================================================
+const sankeyEl = document.getElementById('sankeyChart');
+if (sankeyEl && sankeyNodes.length > 0) {
+  const sankeyChart = echarts.init(sankeyEl);
+  
+  // 去前缀显示
+  const stripPrefix = n => n.replace(/^25年-/, '').replace(/^26年-/, '').replace(/^状态-/, '');
+  
+  // 颜色映射（去前缀后匹配）
+  const nodeColors = {
+    '流失出口': '#ef4444', '新签入口': '#22c55e',
+    '新签': '#22c55e', '流失': '#ef4444',
+    '续大': '#3b82f6', '续小': '#f59e0b', '平续': '#8b5cf6',
+  };
+  
+  const coloredNodes = sankeyNodes.map(n => ({
+    name: n.name,
+    depth: n.depth,
+    itemStyle: { color: nodeColors[stripPrefix(n.name)] || '#4f46e5' },
+    label: { show: true, formatter: () => stripPrefix(n.name) }
+  }));
+  
+  sankeyChart.setOption({
+    tooltip: {
+      trigger: 'item',
+      formatter: p => {
+        if (p.dataType === 'edge') {
+          return `${stripPrefix(p.data.source)} → ${stripPrefix(p.data.target)}: <b>${p.data.value}</b>人`;
+        }
+        return stripPrefix(p.data.name);
+      }
+    },
+    series: [{
+      type: 'sankey',
+      layout: 'none',
+      emphasis: { focus: 'adjacency' },
+      nodeAlign: 'left',
+      nodeGap: 14,
+      nodeWidth: 22,
+      data: coloredNodes,
+      links: sankeyLinks,
+      lineStyle: { color: 'source', opacity: 0.5, curveness: 0.4 },
+      label: { fontSize: 11, fontWeight: 600, color: '#334155' },
+      levels: [
+        { depth: 0, itemStyle: { color: '#64748b' }, lineStyle: { color: 'source', opacity: 0.3 } },
+        { depth: 1, itemStyle: { color: '#4f46e5' }, lineStyle: { color: 'source', opacity: 0.5 } },
+        { depth: 2, itemStyle: { color: '#8b5cf6' }, lineStyle: { color: 'source', opacity: 0.3 } },
+      ]
+    }]
+  });
+} else if (sankeyEl) {
+  sankeyEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:14px;">暂无桑基图数据（爆款订单不足）</div>';
+}
+
+// ============================================================
+// 3.2 爆款热度分布 —— 双面板热力图（25年 vs 26年）
+// X=定价区间段, Y=爆款标签, 颜色深浅=订单量
+// ============================================================
+const heatEl = document.getElementById('heatChart');
+if (heatEl && buckets.length > 0 && tagOrder.length > 0) {
+  const heatChart = echarts.init(heatEl);
+
+  // 将字典数据转换为热力图格式 [[x, y, value], ...]
+  const hData25 = [], hData26 = [];
+  let maxVal = 0;
+  tagOrder.forEach((tag, y) => {
+    const arr25 = tagBucket25[tag] || [];
+    const arr26 = tagBucket26[tag] || [];
+    buckets.forEach((_, x) => {
+      const v25 = arr25[x] || 0;
+      const v26 = arr26[x] || 0;
+      hData25.push([x, y, v25]);
+      hData26.push([x, y, v26]);
+      maxVal = Math.max(maxVal, v25, v26);
+    });
+  });
+
+  // 计算每个单元格的YoY变化（用于tooltip）
+  const changeMap = {}; // key: "x,y" → {v25, v26, pct}
+  buckets.forEach((_, x) => {
+    tagOrder.forEach((tag, y) => {
+      const v25 = (tagBucket25[tag]||[])[x] || 0;
+      const v26 = (tagBucket26[tag]||[])[x] || 0;
+      let pct = '0%';
+      if (v25 === 0) pct = v26 > 0 ? '+∞%' : '0%';
+      else pct = ((v26 - v25) / v25 * 100).toFixed(0);
+      changeMap[`${x},${y}`] = { v25, v26, pct: (pct >= 0 ? '+' : '') + pct + '%', tag };
+    });
+  });
+
+  heatChart.setOption({
+    tooltip: {
+      position: 'top',
+      formatter: p => {
+        const [x, y, v] = p.data;
+        const bucket = buckets[x];
+        const tag = tagOrder[y];
+        const ch = changeMap[`${x},${y}`];
+        const trendColor = ch.v26 > ch.v25 ? '#22c55e' : ch.v26 < ch.v25 ? '#ef4444' : '#94a3b8';
+        return `<div style="font-weight:700;margin-bottom:6px;">${bucket} · ${tag}</div>`
+          + `<div style="display:flex;gap:16px;">`
+          + `<span style="color:#64748b;">25年: <b>${ch.v25.toLocaleString()}</b></span>`
+          + `<span style="color:#4f46e5;">26年: <b>${ch.v26.toLocaleString()}</b></span>`
+          + `</div>`
+          + `<div style="margin-top:4px;color:${trendColor};font-size:12px;">YoY: <b>${ch.pct}</b></div>`;
+      }
+    },
+    grid: [
+      { left: 90, right: 20, top: 36, bottom: 20, width: '42%' },
+      { left: '54%', right: 20, top: 36, bottom: 20, width: '42%' }
+    ],
+    xAxis: [
+      { type: 'category', data: buckets, gridIndex: 0, axisLabel: { show: false }, splitArea: { show: true } },
+      { type: 'category', data: buckets, gridIndex: 1, axisLabel: { rotate: 30, fontSize: 10, color: '#475569' }, splitArea: { show: true } }
+    ],
+    yAxis: [
+      { type: 'category', data: tagOrder, gridIndex: 0, axisLabel: { fontSize: 11, color: '#475569' }, splitArea: { show: true } },
+      { type: 'category', data: tagOrder, gridIndex: 1, axisLabel: { show: false }, splitArea: { show: true } }
+    ],
+    visualMap: {
+      min: 0, max: maxVal,
+      calculable: true,
+      orient: 'horizontal',
+      left: 'center',
+      bottom: 2,
+      itemWidth: 12, itemHeight: 100,
+      textStyle: { fontSize: 10, color: '#94a3b8' },
+      inRange: { color: ['#f0f9ff', '#bae6fd', '#38bdf8', '#0284c7', '#0c4a6e'] }
+    },
+    series: [
+      {
+        name: '2025年', type: 'heatmap', xAxisIndex: 0, yAxisIndex: 0,
+        data: hData25,
+        label: { show: true, fontSize: 10, color: '#1e293b',
+          formatter: p => p.data[2] > 0 ? p.data[2].toLocaleString() : '' },
+        emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.2)' } }
+      },
+      {
+        name: '2026年', type: 'heatmap', xAxisIndex: 1, yAxisIndex: 1,
+        data: hData26,
+        label: { show: true, fontSize: 10, color: '#1e293b',
+          formatter: p => p.data[2] > 0 ? p.data[2].toLocaleString() : '' },
+        emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.2)' } }
+      }
+    ]
+  });
+} else if (heatEl) {
+  heatEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:14px;">暂无热度分布数据</div>';
+}
+
+// ============================================================
+// 弦图（D3.js 定价迁移关系图）
+// ============================================================
+const chordEl = document.getElementById('chordChart');
+if (chordEl && chordFlow.length > 0) {
+  // 收集所有定价节点（含数字的定价名称，排除新签入口/流失出口）
+  const pricePat = /[0-9]/;
+  const allNamesSet = new Set();
+  chordFlow.forEach(f => {
+    if (pricePat.test(f.source)) allNamesSet.add(f.source);
+    if (pricePat.test(f.target)) allNamesSet.add(f.target);
+  });
+  const names = [...allNamesSet];
+  if (names.length === 0) {
+    chordEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:14px;">暂无定价迁移数据</div>';
+  } else {
+    const n = names.length;
+    // 构建邻接矩阵
+    const matrix = Array.from({length: n}, () => Array(n).fill(0));
+    chordFlow.forEach(f => {
+      const si = names.indexOf(f.source);
+      const ti = names.indexOf(f.target);
+      if (si >= 0 && ti >= 0 && si !== ti) {
+        matrix[si][ti] += f.value;
+      }
+    });
+    
+    // 颜色
+    const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
+    
+    const width = chordEl.clientWidth || 640;
+    const height = chordEl.clientHeight || 520;
+    const outerRadius = Math.min(width, height) * 0.5 - 60;
+    const innerRadius = outerRadius - 20;
+    
+    chordEl.innerHTML = '';
+    const svg = d3.select(chordEl).append('svg')
+      .attr('viewBox', [-width / 2, -height / 2, width, height])
+      .attr('width', width).attr('height', height);
+    
+    const chord = d3.chord().padAngle(0.05).sortSubgroups(d3.descending);
+    const chords = chord(matrix);
+    
+    const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+    const ribbon = d3.ribbon().radius(innerRadius);
+    
+    const group = svg.append('g').selectAll('g').data(chords.groups).join('g');
+    
+    // 外弧
+    group.append('path')
+      .attr('fill', d => colorScale(d.index))
+      .attr('stroke', '#fff')
+      .attr('d', arc)
+      .style('cursor', 'pointer')
+      .on('mouseover', function(event, d) {
+        d3.selectAll('.ribbon').transition().duration(200).style('opacity', 0.1);
+        d3.selectAll('.ribbon.source-' + d.index + '.target-' + d.index).transition().duration(200).style('opacity', 0.9);
+        d3.select(this).transition().duration(200).attr('transform', 'scale(1.02)');
+      })
+      .on('mouseout', function() {
+        d3.selectAll('.ribbon').transition().duration(200).style('opacity', 0.65);
+        d3.select(this).transition().duration(200).attr('transform', 'scale(1)');
+      });
+    
+    // 外弧标签
+    group.append('text')
+      .each(d => { d.angle = (d.startAngle + d.endAngle) / 2; })
+      .attr('dy', '0.35em')
+      .attr('transform', d => `
+        rotate(${(d.angle * 180 / Math.PI - 90)})
+        translate(${outerRadius + 10})
+        ${d.angle > Math.PI ? 'rotate(180)' : ''}
+      `)
+      .attr('text-anchor', d => d.angle > Math.PI ? 'end' : 'start')
+      .text(d => names[d.index])
+      .style('font-size', '11px')
+      .style('font-weight', '600')
+      .style('fill', '#334155');
+    
+    // 内弦（ribbon）
+    svg.append('g')
+      .attr('fill-opacity', 0.65)
+      .selectAll('path')
+      .data(chords)
+      .join('path')
+      .attr('class', d => 'ribbon source-' + d.source.index + ' target-' + d.target.index)
+      .attr('d', ribbon)
+      .attr('fill', d => colorScale(d.source.index))
+      .attr('stroke', '#fff')
+      .style('mix-blend-mode', 'multiply')
+      .append('title')
+      .text(d => `${names[d.source.index]} → ${names[d.target.index]}: ${d.source.value}人`);
+    
+    // tooltip 跟随鼠标
+    const tooltip = d3.select('body').append('div')
+      .style('position', 'absolute')
+      .style('visibility', 'hidden')
+      .style('background', 'rgba(0,0,0,0.8)')
+      .style('color', '#fff')
+      .style('padding', '8px 12px')
+      .style('border-radius', '6px')
+      .style('font-size', '12px')
+      .style('pointer-events', 'none')
+      .style('z-index', '9999');
+    
+    svg.selectAll('.ribbon')
+      .on('mousemove', function(event, d) {
+        tooltip.style('visibility', 'visible')
+          .html(`<b>${names[d.source.index]}</b> → <b>${names[d.target.index]}</b><br/>迁移: <b>${d.source.value}</b>人`)
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 20) + 'px');
+      })
+      .on('mouseout', () => tooltip.style('visibility', 'hidden'));
+  }
+}
+
+// ============================================================
+// 响应式
+// ============================================================
+const allCharts = [];
+['bkPctChart','wfARevChart','wfAOrderChart','wfAArpuChart',
+ 'wfBRevChart','wfBOrderChart','wfBArpuChart',
+ 'sankeyChart','heatChart','chordChart'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) { const c = echarts.getInstanceByDom(el); if(c) allCharts.push(c); }
+});
+window.addEventListener('resize', () => allCharts.forEach(c => c.resize()));
+</script>
+</body>
+</html>
