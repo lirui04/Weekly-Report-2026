@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业服务行业日报 · 2026年4月1日 - 6月6日</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'PingFang SC','Microsoft YaHei',sans-serif; background:#f0f4f8; color:#1e293b; }
+  .page-header { background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 50%,#0ea5e9 100%); padding:28px 36px 24px; color:#fff; }
+  .page-header h1 { font-size:22px; font-weight:700; letter-spacing:.5px; }
+  .page-header .subtitle { font-size:13px; opacity:.85; margin-top:4px; }
+  .container { max-width:1400px; margin:0 auto; padding:20px 24px; }
+  
+  /* ===== 顶部摘要卡片区域 ===== */
+  .summary-section { background:#fff; border-radius:12px; padding:24px 28px 20px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+  .summary-title { font-size:14px; font-weight:600; color:#374151; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .summary-title::before { content:''; width:4px; height:16px; background:#2563eb; border-radius:2px; display:inline-block; }
+  
+  /* KPI 卡片行 */
+  .kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+  .kpi-card { background:linear-gradient(135deg,#f8faff,#eef2ff); border:1px solid #e0e7ff; border-radius:10px; padding:16px 18px; }
+  .kpi-card .label { font-size:12px; color:#6b7280; margin-bottom:6px; }
+  .kpi-card .value { font-size:26px; font-weight:700; color:#1e3a5f; line-height:1; }
+  .kpi-card .sub { font-size:11px; margin-top:5px; }
+  .kpi-card .sub.up { color:#16a34a; } .kpi-card .sub.down { color:#dc2626; }
+  .kpi-card .sub.neutral { color:#6b7280; }
+  
+  /* 产品类型占比表格 */
+  .product-breakdown { margin-top:4px; }
+  .product-breakdown h4 { font-size:13px; color:#374151; font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .product-breakdown h4 span { background:#dbeafe; color:#1d4ed8; padding:2px 8px; border-radius:20px; font-size:11px; }
+  .product-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  .product-table th { background:#f1f5f9; padding:8px 12px; text-align:center; font-weight:600; color:#475569; border-bottom:2px solid #e2e8f0; }
+  .product-table th:first-child { text-align:left; }
+  .product-table td { padding:8px 12px; text-align:center; border-bottom:1px solid #f1f5f9; color:#334155; }
+  .product-table td:first-child { text-align:left; font-weight:600; }
+  .product-table tr:hover td { background:#f8faff; }
+  .product-table .yoy-up { color:#16a34a; font-weight:600; }
+  .product-table .yoy-down { color:#dc2626; font-weight:600; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:600; }
+  .badge-grzc { background:#dbeafe; color:#1d4ed8; }
+  .badge-tc { background:#d1fae5; color:#065f46; }
+  .badge-zz { background:#fef3c7; color:#92400e; }
+  .badge-jk { background:#ede9fe; color:#5b21b6; }
+  
+  /* 进度条 */
+  .progress-bar-wrap { display:flex; align-items:center; gap:8px; }
+  .progress-bar { height:8px; border-radius:4px; }
+  .progress-bg { background:#e2e8f0; border-radius:4px; overflow:hidden; flex:1; height:8px; min-width:60px; }
+  .progress-fill { height:100%; border-radius:4px; transition:width .3s; }
+  
+  /* 图表网格 */
+  .section { background:#fff; border-radius:12px; padding:20px 22px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+  .section-title { font-size:14px; font-weight:600; color:#374151; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .section-title::before { content:''; width:4px; height:16px; background:#2563eb; border-radius:2px; display:inline-block; }
+  .chart-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .chart-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .chart-area { width:100%; height:300px; }
+  .chart-area-sm { width:100%; height:240px; }
+  .chart-area-lg { width:100%; height:360px; }
+  .chart-label { font-size:12px; color:#6b7280; margin-bottom:6px; font-weight:500; }
+  
+  /* 表格 */
+  .data-table { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:8px; }
+  .data-table th { background:#f8faff; padding:9px 12px; text-align:left; font-weight:600; color:#374151; border-bottom:2px solid #e2e8f0; font-size:12px; }
+  .data-table td { padding:8px 12px; border-bottom:1px solid #f1f5f9; color:#475569; }
+  .data-table tr:hover td { background:#f8faff; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  
+  /* 注释 */
+  .note { font-size:11px; color:#94a3b8; margin-top:12px; padding-top:8px; border-top:1px dashed #e2e8f0; }
+  
+  @media(max-width:900px) { .kpi-row { grid-template-columns:1fr 1fr; } .chart-grid-2,.chart-grid-3 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>📊 商业服务行业日报</h1>
+  <div class="subtitle">统计周期：2026年4月1日 ～ 6月6日 &nbsp;|&nbsp; 同比：2025年同期 &nbsp;|&nbsp; 数据源：商业服务 - Ai.xlsx &nbsp;|&nbsp; 生成时间：2026-06-08</div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 顶部总结区域 ===== -->
+  <div class="summary-section">
+    <div class="summary-title">核心指标总览</div>
+    
+    <!-- KPI 四格 -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="label">累计订单量</div>
+        <div class="value">1,919</div>
+        <div class="sub up">▲ +9.2% vs 25年同期(1,757单)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">累计回款</div>
+        <div class="value">399.0万</div>
+        <div class="sub up">▲ +6.0% vs 25年同期(376.3万)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">整体ARPU</div>
+        <div class="value">2,079元</div>
+        <div class="sub down">▼ -2.9% vs 25年同期(2,142元)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">新签订单</div>
+        <div class="value">392单</div>
+        <div class="sub neutral">新签占比 20.4% &nbsp;|&nbsp; 续费 1,527单</div>
+      </div>
+    </div>
+    
+    <!-- 产品类型拆分 -->
+    <div class="product-breakdown">
+      <h4>产品类型拆分（4月1日 - 6月6日）<span>个人超值 / 套餐 / 定制 / 框架</span></h4>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>产品类型</th>
+            <th>26年订单数</th>
+            <th>订单占比</th>
+            <th>26年回款</th>
+            <th>回款占比</th>
+            <th>25年订单数</th>
+            <th>25年回款</th>
+            <th>同比订单</th>
+            <th>同比回款</th>
+            <th>订单占比条</th>
+            <th>回款占比条</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-grzc">个人超值</span></td>
+            <td class="num">1,253</td>
+            <td class="num">65.3%</td>
+            <td class="num">62.2万</td>
+            <td class="num">15.6%</td>
+            <td class="num">1,162</td>
+            <td class="num">57.0万</td>
+            <td class="num yoy-up">▲ +7.8%</td>
+            <td class="num yoy-up">▲ +9.3%</td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:65.3%;background:#3b82f6;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">65.3%</span>
+              </div>
+            </td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:15.6%;background:#3b82f6;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">15.6%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-tc">套餐</span></td>
+            <td class="num">650</td>
+            <td class="num">33.9%</td>
+            <td class="num">266.9万</td>
+            <td class="num">66.9%</td>
+            <td class="num">580</td>
+            <td class="num">261.6万</td>
+            <td class="num yoy-up">▲ +12.1%</td>
+            <td class="num yoy-up">▲ +2.0%</td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:33.9%;background:#10b981;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">33.9%</span>
+              </div>
+            </td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:66.9%;background:#10b981;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">66.9%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-zz">定制</span></td>
+            <td class="num">14</td>
+            <td class="num">0.7%</td>
+            <td class="num">52.3万</td>
+            <td class="num">13.1%</td>
+            <td class="num">14</td>
+            <td class="num">44.9万</td>
+            <td class="num neutral">— 0%</td>
+            <td class="num yoy-up">▲ +16.6%</td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:0.7%;background:#f59e0b;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">0.7%</span>
+              </div>
+            </td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:13.1%;background:#f59e0b;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">13.1%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-jk">框架</span></td>
+            <td class="num">2</td>
+            <td class="num">0.1%</td>
+            <td class="num">17.5万</td>
+            <td class="num">4.4%</td>
+            <td class="num">1</td>
+            <td class="num">12.9万</td>
+            <td class="num yoy-up">▲ +100%</td>
+            <td class="num yoy-up">▲ +35.6%</td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:0.1%;background:#8b5cf6;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">0.1%</span>
+              </div>
+            </td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bg"><div class="progress-fill" style="width:4.4%;background:#8b5cf6;"></div></div>
+                <span style="font-size:11px;color:#6b7280;min-width:36px;">4.4%</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note">💡 订单量口径：主表「个人+套餐+定制+框架」sheet 去重统计 | 套餐包含：全网招3.0 / 58招聘 / 赶集招聘 | 框架为主表中已映射框架合同的订单行</div>
+    </div>
+  </div>
+
+  <!-- ===== 1. 每日趋势 ===== -->
+  <div class="section">
+    <div class="section-title">每日订单量 &amp; 回款趋势（26年 vs 25年）</div>
+    <div class="chart-area-lg" id="dailyChart"></div>
+    <div class="note">横轴为月-日（4月1日至6月6日），双Y轴：左轴=每日订单量（柱），右轴=每日回款金额（折线）</div>
+  </div>
+
+  <!-- ===== 2. 月度对比 + 产品占比 ===== -->
+  <div class="chart-grid-2">
+    <div class="section">
+      <div class="section-title">月度订单量对比</div>
+      <div class="chart-area" id="monthOrderChart"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">月度回款对比</div>
+      <div class="chart-area" id="monthRevChart"></div>
+    </div>
+  </div>
+
+  <!-- ===== 3. 产品类型拆分可视化 ===== -->
+  <div class="chart-grid-2">
+    <div class="section">
+      <div class="section-title">26年产品类型 - 订单量占比</div>
+      <div class="chart-area" id="prodOrderPieChart"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">26年产品类型 - 回款占比</div>
+      <div class="chart-area" id="prodRevPieChart"></div>
+    </div>
+  </div>
+
+  <!-- ===== 4. 月度产品类型堆叠 ===== -->
+  <div class="chart-grid-2">
+    <div class="section">
+      <div class="section-title">月度订单 - 按产品类型堆叠</div>
+      <div class="chart-area" id="monthProdStackChart"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">月度回款 - 按产品类型堆叠</div>
+      <div class="chart-area" id="monthRevStackChart"></div>
+    </div>
+  </div>
+
+  <!-- ===== 5. 版本 / 爆款标签 ===== -->
+  <div class="chart-grid-2">
+    <div class="section">
+      <div class="section-title">爆款标签分布（26年 vs 25年）</div>
+      <div class="chart-area" id="tagChart"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">城市 TOP 10（26年订单量）</div>
+      <div class="chart-area" id="cityChart"></div>
+    </div>
+  </div>
+
+  <!-- ===== 6. 新签/续费月度 + 销售TOP10 ===== -->
+  <div class="chart-grid-2">
+    <div class="section">
+      <div class="section-title">新签 / 续费 月度结构</div>
+      <div class="chart-area" id="newRenewChart"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">新签销售 TOP 10（26年）</div>
+      <div class="chart-area" id="salesChart"></div>
+    </div>
+  </div>
+
+  <!-- ===== 7. ARPU月度趋势 ===== -->
+  <div class="section">
+    <div class="section-title">月度 ARPU 趋势（26年 vs 25年）</div>
+    <div class="chart-area-sm" id="arpuChart"></div>
+  </div>
+
+  <!-- ===== 8. 框架合同 ===== -->
+  <div class="section">
+    <div class="section-title">框架合同概览（累计至今）</div>
+    <div class="chart-grid-2" style="margin-bottom:0;">
+      <div>
+        <div class="chart-label">按签框年份 - 合同金额 vs 已回款</div>
+        <div class="chart-area-sm" id="frameChart"></div>
+      </div>
+      <div>
+        <div class="chart-label">服务中框架合同明细（14个，合同金额 168万，已回款 221.1万）</div>
+        <table class="data-table" style="margin-top:0;">
+          <thead><tr><th>签框年份</th><th>合同数</th><th>合同金额（万元）</th><th>已回款（万元）</th><th>回款率</th></tr></thead>
+          <tbody>
+            <tr><td>2024年</td><td class="num">9</td><td class="num">284.0</td><td class="num">322.5</td><td class="num">113.6%</td></tr>
+            <tr><td>2025年</td><td class="num">14</td><td class="num">168.9</td><td class="num">248.5</td><td class="num">147.1%</td></tr>
+            <tr><td>2026年</td><td class="num">4</td><td class="num">48.0</td><td class="num">26.3</td><td class="num">54.8%</td></tr>
+          </tbody>
+        </table>
+        <div class="note">合同状态：服务中14个 | 已到期8个 | 解除5个 &nbsp;|&nbsp; 合同总金额500.9万，累计已回款597.3万</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 9. 定制合同 ===== -->
+  <div class="section">
+    <div class="section-title">定制合同明细（4月1日-6月6日统计期内 14单）</div>
+    <table class="data-table">
+      <thead><tr><th>创建时间</th><th>实付金额</th><th>直销/渠道</th><th>销售名称</th></tr></thead>
+      <tbody>
+        <tr><td>2026-04-08</td><td class="num">30,000</td><td>直销</td><td>唐卓庆</td></tr>
+        <tr><td>2026-04-09</td><td class="num">30,000</td><td>直销</td><td>孙元鹏</td></tr>
+        <tr><td>2026-04-15</td><td class="num">100,000</td><td>直销</td><td>唐举艳</td></tr>
+        <tr><td>2026-04-15</td><td class="num">50,000</td><td>直销</td><td>刘帅</td></tr>
+        <tr><td>2026-04-20</td><td class="num">31,847</td><td>渠道</td><td>林艺</td></tr>
+        <tr><td>2026-04-24</td><td class="num">36,000</td><td>直销</td><td>刘倬亚</td></tr>
+        <tr><td>2026-04-27</td><td class="num">30,911</td><td>渠道</td><td>刘家青</td></tr>
+        <tr><td>2026-05-08</td><td class="num">30,010</td><td>直销</td><td>杨凯丽</td></tr>
+        <tr><td>2026-05-11</td><td class="num">31,343</td><td>渠道</td><td>刘家青</td></tr>
+        <tr><td>2026-05-11</td><td class="num">30,000</td><td>直销</td><td>沈林辉</td></tr>
+        <tr><td>2026-05-15</td><td class="num">30,000</td><td>直销</td><td>林小成</td></tr>
+        <tr><td>2026-05-21</td><td class="num">30,000</td><td>直销</td><td>孙元鹏</td></tr>
+        <tr><td>2026-05-31</td><td class="num">30,110</td><td>渠道</td><td>尹鑫</td></tr>
+        <tr><td>2026-05-31</td><td class="num">32,860</td><td>渠道</td><td>王春荣</td></tr>
+      </tbody>
+    </table>
+    <div class="note">定制合同26年共14单，累计回款523,081元 (52.3万) | 25年同期14单，回款448,560元 (44.9万)，同比 ▲+16.6%</div>
+  </div>
+
+</div>
+
+<script>
+// ===== 数据 =====
+const dates = ["04-01","04-02","04-03","04-04","04-05","04-06","04-07","04-08","04-09","04-10","04-11","04-12","04-13","04-14","04-15","04-16","04-17","04-18","04-19","04-20","04-21","04-22","04-23","04-24","04-25","04-26","04-27","04-28","04-29","04-30","05-01","05-02","05-03","05-04","05-05","05-06","05-07","05-08","05-09","05-10","05-11","05-12","05-13","05-14","05-15","05-16","05-17","05-18","05-19","05-20","05-21","05-22","05-23","05-24","05-25","05-26","05-27","05-28","05-29","05-30","05-31","06-01","06-02","06-03","06-04","06-05","06-06"];
+const cnt26 = [52,24,34,2,2,3,52,39,46,17,21,4,50,37,38,17,24,4,17,35,4,9,53,42,5,4,50,37,39,36,4,5,3,4,5,4,41,33,39,20,21,5,43,42,30,17,20,4,42,38,4,5,42,37,41,4,4,42,35,41,31,29,28,39,40,37,52];
+const rev26 = [84723,38868,97184,7960,998,7178,77986,95338,101331,44680,12980,14578,81567,53798,137453,58058,77050,8518,69038,100940,14578,14578,133430,159940,15978,7960,186960,115720,101940,188580,7918,9980,4992,4992,9980,4992,120818,96408,128140,64640,62140,13980,146420,136990,93910,53810,82650,13360,114340,120920,13360,13360,117680,95060,125780,13360,13360,121860,106770,125780,101711,79248,86130,120980,124980,109200,162221];
+const cnt25 = [0,0,0,0,0,47,30,47,38,18,17,4,44,37,38,31,17,4,39,36,5,4,48,37,37,5,44,0,0,0,0,0,0,4,4,4,43,42,45,19,21,4,44,38,48,24,19,5,47,42,17,4,46,44,36,4,5,0,47,40,35,24,24,20,18,22,17];
+const rev25 = [0,0,0,0,0,71730,44470,98518,70088,44440,41100,9960,98600,59430,193510,91510,99800,8520,101900,95070,14540,9990,145650,104550,109890,14940,149820,0,0,0,0,0,0,9980,7980,7980,136850,130460,153210,51060,75550,9960,155690,110960,161230,89510,57100,14940,164090,156310,64170,12990,154050,140170,122210,12990,14940,0,138020,129780,123740,80760,69920,36260,40040,50740,34070];
+
+const monthLabels = ['4月','5月','6月(1-6日)'];
+const monthly26Cnt = [889,805,225];
+const monthly25Cnt = [752,879,126];
+const monthly26Rev = [2027565,1600141,362529];
+const monthly25Rev = [1601823,1949800,211792];
+
+// 月度ARPU
+const arpu26 = monthly26Rev.map((r,i) => monthly26Cnt[i]>0 ? Math.round(r/monthly26Cnt[i]) : 0);
+const arpu25 = monthly25Rev.map((r,i) => monthly25Cnt[i]>0 ? Math.round(r/monthly25Cnt[i]) : 0);
+
+// 产品类型
+const prodTypes = ['个人超值','套餐','定制','框架'];
+const prodColors = ['#3b82f6','#10b981','#f59e0b','#8b5cf6'];
+const prod26Cnt = [1253,650,14,2];
+const prod25Cnt = [1162,580,14,1];
+const prod26Rev = [622404,2669939,523081,174811];
+const prod25Rev = [569691,2616216,448560,128948];
+
+// 月度产品类型堆叠（订单量）
+const monthProdCnt = {
+  '个人超值': [565,524,164],
+  '套餐':     [316,274,60],
+  '定制':     [7,7,0],
+  '框架':     [1,0,1]
+};
+const monthProdRev = {
+  '个人超值': [279220,260806,82378],
+  '套餐':     [1312777,1125012,232150],
+  '定制':     [308758,214323,0],
+  '框架':     [126810,0,48001]
+};
+
+// 爆款标签
+const tags26 = [1177,387,173,97,37,32];
+const tags25 = [906,327,121,58,44,46];
+const tagNames = ['月度爆款','58引流款','其他','赶集爆款','58爆款','赶集引流款'];
+
+// 城市TOP10
+const cityNames = ['成都','北京','昆明','广州','重庆','郑州','上海','南宁','沈阳','东莞'];
+const cityCnt26 = [125,108,73,65,60,58,47,45,39,36];
+
+// 新签续费
+const newCnt = [194,157,41];
+const renewCnt = [687,641,183];
+
+// 销售TOP10
+const salesNames = ['缪金凤','郑丁铭','熊月传','冯新竹','敖燚','于红月','朱冬香','张达','刘星','任翠利'];
+const salesCnt = [16,5,5,4,4,4,4,4,4,4];
+
+// 框架合同
+const frameYears = ['2024年','2025年','2026年'];
+const frameContract = [284.0,168.9,48.0];
+const framePaid = [322.5,248.5,26.3];
+
+// ===== 图表渲染 =====
+function initChart(id) { return echarts.init(document.getElementById(id)); }
+
+// 1. 每日趋势
+(function(){
+  const chart = initChart('dailyChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'cross'} },
+    legend:{ data:['26年订单量','25年订单量','26年回款','25年回款'], top:0, textStyle:{fontSize:11} },
+    grid:{ left:50, right:60, top:36, bottom:40 },
+    xAxis:{ type:'category', data:dates, axisLabel:{fontSize:10, interval:Math.floor(dates.length/15)} },
+    yAxis:[
+      { type:'value', name:'订单量', nameTextStyle:{fontSize:10}, axisLabel:{fontSize:10} },
+      { type:'value', name:'回款(元)', nameTextStyle:{fontSize:10}, axisLabel:{fontSize:10, formatter:v=>v>=10000?(v/10000).toFixed(1)+'万':v} }
+    ],
+    series:[
+      { name:'26年订单量', type:'bar', data:cnt26, itemStyle:{color:'#3b82f6', opacity:0.8}, barMaxWidth:6 },
+      { name:'25年订单量', type:'bar', data:cnt25, itemStyle:{color:'#94a3b8', opacity:0.6}, barMaxWidth:6 },
+      { name:'26年回款', type:'line', yAxisIndex:1, data:rev26, smooth:true, lineStyle:{color:'#ef4444',width:2}, symbol:'none' },
+      { name:'25年回款', type:'line', yAxisIndex:1, data:rev25, smooth:true, lineStyle:{color:'#fca5a5',width:1.5,type:'dashed'}, symbol:'none' }
+    ]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 2. 月度订单
+(function(){
+  const chart = initChart('monthOrderChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis' },
+    legend:{ data:['26年','25年'], top:0 },
+    grid:{ left:50, right:16, top:36, bottom:36 },
+    xAxis:{ type:'category', data:monthLabels },
+    yAxis:{ type:'value' },
+    series:[
+      { name:'26年', type:'bar', data:monthly26Cnt, itemStyle:{color:'#3b82f6'}, label:{show:true,position:'top',fontSize:11} },
+      { name:'25年', type:'bar', data:monthly25Cnt, itemStyle:{color:'#94a3b8'}, label:{show:true,position:'top',fontSize:11} }
+    ]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 3. 月度回款
+(function(){
+  const chart = initChart('monthRevChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis', formatter: params => params.map(p=>`${p.seriesName}: ${(p.value/10000).toFixed(1)}万`).join('<br>') },
+    legend:{ data:['26年','25年'], top:0 },
+    grid:{ left:60, right:16, top:36, bottom:36 },
+    xAxis:{ type:'category', data:monthLabels },
+    yAxis:{ type:'value', axisLabel:{formatter:v=>(v/10000).toFixed(0)+'万'} },
+    series:[
+      { name:'26年', type:'bar', data:monthly26Rev, itemStyle:{color:'#10b981'}, label:{show:true,position:'top',fontSize:10,formatter:p=>(p.value/10000).toFixed(1)+'万'} },
+      { name:'25年', type:'bar', data:monthly25Rev, itemStyle:{color:'#86efac'}, label:{show:true,position:'top',fontSize:10,formatter:p=>(p.value/10000).toFixed(1)+'万'} }
+    ]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 4. 产品订单饼图
+(function(){
+  const chart = initChart('prodOrderPieChart');
+  chart.setOption({
+    tooltip:{ trigger:'item', formatter:'{b}: {c}单 ({d}%)' },
+    legend:{ orient:'vertical', right:10, top:'center', textStyle:{fontSize:11} },
+    series:[{
+      type:'pie', radius:['40%','70%'], center:['40%','50%'],
+      data: prodTypes.map((t,i)=>({ name:t, value:prod26Cnt[i], itemStyle:{color:prodColors[i]} })),
+      label:{ fontSize:11, formatter:'{b}\n{c}单' }
+    }]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 5. 产品回款饼图
+(function(){
+  const chart = initChart('prodRevPieChart');
+  chart.setOption({
+    tooltip:{ trigger:'item', formatter:p=>`${p.name}: ${(p.value/10000).toFixed(1)}万 (${p.percent}%)` },
+    legend:{ orient:'vertical', right:10, top:'center', textStyle:{fontSize:11} },
+    series:[{
+      type:'pie', radius:['40%','70%'], center:['40%','50%'],
+      data: prodTypes.map((t,i)=>({ name:t, value:prod26Rev[i], itemStyle:{color:prodColors[i]} })),
+      label:{ fontSize:11, formatter:p=>`${p.name}\n${(p.value/10000).toFixed(1)}万` }
+    }]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 6. 月度产品类型堆叠订单
+(function(){
+  const chart = initChart('monthProdStackChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+    legend:{ data:prodTypes, top:0, textStyle:{fontSize:10} },
+    grid:{ left:50, right:16, top:36, bottom:36 },
+    xAxis:{ type:'category', data:monthLabels },
+    yAxis:{ type:'value' },
+    series: prodTypes.map((t,i)=>({
+      name:t, type:'bar', stack:'total',
+      data:monthProdCnt[t],
+      itemStyle:{color:prodColors[i]},
+      label:{ show:true, fontSize:10, formatter:p=>p.value>0?p.value:'' }
+    }))
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 7. 月度产品类型堆叠回款
+(function(){
+  const chart = initChart('monthRevStackChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'}, formatter: params => {
+      let s = params[0].axisValue + '<br>';
+      params.forEach(p=>{ s += `${p.marker}${p.seriesName}: ${(p.value/10000).toFixed(1)}万<br>`; });
+      return s;
+    }},
+    legend:{ data:prodTypes, top:0, textStyle:{fontSize:10} },
+    grid:{ left:60, right:16, top:36, bottom:36 },
+    xAxis:{ type:'category', data:monthLabels },
+    yAxis:{ type:'value', axisLabel:{formatter:v=>(v/10000).toFixed(0)+'万'} },
+    series: prodTypes.map((t,i)=>({
+      name:t, type:'bar', stack:'total',
+      data:monthProdRev[t],
+      itemStyle:{color:prodColors[i]},
+      label:{ show:true, fontSize:10, formatter:p=>p.value>5000?(p.value/10000).toFixed(0)+'万':'' }
+    }))
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 8. 爆款标签
+(function(){
+  const chart = initChart('tagChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis' },
+    legend:{ data:['26年','25年'], top:0 },
+    grid:{ left:80, right:16, top:36, bottom:36 },
+    xAxis:{ type:'value' },
+    yAxis:{ type:'category', data:tagNames, axisLabel:{fontSize:11} },
+    series:[
+      { name:'26年', type:'bar', data:tags26, itemStyle:{color:'#3b82f6'}, label:{show:true,position:'right',fontSize:10} },
+      { name:'25年', type:'bar', data:tags25, itemStyle:{color:'#94a3b8'}, label:{show:true,position:'right',fontSize:10} }
+    ]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 9. 城市
+(function(){
+  const chart = initChart('cityChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis' },
+    grid:{ left:50, right:40, top:16, bottom:36 },
+    xAxis:{ type:'category', data:cityNames, axisLabel:{fontSize:11} },
+    yAxis:{ type:'value' },
+    series:[{ type:'bar', data:cityCnt26, itemStyle:{ color:v=>['#3b82f6','#0ea5e9','#06b6d4','#10b981','#84cc16','#eab308','#f97316','#ef4444','#ec4899','#8b5cf6'][v.dataIndex] }, label:{show:true,position:'top',fontSize:10} }]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 10. 新签续费
+(function(){
+  const chart = initChart('newRenewChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+    legend:{ data:['新签','续费'], top:0 },
+    grid:{ left:50, right:16, top:36, bottom:36 },
+    xAxis:{ type:'category', data:monthLabels },
+    yAxis:{ type:'value' },
+    series:[
+      { name:'续费', type:'bar', stack:'s', data:renewCnt, itemStyle:{color:'#dbeafe'}, label:{show:true,position:'inside',fontSize:10,color:'#1d4ed8'} },
+      { name:'新签', type:'bar', stack:'s', data:newCnt, itemStyle:{color:'#3b82f6'}, label:{show:true,position:'inside',fontSize:10} }
+    ]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 11. 销售TOP10
+(function(){
+  const chart = initChart('salesChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis' },
+    grid:{ left:60, right:40, top:16, bottom:36 },
+    xAxis:{ type:'category', data:salesNames, axisLabel:{fontSize:10} },
+    yAxis:{ type:'value', name:'新签单数' },
+    series:[{ type:'bar', data:salesCnt, itemStyle:{color:'#10b981'}, label:{show:true,position:'top',fontSize:11} }]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 12. ARPU
+(function(){
+  const chart = initChart('arpuChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis' },
+    legend:{ data:['26年ARPU','25年ARPU'], top:0 },
+    grid:{ left:70, right:16, top:36, bottom:36 },
+    xAxis:{ type:'category', data:monthLabels },
+    yAxis:{ type:'value', axisLabel:{formatter:v=>v.toLocaleString()+'元'} },
+    series:[
+      { name:'26年ARPU', type:'line', data:arpu26, smooth:true, symbol:'circle', symbolSize:8, lineStyle:{color:'#3b82f6',width:3}, label:{show:true,position:'top',fontSize:11,formatter:p=>p.value.toLocaleString()+'元'} },
+      { name:'25年ARPU', type:'line', data:arpu25, smooth:true, symbol:'circle', symbolSize:8, lineStyle:{color:'#94a3b8',width:2,type:'dashed'}, label:{show:true,position:'bottom',fontSize:11,formatter:p=>p.value.toLocaleString()+'元'} }
+    ]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+
+// 13. 框架合同
+(function(){
+  const chart = initChart('frameChart');
+  chart.setOption({
+    tooltip:{ trigger:'axis' },
+    legend:{ data:['合同金额','已回款'], top:0 },
+    grid:{ left:50, right:16, top:36, bottom:36 },
+    xAxis:{ type:'category', data:frameYears },
+    yAxis:{ type:'value', axisLabel:{formatter:v=>v+'万'} },
+    series:[
+      { name:'合同金额', type:'bar', data:frameContract, itemStyle:{color:'#8b5cf6'}, label:{show:true,position:'top',fontSize:10,formatter:p=>p.value+'万'} },
+      { name:'已回款', type:'bar', data:framePaid, itemStyle:{color:'#a78bfa'}, label:{show:true,position:'top',fontSize:10,formatter:p=>p.value+'万'} }
+    ]
+  });
+  window.addEventListener('resize', ()=>chart.resize());
+})();
+</script>
+</body>
+</html>
