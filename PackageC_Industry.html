@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保安&货运行业调整方案</title>
+<style>
+  :root {
+    --brand: #2563EB;
+    --brand-light: #EFF6FF;
+    --brand-mid: #DBEAFE;
+    --accent: #DC2626;
+    --accent-light: #FEF2F2;
+    --green: #16A34A;
+    --green-light: #F0FDF4;
+    --amber: #D97706;
+    --amber-light: #FFFBEB;
+    --gray-900: #111827;
+    --gray-700: #374151;
+    --gray-500: #6B7280;
+    --gray-300: #D1D5DB;
+    --gray-100: #F3F4F6;
+    --gray-50: #F9FAFB;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--gray-700);
+    background: #F0F4F8;
+    padding: 24px 16px 48px;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .doc-header {
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 60%, #3B82F6 100%);
+    border-radius: 16px;
+    padding: 36px 40px 32px;
+    margin-bottom: 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .doc-header::after {
+    content: '';
+    position: absolute;
+    right: 40px; bottom: -60px;
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .doc-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .doc-header .data-note {
+    font-size: 13px;
+    opacity: 0.82;
+    background: rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 10px 14px;
+    border-left: 3px solid rgba(255,255,255,0.4);
+    max-width: 720px;
+  }
+
+  /* Section cards */
+  .section-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--brand);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2 .num {
+    background: var(--brand);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 20px 0 10px;
+  }
+
+  /* Background section */
+  .bg-section {
+    background: var(--brand-light);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    border: 1px solid var(--brand-mid);
+  }
+  .bg-section h2 {
+    border-bottom-color: var(--brand);
+    color: var(--brand);
+  }
+  .bg-section p {
+    color: var(--gray-700);
+    margin-bottom: 10px;
+  }
+
+  /* Highlight box */
+  .highlight-box {
+    background: #FFF7ED;
+    border: 1px solid #FED7AA;
+    border-left: 4px solid #F97316;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    font-size: 14px;
+    color: #92400E;
+  }
+  .highlight-box strong { color: #C2410C; }
+
+  /* Conclusion cards */
+  .conclusion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 16px 0;
+  }
+  @media (max-width: 720px) { .conclusion-grid { grid-template-columns: 1fr; } }
+
+  .conclusion-card {
+    border-radius: 10px;
+    padding: 18px;
+    border: 1px solid transparent;
+  }
+  .conclusion-card.red {
+    background: var(--accent-light);
+    border-color: #FECACA;
+  }
+  .conclusion-card.amber {
+    background: var(--amber-light);
+    border-color: #FDE68A;
+  }
+  .conclusion-card.gray {
+    background: var(--gray-50);
+    border-color: var(--gray-300);
+  }
+  .conclusion-card .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .conclusion-card.red .tag { background: var(--accent); color: #fff; }
+  .conclusion-card.amber .tag { background: var(--amber); color: #fff; }
+  .conclusion-card.gray .tag { background: var(--gray-500); color: #fff; }
+  .conclusion-card .industry { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+  .conclusion-card .desc { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+  .conclusion-card .rec {
+    margin-top: 10px;
+    font-size: 12.5px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.04);
+    color: var(--gray-700);
+    border-left: 3px solid rgba(0,0,0,0.12);
+  }
+
+  /* Images */
+  .ref-data {
+    margin: 16px 0;
+  }
+  .ref-data .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brand);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ref-data .label::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 16px;
+    background: var(--brand);
+    border-radius: 2px;
+  }
+  .ref-data img {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--gray-300);
+    display: block;
+  }
+  .ref-data .img-note {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: var(--gray-50);
+    border-radius: 6px;
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 14px 0;
+    border-radius: 8px;
+    border: 1px solid var(--gray-300);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead tr {
+    background: var(--brand);
+    color: #fff;
+  }
+  thead th {
+    padding: 11px 14px;
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(even) { background: var(--gray-50); }
+  tbody tr:hover { background: var(--brand-light); transition: background 0.15s; }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td strong, td b { color: var(--accent); }
+
+  /* Risk table special rows */
+  .risk-high td:first-child { color: var(--accent); font-weight: 600; }
+  .risk-low td:first-child { color: var(--green); font-weight: 600; }
+  .risk-none td:first-child { color: var(--brand); font-weight: 600; }
+
+  /* Pricing card */
+  .pricing-row {
+    display: flex;
+    gap: 16px;
+    margin: 14px 0;
+  }
+  @media (max-width: 600px) { .pricing-row { flex-direction: column; } }
+  .pricing-card {
+    flex: 1;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .pricing-card.security { background: var(--accent-light); border: 1px solid #FECACA; }
+  .pricing-card.freight { background: var(--amber-light); border: 1px solid #FDE68A; }
+  .pricing-card .icon {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .pricing-card .info .name { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+  .pricing-card .info .price { font-size: 22px; font-weight: 800; color: var(--accent); margin-top: 2px; }
+  .pricing-card.freight .info .price { color: var(--amber); }
+
+  /* Notice bullets */
+  .notice-list {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .notice-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13.5px;
+    color: var(--gray-700);
+    background: var(--gray-50);
+    border-radius: 8px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--brand);
+  }
+  .notice-item .notice-key {
+    font-weight: 700;
+    color: var(--gray-900);
+    white-space: nowrap;
+    min-width: 70px;
+  }
+
+  /* Section overview image */
+  .overview-img {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--gray-300);
+    display: block;
+    margin: 14px 0;
+  }
+
+  /* Sub-section separator */
+  .sub-sep {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 20px 0;
+  }
+
+  p { margin-bottom: 8px; }
+
+  /* Impact summary badge */
+  .impact-summary {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <h1>保安 &amp; 货运行业调整方案</h1>
+    <div class="data-note">
+      数据说明：因子账号绑定时间不同，摊销时间不同，无法准确判断子账号一年365天的摊销金额。摊销gaap的相关数据仅作为参考。
+    </div>
+  </div>
+
+  <!-- 背景说明 -->
+  <div class="bg-section">
+    <h2>背景说明</h2>
+    <p>各行业客户的招聘习惯和商业推广投入力度存在显著差异。当前采用统一的售卖策略，导致部分客户（尤其是商业推广少、线索成本低的行业）实际转化效率偏低，同时也影响了平台收入结构的健康度。</p>
+    <p>为此，我们针对重点行业客户的招聘习惯及获客成本进行深入分析，将<strong>「不卷商业、线索成本低」</strong>的行业客户从通用策略中拆分出来，单独设计与之匹配的售卖方案，以实现更精准的行业定价与资源分配。</p>
+    <div class="highlight-box">
+      💡 <strong>调整方向：</strong>保安、货运行业属于低商业依赖、低线索成本领域，从「发帖曝光+币商业推广」模式中拆分，转向「发帖曝光+付费沟通」专属方案；其他行业保持高竞争力现状策略不变。
+    </div>
+  </div>
+
+  <!-- 一、商业推广占比&成本评估 -->
+  <div class="section-card">
+    <h2><span class="num">一</span>商业推广占比 &amp; 成本评估（卷or不卷）</h2>
+
+    <h3>核心结论</h3>
+    <div class="conclusion-grid">
+      <div class="conclusion-card red">
+        <div class="tag">低商业依赖</div>
+        <div class="industry">保安行业</div>
+        <div class="desc">商业化依赖度<strong>最低</strong>，从招聘币回款占比、商业推广gaap占比、线索成本三个指标评估均为最低，且不卷的客户占比最高。</div>
+        <div class="rec">➤ 最适合采用「账号涨价、独立售卖规则」等非招聘币商业策略</div>
+      </div>
+      <div class="conclusion-card amber">
+        <div class="tag">居中·线索低</div>
+        <div class="industry">货运行业</div>
+        <div class="desc">商业化依赖度居中，但<strong>线索成本偏低</strong>，为单独管控此行业客户，拉伸客户合作价值。</div>
+        <div class="rec">➤ 推荐采用「账号涨价、独立售卖规则」等非招聘币商业策略</div>
+      </div>
+      <div class="conclusion-card gray">
+        <div class="tag">商业依赖强</div>
+        <div class="industry">其他行业</div>
+        <div class="desc">家政、配送、汽车租赁、物流、制造业等行业商业产品依赖强，线索成本正常。</div>
+        <div class="rec">➤ 适合继续推进招聘币、线索付费等商业化产品</div>
+      </div>
+    </div>
+
+    <div class="sub-sep"></div>
+
+    <div class="ref-data">
+      <div class="label">参考数据1：行业情况概览</div>
+      <img src="https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/af06e094a4674f82a665110bf3f4b36f.png" alt="行业情况概览">
+      <div class="img-note">数据验证：单账号回款金额和单账号年均gaap相差不大，故可参照年均单账号gaap配置账号价格。</div>
+    </div>
+
+    <div class="ref-data">
+      <div class="label">参考数据2：账号数量分布</div>
+      <img src="https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/94cdf9e5734342ce9ae798ba51031d79.png" alt="账号数量分布">
+      <div class="img-note">误差说明：因子账号绑定时间不同，摊销时间不同，无法准确判断子账号一年365天的摊销金额。根据商业推广gaap占比核算的不卷客户占比会偏高。</div>
+    </div>
+  </div>
+
+  <!-- 二、保安&货运行业调整方案 -->
+  <div class="section-card">
+    <h2><span class="num">二</span>保安 &amp; 货运行业调整方案</h2>
+
+    <h3>方案概览</h3>
+    <img class="overview-img" src="https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/dd3df2df24d8402f8db3a7c0890c4b08.png" alt="方案概览">
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>行业</th>
+            <th>其他行业（现状）</th>
+            <th>保安行业</th>
+            <th>货运行业</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#374151">售卖模式</strong></td>
+            <td><strong style="color:#374151">账号+币（发帖+曝光）</strong><br><span style="color:#6B7280;font-size:12px">账号内含发帖和主动开聊，且发帖无限类规则</span></td>
+            <td><strong style="color:#DC2626">仅账号（发帖+付费聊）</strong><br><span style="color:#6B7280;font-size:12px">账号内含发帖和沟通钥匙，且发帖限行业类目</span></td>
+            <td><strong style="color:#DC2626">仅账号（发帖+付费聊）</strong><br><span style="color:#6B7280;font-size:12px">账号内含发帖和沟通钥匙，且发帖限行业类目</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#374151">伯小乐售卖版本</strong></td>
+            <td style="font-size:12.5px">
+              ① 标准版A_1800元（含8个资源劲爆+100聊/日）+搭配500币<br>
+              ② plus-D_3600元（含5个容器劲爆+100聊/日）+搭配500币<br>
+              ③ 季度标准版G_2300元（含30个资源劲爆+100聊/日），无需搭配币<br>
+              <span style="color:#6B7280">*上述3个版本均无限类规则</span>
+            </td>
+            <td style="font-size:12.5px">④ 年度版_<strong>2800元</strong>（含30个资源劲爆+150次/月沟通钥匙）&amp; 限类<strong>安保消防</strong></td>
+            <td style="font-size:12.5px">⑤ 年度版_<strong>4500元</strong>（含25个资源劲爆+260次/月沟通钥匙）&amp; 限类<strong>司机物流</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-sep"></div>
+
+    <!-- 1. 账号定价 -->
+    <h3>1、账号定价</h3>
+    <p style="color:#6B7280;font-size:13px;margin-bottom:12px">根据参考数据1中的年均单账号gaap配置账号价格</p>
+    <div class="pricing-row">
+      <div class="pricing-card security">
+        <div class="icon">🛡️</div>
+        <div class="info">
+          <div class="name">保安行业</div>
+          <div class="price">2,800 元/年/个</div>
+        </div>
+      </div>
+      <div class="pricing-card freight">
+        <div class="icon">🚛</div>
+        <div class="info">
+          <div class="name">货运行业</div>
+          <div class="price">4,500 元/年/个</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-sep"></div>
+
+    <!-- 2. 客户影响评估 -->
+    <h3>2、客户影响评估</h3>
+    <p style="font-size:13px;color:#6B7280;margin-bottom:14px">说明：因子账号绑定时间不同，摊销时间不同，无法准确判断子账号一年365天的摊销金额。根据账号25年实际gaap和预估365天的gaap测算影响的客户最大量和最小量。</p>
+
+    <div class="impact-summary">🛡️ 保安行业影响评估</div>
+    <p style="font-size:13px;margin-bottom:10px">当保安行业的账号定价设置为2800元/年/个时，<strong>最多68%账号受影响，最少38%的账号受影响。</strong></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2" style="vertical-align:middle">评估方式</th>
+            <th colspan="2">最大受影响客户量<br><span style="font-weight:400;font-size:12px">(根据账号25年实际gaap测算)</span></th>
+            <th colspan="2">最小受影响客户量<br><span style="font-weight:400;font-size:12px">(先计算365天gaap=25年gaap/摊销天数*365；再测算影响)</span></th>
+          </tr>
+          <tr>
+            <th>账号数量</th>
+            <th>账号占比</th>
+            <th>账号数量</th>
+            <th>账号占比</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="risk-none">
+            <td>流失风险评估</td>
+            <td colspan="4" style="color:#6B7280;font-size:12px;font-style:italic">无风险_gaap高于定价</td>
+          </tr>
+          <tr>
+            <td style="padding-left:24px;color:#16A34A">无风险_gaap高于定价</td>
+            <td>407</td><td>31%</td><td>717</td><td>54%</td>
+          </tr>
+          <tr>
+            <td style="padding-left:24px;color:#D97706">流失风险小_gaap低于定价不足50元</td>
+            <td>16</td><td>1%</td><td>4</td><td>0%</td>
+          </tr>
+          <tr>
+            <td style="padding-left:24px;color:#DC2626;font-weight:600">流失风险大_gaap低于定价达到50元</td>
+            <td>910</td><td><strong>68%</strong></td><td>612</td><td>46%</td>
+          </tr>
+          <tr class="risk-none">
+            <td>账号涨价幅度评估</td>
+            <td colspan="4" style="color:#6B7280;font-size:12px;font-style:italic">未涨价_gaap总额高于定价</td>
+          </tr>
+          <tr>
+            <td style="padding-left:24px;color:#16A34A">未涨价_gaap总额高于定价</td>
+            <td>407</td><td>31%</td><td>717</td><td>54%</td>
+          </tr>
+          <tr>
+            <td style="padding-left:24px">涨价未达到30%</td>
+            <td>205</td><td>15%</td><td>104</td><td>8%</td>
+          </tr>
+          <tr>
+            <td style="padding-left:24px;color:#DC2626;font-weight:600">涨价达到30%</td>
+            <td>721</td><td>54%</td><td>512</td><td><strong>38%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="impact-summary" style="background:var(--amber)">🚛 货运行业影响评估</div>
+    </div>
+    <p style="font-size:13px;margin-bottom:10px">当货运行业的账号定价设置为4500元/年/个时，<strong>最多70%账号受影响，最少26%的账号受影响。</strong></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2" style="vertical-align:middle">评估方式</th>
+            <th colspan="2">最大受影响客户量<br><span style="font-weight:400;font-size:12px">(根据账号25年实际gaap测算)</span></th>
+            <th colspan="2">最小受影响客户量<br><span style="font-weight:400;font-size:12px">(先计算365天gaap=25年gaap/摊销天数*365；再测算影响)</span></th>
+          </tr>
+          <tr>
+            <th>账号数量</th>
+            <th>账号占比</th>
+            <th>账号数量</th>
+            <th>账号占比</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#16A34A">无风险_gaap高于定价</td>
+            <td>1445</td><td>30%</td><td>3345</td><td>69%</td>
+          </tr>
+          <tr>
+            <td style="color:#D97706">流失风险小_gaap低于定价不足50元</td>
+            <td>22</td><td>0%</td><td>7</td><td>0%</td>
+          </tr>
+          <tr>
+            <td style="color:#DC2626;font-weight:600">流失风险大_gaap低于定价达到50元</td>
+            <td>3388</td><td><strong>70%</strong></td><td>1503</td><td>31%</td>
+          </tr>
+          <tr>
+            <td style="color:#16A34A">未涨价_gaap总额高于定价</td>
+            <td>1445</td><td>30%</td><td>3345</td><td>69%</td>
+          </tr>
+          <tr>
+            <td>涨价未达到30%</td>
+            <td>506</td><td>10%</td><td>224</td><td>5%</td>
+          </tr>
+          <tr>
+            <td style="color:#DC2626;font-weight:600">涨价达到30%</td>
+            <td>2904</td><td>60%</td><td>1286</td><td><strong>26%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-sep"></div>
+
+    <!-- 3. 账号权益配置 -->
+    <h3>3、账号权益配置</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>行业</th>
+            <th>伯小乐版本</th>
+            <th>定价</th>
+            <th>劲爆职位点</th>
+            <th>沟通钥匙</th>
+            <th>有效期</th>
+            <th>限类规则</th>
+            <th>启用规则</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>保安</strong></td>
+            <td>伯小乐_保安专属</td>
+            <td><strong>2800元/年/个</strong></td>
+            <td>30个_资源型</td>
+            <td>150次/月</td>
+            <td>365天</td>
+            <td>仅可发布<strong>安保消防</strong>下的岗位</td>
+            <td>每个UID最多同时启用3个</td>
+          </tr>
+          <tr>
+            <td><strong>货运</strong></td>
+            <td>伯小乐_货运专属</td>
+            <td><strong>4500元/年/个</strong></td>
+            <td>25个_资源型</td>
+            <td>260次/月</td>
+            <td>365天</td>
+            <td>仅可发布<strong>司机物流</strong>下的岗位</td>
+            <td>每个UID最多同时启用3个</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice-list">
+      <div class="notice-item">
+        <span class="notice-key">配置逻辑</span>
+        <span>根据单账号发帖量配置劲爆职位数量，且客户从帖子曝光→付费沟通，劲爆不算价格。每月发放沟通钥匙数量 =（定价 - 500招聘助手）/ 沟通钥匙价格1.3元 / 12个月。</span>
+      </div>
+      <div class="notice-item">
+        <span class="notice-key">售卖限制</span>
+        <span>保安行业客户仅可购买「伯小乐_保安专属」版本的伯小乐，货运行业客户仅可购买「伯小乐_货运专属」版本的伯小乐。</span>
+      </div>
+      <div class="notice-item">
+        <span class="notice-key">换购活动</span>
+        <span>无。保安、货运行业专属的伯小乐无换购活动，可直接以上述价格采购。</span>
+      </div>
+      <div class="notice-item">
+        <span class="notice-key">折价规则</span>
+        <span>框架客户购买时需根据提单时框架剩余服务时长折价，最低300元。</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
