@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>招聘产品权益阶梯对比 · 非会员vs会员定价分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9eef3 0%, #dce3ec 100%);
+            font-family: 'Segoe UI', 'Roboto', 'Inter', system-ui, -apple-system, 'Noto Sans', 'Helvetica Neue', sans-serif;
+            padding: 32px 24px;
+            color: #1a2c3e;
+        }
+
+        /* 主容器 - 卡片质感 */
+        .dashboard {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        /* 头部区域：标题 + 双链接 */
+        .header-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px 12px 28px;
+            background: #ffffff;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .title-section h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1f6392, #0e4b6e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+        .title-section .sub {
+            font-size: 0.8rem;
+            color: #5e7a93;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .link-group {
+            display: flex;
+            gap: 18px;
+            background: #f8fafd;
+            padding: 8px 18px;
+            border-radius: 60px;
+            backdrop-filter: blur(2px);
+            box-shadow: inset 0 1px 2px #ffffff, 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .doc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: #edf2f9;
+            padding: 5px 14px;
+            border-radius: 40px;
+            color: #216e96;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid #dbe4ed;
+        }
+        .doc-link:hover {
+            background: #e3eaf3;
+            color: #0c4b6e;
+            border-color: #bdd1e4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .doc-link i {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* 表格外层滚动 */
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 8px 0 8px 0;
+            background: #ffffff;
+        }
+
+        /* 主表格设计 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            line-height: 1.45;
+            min-width: 1180px;
+            font-feature-settings: "tnum";
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #e2e8f2;
+            padding: 12px 12px;
+            vertical-align: top;
+            background-color: #ffffff;
+            transition: background 0.1s;
+        }
+
+        /* 增加第一列宽度（增加1cm ≈ 38px，原默认约110px，现设为160px）并加粗字体 */
+        .comparison-table td:first-child,
+        .comparison-table th:first-child {
+            min-width: 160px;
+            width: 160px;
+            font-weight: 700;
+            background-color: #fefefe;
+            border-right-width: 1px;
+        }
+
+        /* 表头多层次 */
+        .comparison-table thead tr:first-child th {
+            background: #f3f7fc;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #2c4c6e;
+            border-bottom: 2px solid #cbdbeb;
+        }
+        .comparison-table thead tr:last-child th {
+            background: #eef3fa;
+            font-weight: 700;
+            color: #1d5a7a;
+            border-top: 1px solid #d6e2ef;
+            font-size: 0.85rem;
+        }
+
+        /* 已有高亮样式 */
+        .highlight-price-warning {
+            background-color: #fff2e0 !important;
+            font-weight: 700;
+            color: #c75219;
+            border-left: 3px solid #ffa055;
+            box-shadow: inset 0 0 0 1px #ffe0b5;
+        }
+        .highlight-extreme-low {
+            background-color: #ffeae9 !important;
+            font-weight: 800;
+            color: #bc3f00;
+            box-shadow: inset 0 0 0 1px #ffbcb2;
+        }
+        .risk-text {
+            background-color: #fef2ef;
+            color: #b5452a;
+            font-weight: 500;
+            border-left: 2px solid #e8855e;
+        }
+        
+        /* 🟢 新增高亮样式：促销权益 / 套餐效果权益 / 行业免费发帖&新组合 单元格 */
+        .highlight-strategy-cell {
+            background: #fff1bf !important;
+            border-left: 4px solid #e6a017 !important;
+            border-right: 1px solid #ffe0a3 !important;
+            font-weight: 800 !important;
+            color: #a4660a !important;
+            box-shadow: inset 0 1px 2px rgba(255,215,130,0.6);
+        }
+        
+        .badge-icon, .img-placeholder {
+            display: inline-flex;
+            align-items: center;
+            background: #edf2f9;
+            border-radius: 24px;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-family: monospace;
+            gap: 4px;
+        }
+        .case-comment td {
+            background-color: #fef7ec;
+            font-size: 12px;
+        }
+        .section-bg {
+            background: #fafcff;
+        }
+
+        /* 脚注区 */
+        .footer-note {
+            background: #fafcf9;
+            border-top: 1px solid #e9edf2;
+            padding: 18px 28px;
+            font-size: 12px;
+            color: #48637c;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .inline-link {
+            color: #226f96;
+            text-decoration: none;
+            border-bottom: 1px dashed #9ab3cc;
+        }
+        hr {
+            margin: 0;
+            border: none;
+            border-top: 1px solid #e9edf2;
+        }
+        .tooltip-marker {
+            border-bottom: 1px dotted #8aa4c0;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- 顶部区域 + 两个内网链接 -->
+    <div class="header-bar">
+        <div class="title-section">
+            <h1>📊 权益阶梯对比 · 非会员 vs 会员</h1>
+            <div class="sub">
+                <span>🗂️ 基于 2026年6月定价数据 | 倒挂分析 · 双平台差异</span>
+                <span class="img-placeholder">📸 定价截图参照 06/11/2026</span>
+            </div>
+        </div>
+        <div class="link-group">
+            <a href="https://docs.58corp.com/#/space/2056638719015890945" class="doc-link" target="_blank" rel="noopener noreferrer">
+                <i>📄</i> 非会员→会员定价决策空间
+            </a>
+            <a href="https://docs.58corp.com/#/space/2063855379061690368?tab=ace96b" class="doc-link" target="_blank" rel="noopener noreferrer">
+                <i>🔗</i> 会员套餐·促销与权益全景
+            </a>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="comparison-table">
+            <!-- ========= 第一行：客诉案例完整内容 ========= -->
+            <thead>
+                <tr class="case-comment">
+                    <td colspan="2" style="background-color: #fff8ef; font-weight: 600; width: 18%; border-right: 1px solid #eeddbb;">
+                        📢 客诉案例
+                    \n</td>
+                    <td colspan="6" style="background-color: #fff8ef; padding: 12px;">
+                        🔻 长周期自助产品价格严重倒挂，定价体系面临“以小博大”风险<br>
+                        🔹 典型实例<br>
+                        • 【自助季度90天权益倒挂】 非会员单购“劲爆·职位季度”¥286保效果量45个， VS 季度会员简历宝¥1899 保效果75个（25个*3）。<br>
+                        • 【自助季度90天价格低至286元】 非会员单购“劲爆·职位季度”仅¥286，折合日均¥3.2 对比 “会员季度”需¥1980 ，折合日均¥21.5 。<br>
+                        • 【双平台展示与准入不一致】： 营销客户自助购买非会员产品时可双平台展示，但无法购买赶集会员产品，无法双平台展示。<br>
+                        <span class="img-placeholder">📸 2026年6月11日在线定价截图→</span> 
+                        <span style="font-size:11px; color:#556f8d;">(原始图片保留)</span>
+                    </td>
+                    <td style="background-color: #fff0e6; border-left: 2px solid #fcb27b; width: 16%;">
+                        ⚠️ <strong>非会员给客户的资源权益高，销售无法转化</strong><br>
+                        客户质疑无法应对<br>
+                        📎 非会员&会员权益对比-20260519
+                    </td>
+                </tr>
+                <!-- 列头维度 + 权益项等 -->
+                <tr>
+                    <th style="min-width: 100px;">维度</th>
+                    <th style="min-width: 100px;">权益项</th>
+                    <th>劲爆·职位月度<br>(自助)</th>
+                    <th>劲爆·职位季度<br>(自助)</th>
+                    <th>个人超值月度<br>(非会员)</th>
+                    <th>赶集·季度<br>(会员)</th>
+                    <th>赶集·年度<br>(会员)</th>
+                    <th>58·季度<br>(会员)</th>
+                    <th>58·年度<br>(会员)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 产品定价 -->
+                <tr><td>产品定价</td><td>主售套餐</td><td>¥206/30天</td><td class="highlight-price-warning">⚠️¥286/90天</td><td>¥499/30天</td><td>¥1899/92天</td><td>¥3980/365天</td><td>¥1980/92天</td><td>¥3980/365天</td></tr>
+                <tr><td>刊例价</td><td>产品原子价</td><td>运营调价平台 & 蜂巢</td><td>运营调价平台 & 蜂巢</td><td>运营调价平台</td><td colspan="4">1、会员合同_订单_产品介绍<br>2、线上招聘币_产品单购</td></tr>
+                <tr><td rowspan="3">售卖限制</td><td>行业限制（准入）</td><td>❌ 无明显限制<br>全行业通用</td><td>❌ 无明显限制</td><td class="risk-text">⚠️ 严格限制：司机/物流、生产制造、普工/技工、安保消防、家政服务、就业培训等均不支持上架</td><td class="risk-text">⚠️ 严格限制：同上，需额外付费</td><td>⚠️ 专享职位1个（可换5大类），不可主动开聊，其余需加购</td><td>❌ 不限类</td><td>❌ 不限类</td></tr>
+                <tr><td>客户标签</td><td>所有</td><td>所有</td><td>所有</td><td>直招</td><td>直招</td><td>营销/直招</td><td>营销/直招</td></tr>
+                <tr><td>双平台展示</td><td>✅ 自助购买可获得双平台曝光 <br>直招&营销客户标签做区分</td><td>✅ 同左</td><td class="risk-text">⚠️ 专享职位，5大类单独付费</td><td class="risk-text">❌ 有营销标识客户买不了赶集产品，不能双平台显示</td><td class="risk-text">❌ 同左</td><td>✅ 不限类，仅58展示</td><td>✅ 不限类，仅58展示</td></tr>
+
+                <!-- 产品权益 -->
+                <tr><td rowspan="9" style="background:#f9fcff;">产品权益</td><td>伯小乐权益包</td><td>—</td><td>—</td><td>—</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                <tr><td>伯小乐劲爆职位点</td><td>—</td><td>—</td><td>2</td><td>6个30天</td><td>5（可更换）</td><td>3（不可换）</td><td>5（不可换）</td></tr>
+                <tr><td>伯小乐主动开聊(每日)</td><td>60次/日</td><td>60次/日</td><td>60次/日</td><td>20次/日</td><td>200次/日</td><td>100次/日</td><td>100次/日</td></tr>
+                <tr><td>道具·超级置顶</td><td>—</td><td>—</td><td>1</td><td>—</td><td>12</td><td>—</td><td>—</td></tr>
+                <tr><td>道具·简历宝</td><td>—</td><td>—</td><td>—</td><td>3</td><td>—</td><td>—</td><td>—</td></tr>
+                <tr><td>保效果量</td><td>20</td><td class="highlight-price-warning">45</td><td>40</td><td>25*3</td><td>—</td><td>—</td><td>—</td></tr>
+                <tr><td>AI极速聊 / AI面试间</td><td>—</td><td>—</td><td>—</td><td>各1个</td><td>各1个</td><td>—</td><td>—</td></tr>
+                <tr><td>赠送职位点/附加权益</td><td>1个随心聊·30天<br>1个极速电话</td><td>—</td><td>5个/30天</td><td>15个/92天</td><td>15个/92天</td><td>15个/92天</td><td>15个/92天</td></tr>
+                <tr><td>招聘币</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>1%~24%返比</td><td>1%~24%返比</td></tr>
+
+                <!-- 定价对比 -->
+                <tr><td rowspan="3" style="background:#faf2e6;">定价对比<br>⚠️统一售卖政策</td><td>日均价格（元/天）</td><td>6.86</td><td class="highlight-extreme-low">3.2</td><td>16.63</td><td>20.64</td><td>10.9</td><td>21.52</td><td>10.9</td></tr>
+                <tr><td>折扣系数（刊例价/招聘币折扣）</td><td>原子价*30*0.36折扣</td><td>原子价*90*0.24折扣*2倍溢价</td><td>—</td><td>道具刊例1497，折扣0.67</td><td>道具刊例2736，折扣0.65</td><td>招聘币刊例1500，折扣0.97</td><td>招聘币刊例2600，折扣0.92</td></tr>
+                <tr><td>性价比评价</td><td>日均仅 ¥6.86</td><td class="highlight-extreme-low">季度日均价¥3.2，性价比极高<br>⚠️倒挂风险</td><td>日均¥16.6，禁止发5大类</td><td>日均¥20.6，简历宝类目限制</td><td>日均¥10.9，5大类单购</td><td>日均¥21.5</td><td>日均¥10.9</td></tr>
+
+                <!-- 商业权益 T类 / C类 -->
+                <tr><td rowspan="3" style="background:#f4f8fd;">商业权益</td><td>T类</td><td colspan="2">1）券折扣，非必要不用券，套餐超8折报备<br>√大促节点会针对召回/拉新客群发85折券，极少8折（抽奖等式）<br>√按照淡旺季|特定客群（营代溢价）<br>√极个别场景：用折扣解决“价格”诉求的客户刺激付费或者加购。<br>多次访问未付费→9折券<br>加购场景→超级置顶资源品9折券</td><td>—</td><td colspan="4">利用增益模型发券：<br>1. 圈选客户范围：预测发券 vs 不发券对用户下单概率的差值（即“增益”），核心作用于标单客户；<br>2. 折扣力度：当日有效的7～9折折扣券，随机折扣实验中。<br>3. 发券量&效果：日均发券量6000+，当日核销率3.5%，日均增量ROI=2，日均增收入2w+。</td></tr>
+                <tr><td>C类</td><td colspan="2">—</td><td>—</td><td colspan="4">利用增益模型发券：<br>1. 圈选客户范围：预测发券 vs 不发券对用户下单概率的差值（即“增益”），核心作用于标单客户；<br>2. 折扣力度：当日有效的满赠券，满100-50（需要在3天内达到满赠条件）。<br>3. 发券量&效果：日均发券量2000+，绑定比例77%，核销率15%，日均增收入8000+。</td></tr>
+                <tr><td>人才获取</td><td colspan="7">—</td></tr>
+
+                <!-- 促销权益 + 成长权益 -->
+                <!-- ⭐ 高亮第一类：促销权益 (rowspan 所在单元格) -->
+                <tr>
+                    <td rowspan="2" class="highlight-strategy-cell">促销权益<br>⚠️营销系统升级</td>
+                    <td>价格策略</td>
+                    <td colspan="2">节假日针对特定客群溢价</td>
+                    <td>同左侧</td>
+                    <td>无</td>
+                    <td>8000以上套餐9折优惠券，<br>新签高活人群88折</td>
+                    <td>8000以上套餐9折优惠券，<br>新签高活人群88折</td>
+                    <td>8000以上套餐9折优惠券，<br>新签高活人群88折，<br>套餐/框架/定制币赠送不超过5%</td>
+                </tr>
+                <tr>
+                    <td>成长权益</td>
+                    <td colspan="2">续费客户</td>
+                    <td>—</td>
+                    <td>无</td>
+                    <td>9折优惠券，<br>续费高活人群85折<br>重返10%~24%</td>
+                    <td>9折优惠券，<br>续费高活人群85折<br>提起续费5个<br>重返10%~24%</td>
+                    <td>9折优惠券，<br>新签高活人群85折，<br>套餐/框架/定制币赠送不超过5%<br>重返10%~24%</td>
+                </tr>
+
+                <!-- ⭐ 高亮第二类：套餐效果权益 -->
+                <tr>
+                    <td class="highlight-strategy-cell">套餐效果权益<br>⚠️效果预期管理</td>
+                    <td colspan="8">—</td>
+                </tr>
+                <!-- ⭐ 高亮第三类：行业免费发帖&新组合 -->
+                <tr>
+                    <td class="highlight-strategy-cell">行业免费发帖&新组合<br>⚠️行业客户增长</td>
+                    <td colspan="8">—</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="footer-note">
+        <div>📌 注：非会员在行业准入和双平台展示上具有明显优势；会员因营销标识或行业限制导致部分场景无法双平台曝光。</div>
+        <div>🔗 内部参考：<a href="https://docs.58corp.com/#/space/2056638719015890945" target="_blank" class="inline-link">非会员→会员定价决策空间</a> &nbsp;|&nbsp; 
+        <a href="https://docs.58corp.com/#/space/2063855379061690368?tab=ace96b" target="_blank" class="inline-link">会员套餐·促销与权益全景</a> &nbsp;| 📎 原始图片及文本均未改动，保留所有超链接语义</div>
+    </div>
+</div>
+</body>
+</html>
