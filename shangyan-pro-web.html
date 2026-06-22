@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商研Pro - 商业服务行业研究平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --seed-primary: #8B5FC7;
+  --seed-primary-dark: #6B45A3;
+  --seed-primary-darker: #563789;
+  --seed-primary-light: #A87FD8;
+  --seed-accent: #B899D9;
+  --seed-accent-light: #CDB8E8;
+  --seed-surface: #F5F0FA;
+  --seed-bg: #FAF7FE;
+  --seed-fg: #1E1B2E;
+  --seed-muted: #6E6A82;
+  --seed-border: #E5DCF0;
+  --seed-radius: 12px;
+  --seed-radius-sm: 8px;
+  --seed-radius-lg: 16px;
+  --seed-success: #2D8B4E;
+  --seed-danger: #C53030;
+  --seed-warn: #D97706;
+  --seed-white: #FFFFFF;
+  --seed-meta: #9A95AE;
+  --seed-placeholder: #B0A8C0;
+  --seed-quote: #4A4660;
+  --seed-method: #5A5670;
+  --seed-neutral: #B0A8C0;
+  --seed-gold-bg: #FEF3C7;
+  --seed-gold-fg: #B45309;
+  --seed-bronze-bg: #FFF1E6;
+  --seed-bronze-fg: #C2410C;
+  --seed-report-1a: #EDE4F7;
+  --seed-report-1b: #DDD0F0;
+  --seed-report-2a: #FEF3C7;
+  --seed-report-2b: #FDE68A;
+  --seed-report-3a: #E8DFF5;
+  --seed-report-3b: #D4C5EB;
+  --seed-report-4a: #F0E8FA;
+  --seed-report-4b: #E2D5F2;
+  --seed-industry-other: #C8C0D8;
+  --seed-intl-bg: #FFF7ED;
+  --seed-intl-fg: #C2410C;
+  --seed-danger-light: #FEE2E2;
+  --font-body: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-body);
+  background: var(--seed-bg);
+  color: var(--seed-fg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === Top Navigation === */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: var(--seed-white);
+  border-bottom: 1px solid var(--seed-border);
+  box-shadow: 0 1px 4px rgba(107,69,163,0.06);
+}
+.top-nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center;
+  padding: 0 24px; height: 64px; gap: 32px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.nav-logo-mark {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--seed-primary-dark), var(--seed-primary-darker));
+  border-radius: var(--seed-radius-sm); flex-shrink: 0;
+}
+.nav-logo-text .logo-name { font-size: 17px; font-weight: 700; color: var(--seed-fg); letter-spacing: -0.01em; }
+.nav-logo-text .logo-tag { font-size: 10px; color: var(--seed-muted); letter-spacing: 0.02em; }
+.nav-items { display: flex; gap: 4px; flex: 1; }
+.nav-item {
+  padding: 8px 16px; border-radius: var(--seed-radius-sm);
+  font-size: 14px; font-weight: 500; color: var(--seed-muted);
+  cursor: pointer; transition: all 0.2s; position: relative;
+  display: flex; align-items: center; gap: 7px;
+  letter-spacing: 0.01em; white-space: nowrap;
+}
+.nav-item:hover { color: var(--seed-primary); background: var(--seed-surface); }
+.nav-item.active { color: var(--seed-primary); font-weight: 600; }
+.nav-item.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 16px; right: 16px;
+  height: 2.5px; background: var(--seed-primary); border-radius: 2px 2px 0 0;
+}
+.nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.nav-search {
+  display: flex; align-items: center; gap: 10px;
+  height: 40px; background: var(--seed-surface);
+  border-radius: 20px; padding: 0 16px; min-width: 240px;
+  border: 1.5px solid transparent; transition: border-color 0.2s;
+}
+.nav-search:focus-within { border-color: var(--seed-primary-light); }
+.nav-search svg { width: 16px; height: 16px; color: var(--seed-muted); flex-shrink: 0; }
+.nav-search input {
+  border: none; background: none; flex: 1;
+  font-size: 13px; color: var(--seed-fg); outline: none;
+  font-family: var(--font-body); letter-spacing: 0.01em;
+}
+.nav-search input::placeholder { color: var(--seed-placeholder); }
+.nav-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.nav-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--seed-primary), var(--seed-primary-light));
+  cursor: pointer;
+}
+.nav-bell {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--seed-surface); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative;
+}
+.nav-bell svg { width: 16px; height: 16px; color: var(--seed-muted); }
+.badge-dot {
+  position: absolute; top: -1px; right: -1px;
+  width: 8px; height: 8px; background: var(--seed-danger);
+  border-radius: 50%; border: 1.5px solid var(--seed-white);
+}
+
+/* === Main Content === */
+.main-wrap { max-width: 1200px; margin: 0 auto; padding: 88px 24px 40px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* === Shared === */
+.section-title {
+  font-size: 16px; font-weight: 700; color: var(--seed-fg);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px; letter-spacing: -0.01em;
+}
+.section-title::before {
+  content: ''; width: 3px; height: 18px;
+  background: var(--seed-primary); border-radius: 2px; display: inline-block;
+}
+.cat-tags { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.cat-tag {
+  padding: 7px 18px; border-radius: 20px;
+  font-size: 13px; font-weight: 500;
+  border: 1px solid var(--seed-border); color: var(--seed-muted);
+  background: var(--seed-white); cursor: pointer; transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
+.cat-tag:hover { border-color: var(--seed-primary-light); color: var(--seed-primary); }
+.cat-tag.active { background: var(--seed-primary); color: var(--seed-white); border-color: var(--seed-primary); }
+.card {
+  background: var(--seed-white); border-radius: var(--seed-radius);
+  border: 1px solid var(--seed-border); transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 16px rgba(107,69,163,0.08); }
+
+/* === Page 1: Home === */
+.home-hero {
+  background: linear-gradient(135deg, var(--seed-primary-darker) 0%, var(--seed-primary-dark) 60%, var(--seed-primary) 100%);
+  border-radius: var(--seed-radius-lg); padding: 36px 40px;
+  color: var(--seed-white); margin-bottom: 28px; position: relative; overflow: hidden;
+}
+.home-hero::after {
+  content: ''; position: absolute; top: -50px; right: -50px;
+  width: 200px; height: 200px; background: rgba(255,255,255,0.04); border-radius: 50%;
+}
+.home-hero::before {
+  content: ''; position: absolute; bottom: -30px; right: 120px;
+  width: 100px; height: 100px; background: rgba(255,255,255,0.03); border-radius: 50%;
+}
+.home-hero-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.home-hero-sub { font-size: 13px; opacity: 0.7; margin-bottom: 20px; position: relative; z-index: 1; }
+.home-hero-stats { display: flex; gap: 40px; position: relative; z-index: 1; }
+.home-hero-stat .val { font-size: 26px; font-weight: 700; }
+.home-hero-stat .lbl { font-size: 11px; opacity: 0.6; margin-top: 2px; letter-spacing: 0.02em; }
+
+/* === Industry Overview === */
+.industry-overview {
+  background: var(--seed-white); border-radius: var(--seed-radius);
+  border: 1px solid var(--seed-border); padding: 24px; margin-bottom: 28px;
+}
+.industry-def {
+  font-size: 14px; color: var(--seed-fg); line-height: 1.8;
+  margin-bottom: 20px; letter-spacing: 0.01em;
+}
+.industry-def a { color: var(--seed-primary); text-decoration: none; border-bottom: 1px dashed var(--seed-primary-light); }
+.industry-def a:hover { border-bottom-style: solid; }
+.sector-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+}
+.sector-card {
+  background: var(--seed-surface); border-radius: var(--seed-radius-sm);
+  padding: 14px; text-align: center; transition: box-shadow 0.2s;
+}
+.sector-card:hover { box-shadow: 0 2px 8px rgba(107,69,163,0.1); }
+.sector-card .sector-icon { font-size: 22px; margin-bottom: 6px; }
+.sector-card .sector-name { font-size: 13px; font-weight: 600; color: var(--seed-fg); margin-bottom: 2px; }
+.sector-card .sector-share { font-size: 18px; font-weight: 700; color: var(--seed-primary); margin: 4px 0; }
+.sector-card .sector-growth { font-size: 11px; color: var(--seed-success); font-weight: 500; }
+
+/* === Global News === */
+.global-news {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px;
+}
+.news-section-title {
+  font-size: 14px; font-weight: 600; color: var(--seed-fg);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.news-section-title .tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px;
+  font-weight: 500; letter-spacing: 0.02em;
+}
+.news-section-title .tag.domestic { background: var(--seed-surface); color: var(--seed-primary); }
+.news-section-title .tag.intl { background: var(--seed-intl-bg); color: var(--seed-intl-fg); }
+.global-news-item {
+  padding: 12px 0; border-bottom: 1px solid var(--seed-border);
+}
+.global-news-item:last-child { border-bottom: none; }
+.global-news-item .gn-title {
+  font-size: 13px; font-weight: 500; color: var(--seed-fg);
+  line-height: 1.6; margin-bottom: 4px;
+}
+.global-news-item .gn-title a { color: var(--seed-primary); text-decoration: none; }
+.global-news-item .gn-title a:hover { text-decoration: underline; }
+.global-news-item .gn-meta {
+  font-size: 11px; color: var(--seed-meta); display: flex; gap: 10px;
+}
+
+.home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.home-left { display: flex; flex-direction: column; gap: 20px; }
+.home-right { display: flex; flex-direction: column; gap: 20px; }
+
+.news-card {
+  background: var(--seed-white); border-radius: var(--seed-radius);
+  padding: 18px; border: 1px solid var(--seed-border); transition: box-shadow 0.2s;
+}
+.news-card:hover { box-shadow: 0 4px 16px rgba(107,69,163,0.08); }
+.news-card .source { font-size: 12px; color: var(--seed-primary); font-weight: 500; letter-spacing: 0.01em; }
+.news-card .title { font-size: 15px; font-weight: 600; color: var(--seed-fg); margin: 8px 0; line-height: 1.5; letter-spacing: -0.01em; }
+.news-card .meta { font-size: 12px; color: var(--seed-meta); display: flex; gap: 14px; }
+
+.report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.report-card {
+  background: var(--seed-white); border-radius: var(--seed-radius);
+  overflow: hidden; border: 1px solid var(--seed-border); transition: box-shadow 0.2s, transform 0.2s;
+  position: relative; display: block; text-decoration: none; color: inherit;
+}
+.report-card:hover { box-shadow: 0 4px 16px rgba(107,69,163,0.08); }
+.report-card.clickable { cursor: pointer; }
+.report-card.clickable:hover { transform: translateY(-2px); }
+.report-card .card-link-icon {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.85); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.report-card.clickable:hover .card-link-icon { opacity: 1; }
+.card-link-icon svg { width: 14px; height: 14px; color: var(--seed-primary-dark); }
+.report-card .card-img {
+  height: 100px; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--seed-muted); font-weight: 500; letter-spacing: 0.02em;
+}
+.report-card:nth-child(odd) .card-img { height: 110px; }
+.report-card .card-body { padding: 14px; }
+.report-card .card-title {
+  font-size: 13px; font-weight: 600; color: var(--seed-fg);
+  line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.report-card .card-meta { font-size: 11px; color: var(--seed-meta); margin-top: 8px; letter-spacing: 0.02em; }
+
+/* === Page 2: Analytics === */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi-card {
+  background: var(--seed-white); border-radius: var(--seed-radius);
+  padding: 20px; border: 1px solid var(--seed-border); transition: box-shadow 0.2s;
+}
+.kpi-card:hover { box-shadow: 0 4px 16px rgba(107,69,163,0.08); }
+.kpi-card .kpi-label { font-size: 12px; color: var(--seed-muted); margin-bottom: 6px; letter-spacing: 0.02em; }
+.kpi-card .kpi-value { font-size: 28px; font-weight: 700; color: var(--seed-fg); letter-spacing: -0.02em; }
+.kpi-card .kpi-change { font-size: 12px; color: var(--seed-success); margin-top: 4px; font-weight: 500; }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.chart-card { background: var(--seed-white); border-radius: var(--seed-radius); padding: 20px; border: 1px solid var(--seed-border); }
+.chart-bars {
+  display: flex; align-items: flex-end; justify-content: space-around;
+  height: 180px; margin-top: 12px; padding: 0 4px;
+  background: linear-gradient(180deg, var(--seed-surface) 0%, var(--seed-white) 100%);
+  border-radius: var(--seed-radius-sm);
+}
+.chart-bar-wrap { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.chart-bar { width: 36px; border-radius: 4px 4px 0 0; transition: opacity 0.2s; }
+.chart-bar:hover { opacity: 0.85; }
+.chart-bar-label { font-size: 11px; color: var(--seed-muted); letter-spacing: 0.02em; }
+.chart-bar-label.highlight { color: var(--seed-primary); font-weight: 500; }
+.h-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.h-bar-label { font-size: 13px; width: 80px; text-align: right; color: var(--seed-fg); flex-shrink: 0; }
+.h-bar-track { flex: 1; height: 20px; background: var(--seed-surface); border-radius: 10px; overflow: hidden; }
+.h-bar-fill { height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+.h-bar-val { font-size: 12px; color: var(--seed-muted); width: 40px; letter-spacing: 0.01em; }
+
+/* === Analytics: Gauge === */
+.gauge-wrap { display: flex; align-items: center; gap: 28px; justify-content: center; margin-top: 16px; }
+.gauge-ring {
+  width: 130px; height: 130px; border-radius: 50%; position: relative;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.gauge-ring-inner {
+  width: 86px; height: 86px; background: var(--seed-white); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+}
+.gauge-ring-inner .gauge-val { font-size: 28px; font-weight: 700; color: var(--seed-primary); letter-spacing: -0.02em; }
+.gauge-ring-inner .gauge-lbl { font-size: 10px; color: var(--seed-muted); letter-spacing: 0.02em; }
+.gauge-detail { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.gauge-detail .gd-row { display: flex; align-items: center; gap: 8px; }
+.gauge-detail .gd-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.gauge-detail .gd-label { color: var(--seed-muted); }
+.gauge-detail .gd-value { font-weight: 600; color: var(--seed-fg); margin-left: auto; }
+
+/* === Analytics: Funnel === */
+.funnel-wrap { display: flex; flex-direction: column; gap: 0; margin-top: 16px; padding: 0 20px; }
+.funnel-step {
+  display: flex; align-items: center; gap: 16px; position: relative;
+}
+.funnel-bar-wrap { flex: 1; position: relative; }
+.funnel-bar {
+  height: 48px; border-radius: var(--seed-radius-sm); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--seed-white);
+  transition: opacity 0.2s;
+}
+.funnel-bar:hover { opacity: 0.9; }
+.funnel-label {
+  font-size: 12px; color: var(--seed-muted); width: 140px; text-align: right;
+  flex-shrink: 0; line-height: 1.4;
+}
+.funnel-value {
+  font-size: 12px; color: var(--seed-muted); width: 80px; flex-shrink: 0;
+}
+.funnel-arrow {
+  text-align: center; font-size: 18px; color: var(--seed-placeholder);
+  padding: 2px 0; margin-left: 140px;
+}
+
+/* === Analytics: Risk Table === */
+.risk-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.risk-table th {
+  text-align: left; font-size: 12px; font-weight: 600; color: var(--seed-muted);
+  padding: 10px 12px; border-bottom: 2px solid var(--seed-border); letter-spacing: 0.02em;
+}
+.risk-table td {
+  padding: 10px 12px; font-size: 13px; color: var(--seed-fg);
+  border-bottom: 1px solid var(--seed-border);
+}
+.risk-table tr:last-child td { border-bottom: none; }
+.risk-table .num { font-weight: 700; text-align: center; }
+.risk-table .total-row td { font-weight: 700; background: var(--seed-surface); border-top: 2px solid var(--seed-border); }
+.risk-badge {
+  display: inline-flex; padding: 2px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.01em;
+}
+.risk-badge.warn { background: var(--seed-gold-bg); color: var(--seed-gold-fg); }
+.risk-badge.danger { background: var(--seed-bronze-bg); color: var(--seed-bronze-fg); }
+
+/* === Page 3: Ranking === */
+.rank-list { display: flex; flex-direction: column; gap: 6px; }
+.rank-item {
+  background: var(--seed-white); border-radius: var(--seed-radius-sm);
+  padding: 10px 16px; display: flex; align-items: center; gap: 12px;
+  border: 1px solid var(--seed-border); transition: box-shadow 0.2s;
+}
+.rank-item:hover { box-shadow: 0 4px 16px rgba(107,69,163,0.08); }
+.rank-num {
+  width: 28px; height: 28px; border-radius: var(--seed-radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+}
+.rank-num.gold { background: var(--seed-gold-bg); color: var(--seed-gold-fg); }
+.rank-num.silver { background: var(--seed-surface); color: var(--seed-muted); }
+.rank-num.bronze { background: var(--seed-bronze-bg); color: var(--seed-bronze-fg); }
+.rank-num.normal { color: var(--seed-meta); font-weight: 500; }
+.rank-logo {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--seed-white); flex-shrink: 0;
+  background: linear-gradient(135deg, var(--seed-primary-dark), var(--seed-primary));
+}
+.rank-info { flex: 1; min-width: 0; }
+.rank-name { font-size: 14px; font-weight: 600; color: var(--seed-fg); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-desc { font-size: 11px; color: var(--seed-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-loc { font-size: 11px; color: var(--seed-meta); background: var(--seed-surface); padding: 2px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
+.rank-score { font-size: 13px; font-weight: 700; color: var(--seed-primary); margin-right: 4px; white-space: nowrap; min-width: 60px; text-align: right; }
+.rank-change { font-size: 11px; font-weight: 500; white-space: nowrap; min-width: 40px; text-align: right; }
+.rank-change.up { color: var(--seed-success); }
+.rank-change.down { color: var(--seed-danger); }
+
+/* === Page 4: Personnel === */
+.personnel-hero, .survey-hero {
+  background: linear-gradient(135deg, var(--seed-primary-darker) 0%, var(--seed-primary-dark) 60%, var(--seed-primary) 100%);
+  border-radius: var(--seed-radius-lg); padding: 36px 40px;
+  color: var(--seed-white); margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.personnel-hero::after, .survey-hero::after {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 160px; height: 160px; background: rgba(255,255,255,0.04); border-radius: 50%;
+}
+.personnel-hero-title, .survey-hero-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.personnel-hero-sub, .survey-hero-sub { font-size: 12px; opacity: 0.7; margin-bottom: 18px; position: relative; z-index: 1; letter-spacing: 0.01em; }
+.personnel-hero-stats, .survey-hero-stats { display: flex; gap: 40px; position: relative; z-index: 1; }
+.personnel-hero-stat .val, .survey-hero-stat .val { font-size: 24px; font-weight: 700; }
+.personnel-hero-stat .lbl, .survey-hero-stat .lbl { font-size: 11px; opacity: 0.6; margin-top: 2px; letter-spacing: 0.02em; }
+.personnel-grid, .survey-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.pie-chart-wrap { display: flex; align-items: center; gap: 28px; margin-top: 12px; justify-content: center; }
+.pie-chart { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pie-chart-inner { width: 72px; height: 72px; background: var(--seed-white); border-radius: 50%; }
+.pie-legend { display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.skill-tag {
+  padding: 6px 14px; border-radius: var(--seed-radius-sm);
+  font-size: 13px; background: var(--seed-surface);
+  color: var(--seed-primary-dark); font-weight: 500; letter-spacing: 0.01em;
+}
+
+/* === Page 5: Survey === */
+.survey-full { margin-bottom: 20px; }
+.sat-bars { display: flex; flex-direction: column; gap: 10px; }
+.sat-row { display: flex; align-items: center; gap: 12px; }
+.sat-label { font-size: 13px; color: var(--seed-fg); width: 70px; text-align: right; flex-shrink: 0; }
+.sat-bar-wrap { flex: 1; height: 22px; background: var(--seed-surface); border-radius: 11px; overflow: hidden; }
+.sat-bar {
+  height: 100%; border-radius: 11px; font-size: 11px;
+  color: var(--seed-white); display: flex; align-items: center;
+  padding-left: 10px; font-weight: 500; transition: width 0.6s ease;
+}
+.sat-bar.s1 { background: var(--seed-primary-dark); }
+.sat-bar.s2 { background: var(--seed-primary); }
+.sat-bar.s3 { background: var(--seed-primary-light); }
+.sat-bar.s4 { background: var(--seed-accent); color: var(--seed-fg); }
+.sat-bar.s5 { background: var(--seed-accent-light); color: var(--seed-fg); }
+.metric-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.metric-card-sm {
+  background: var(--seed-white); border-radius: var(--seed-radius);
+  padding: 18px; border: 1px solid var(--seed-border);
+  text-align: center; transition: box-shadow 0.2s;
+}
+.metric-card-sm:hover { box-shadow: 0 4px 16px rgba(107,69,163,0.08); }
+.metric-card-sm .m-val { font-size: 26px; font-weight: 700; color: var(--seed-primary); letter-spacing: -0.02em; }
+.metric-card-sm .m-label { font-size: 12px; color: var(--seed-muted); margin-top: 4px; letter-spacing: 0.01em; }
+.finding-card {
+  background: var(--seed-white); border-radius: var(--seed-radius);
+  padding: 18px; display: flex; flex-direction: column; gap: 4px;
+  border-top: 3px solid var(--seed-primary); transition: box-shadow 0.2s;
+}
+.finding-card:hover { box-shadow: 0 4px 16px rgba(107,69,163,0.08); }
+.finding-card.warn { border-top-color: var(--seed-warn); }
+.finding-card .find-label { font-size: 11px; color: var(--seed-muted); font-weight: 500; letter-spacing: 0.02em; }
+.finding-card .find-val { font-size: 16px; font-weight: 700; color: var(--seed-fg); letter-spacing: -0.01em; }
+.finding-card .find-desc { font-size: 12px; color: var(--seed-muted); margin-top: 4px; line-height: 1.6; }
+.quote-card { background: var(--seed-surface); border-radius: var(--seed-radius); padding: 18px; position: relative; }
+.quote-card .quote-text { font-size: 14px; color: var(--seed-quote); font-style: italic; line-height: 1.6; margin-bottom: 10px; }
+.quote-card .quote-text::before {
+  content: '\201C'; font-size: 28px; color: var(--seed-primary);
+  font-weight: 700; margin-right: 2px; line-height: 0; vertical-align: -6px;
+}
+.quote-card .quote-author { font-size: 12px; color: var(--seed-muted); letter-spacing: 0.01em; }
+.method-note {
+  background: var(--seed-surface); border-radius: var(--seed-radius);
+  padding: 16px; font-size: 12px; color: var(--seed-method);
+  line-height: 1.7; letter-spacing: 0.01em;
+}
+.method-note strong { color: var(--seed-primary-dark); }
+.findings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.quotes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+/* === Editor System === */
+.editor-fab {
+  position: fixed; bottom: 28px; right: 28px; z-index: 500;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--seed-primary-dark), var(--seed-primary-darker));
+  color: var(--seed-white); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(107,69,163,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.editor-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(107,69,163,0.4); }
+.editor-fab svg { width: 24px; height: 24px; }
+.editor-fab.active { background: var(--seed-danger); }
+
+.edit-mode-badge {
+  position: fixed; bottom: 28px; right: 90px; z-index: 500;
+  background: var(--seed-primary); color: var(--seed-white);
+  padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  display: none; align-items: center; gap: 6px;
+  box-shadow: 0 2px 12px rgba(107,69,163,0.2);
+}
+.edit-mode-badge.show { display: flex; }
+
+.section-edit-btn {
+  display: none; position: absolute; top: 8px; right: 8px; z-index: 10;
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--seed-primary); color: var(--seed-white);
+  border: none; cursor: pointer; align-items: center; justify-content: center;
+  font-size: 14px; transition: opacity 0.2s;
+}
+.edit-mode .section-edit-btn { display: flex; }
+.edit-mode [data-section] { position: relative; outline: 2px dashed var(--seed-primary-light); outline-offset: 4px; border-radius: var(--seed-radius); }
+
+/* Editor Panel */
+.editor-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30,27,46,0.5); z-index: 600;
+  display: none; align-items: stretch; justify-content: flex-end;
+}
+.editor-overlay.open { display: flex; }
+.editor-panel {
+  width: 560px; max-width: 90vw; background: var(--seed-white);
+  height: 100vh; overflow-y: auto; box-shadow: -4px 0 24px rgba(107,69,163,0.12);
+  display: flex; flex-direction: column;
+}
+.editor-header {
+  padding: 20px 24px; border-bottom: 1px solid var(--seed-border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.editor-header h3 { font-size: 16px; font-weight: 700; color: var(--seed-fg); }
+.editor-close {
+  width: 32px; height: 32px; border-radius: 8px; background: var(--seed-surface);
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--seed-muted);
+}
+.editor-close:hover { background: var(--seed-border); }
+.editor-tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--seed-border);
+  padding: 0 24px; flex-shrink: 0; overflow-x: auto;
+}
+.editor-tab {
+  padding: 12px 16px; font-size: 13px; font-weight: 500;
+  color: var(--seed-muted); cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+}
+.editor-tab:hover { color: var(--seed-primary); }
+.editor-tab.active { color: var(--seed-primary); font-weight: 600; border-bottom-color: var(--seed-primary); }
+.editor-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+.editor-section { display: none; }
+.editor-section.active { display: block; }
+.editor-field { margin-bottom: 16px; }
+.editor-field label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--seed-muted); margin-bottom: 6px; letter-spacing: 0.02em;
+}
+.editor-field input, .editor-field textarea, .editor-field select {
+  width: 100%; padding: 10px 14px; border: 1px solid var(--seed-border);
+  border-radius: var(--seed-radius-sm); font-size: 13px;
+  font-family: var(--font-body); color: var(--seed-fg);
+  background: var(--seed-white); outline: none; transition: border-color 0.2s;
+}
+.editor-field input:focus, .editor-field textarea:focus {
+  border-color: var(--seed-primary-light);
+}
+.editor-field textarea { min-height: 80px; resize: vertical; line-height: 1.6; }
+.editor-list-item {
+  background: var(--seed-surface); border-radius: var(--seed-radius-sm);
+  padding: 12px; margin-bottom: 8px; position: relative;
+}
+.editor-list-item .remove-btn {
+  position: absolute; top: 8px; right: 8px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--seed-white); border: 1px solid var(--seed-border);
+  color: var(--seed-danger); font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.editor-list-item .remove-btn:hover { background: var(--seed-danger-light); }
+.editor-list-item input, .editor-list-item textarea {
+  margin-bottom: 6px; background: var(--seed-white);
+}
+.editor-list-item input:last-child, .editor-list-item textarea:last-child { margin-bottom: 0; }
+.add-item-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 10px; border: 1.5px dashed var(--seed-border);
+  border-radius: var(--seed-radius-sm); background: none;
+  color: var(--seed-primary); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: var(--font-body); transition: all 0.2s;
+}
+.add-item-btn:hover { border-color: var(--seed-primary-light); background: var(--seed-surface); }
+.editor-footer {
+  padding: 16px 24px; border-top: 1px solid var(--seed-border);
+  display: flex; gap: 10px; flex-shrink: 0;
+}
+.btn-primary {
+  flex: 1; padding: 10px 20px; border-radius: var(--seed-radius-sm);
+  background: var(--seed-primary); color: var(--seed-white);
+  border: none; font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: var(--font-body); transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--seed-primary-dark); }
+.btn-secondary {
+  padding: 10px 20px; border-radius: var(--seed-radius-sm);
+  background: var(--seed-surface); color: var(--seed-fg);
+  border: 1px solid var(--seed-border); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: var(--font-body); transition: all 0.2s;
+}
+.btn-secondary:hover { background: var(--seed-border); }
+
+/* Auto-analysis panel */
+.analysis-results {
+  background: var(--seed-surface); border-radius: var(--seed-radius-sm);
+  padding: 14px; margin-top: 12px;
+}
+.analysis-results h4 {
+  font-size: 12px; font-weight: 600; color: var(--seed-primary-dark);
+  margin-bottom: 8px; letter-spacing: 0.02em;
+}
+.analysis-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 500;
+  margin: 2px 4px 2px 0; background: var(--seed-white); color: var(--seed-primary);
+  border: 1px solid var(--seed-border);
+}
+.analysis-tag.linked { background: var(--seed-primary); color: var(--seed-white); border-color: var(--seed-primary); }
+.analysis-tag .link-icon { font-size: 10px; }
+.analysis-suggest {
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--seed-border);
+}
+.analysis-suggest .suggest-title { font-size: 11px; color: var(--seed-muted); margin-bottom: 6px; }
+.suggest-link {
+  display: block; font-size: 12px; color: var(--seed-primary);
+  text-decoration: none; padding: 4px 0;
+}
+.suggest-link:hover { text-decoration: underline; }
+
+/* Editor field row (side by side) */
+.editor-row { display: flex; gap: 10px; }
+.editor-row .editor-field { flex: 1; }
+
+/* JSON Import/Export */
+.json-area {
+  width: 100%; min-height: 200px; padding: 12px;
+  border: 1px solid var(--seed-border); border-radius: var(--seed-radius-sm);
+  font-family: 'Consolas', 'Monaco', monospace; font-size: 11px;
+  color: var(--seed-fg); background: var(--seed-surface);
+  resize: vertical; outline: none;
+}
+.json-area:focus { border-color: var(--seed-primary-light); }
+
+/* === Responsive === */
+@media (max-width: 960px) {
+  .home-grid, .chart-grid, .personnel-grid, .survey-grid, .global-news { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .findings-grid, .quotes-grid { grid-template-columns: 1fr; }
+  .metric-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .sector-grid { grid-template-columns: repeat(3, 1fr); }
+  .nav-search { min-width: 180px; }
+}
+@media (max-width: 768px) {
+  .top-nav-inner { padding: 0 16px; gap: 12px; }
+  .nav-items { display: none; }
+  .nav-search { min-width: 140px; flex: 1; }
+  .main-wrap { padding: 80px 16px 24px; }
+  .home-hero, .personnel-hero, .survey-hero { padding: 24px 20px; }
+  .home-hero-stats, .personnel-hero-stats, .survey-hero-stats { gap: 20px; flex-wrap: wrap; }
+  .home-hero-stat .val, .personnel-hero-stat .val, .survey-hero-stat .val { font-size: 20px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .metric-grid-3 { grid-template-columns: 1fr; }
+  .report-grid { grid-template-columns: 1fr; }
+  .sector-grid { grid-template-columns: repeat(2, 1fr); }
+  .editor-panel { width: 100vw; }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .home-hero-title, .personnel-hero-title, .survey-hero-title { font-size: 18px; }
+  .sector-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Mobile nav toggle */
+.nav-mobile-toggle {
+  display: none; width: 36px; height: 36px; border-radius: 8px;
+  background: var(--seed-surface); align-items: center; justify-content: center; cursor: pointer;
+}
+.nav-mobile-toggle svg { width: 20px; height: 20px; color: var(--seed-muted); }
+@media (max-width: 768px) {
+  .nav-mobile-toggle { display: flex; }
+  .nav-items.mobile-open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 64px; left: 0; right: 0;
+    background: var(--seed-white); padding: 12px 16px; gap: 4px;
+    border-bottom: 1px solid var(--seed-border);
+    box-shadow: 0 4px 12px rgba(107,69,163,0.08);
+  }
+  .nav-item.active::after { display: none; }
+  .nav-item.active { background: var(--seed-surface); border-radius: var(--seed-radius-sm); }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav class="top-nav" data-component="main-navigation">
+  <div class="top-nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-mark"></div>
+      <div class="nav-logo-text">
+        <div class="logo-name">商研Pro</div>
+        <div class="logo-tag">商业服务研究</div>
+      </div>
+    </div>
+    <div class="nav-mobile-toggle" onclick="toggleMobileNav()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </div>
+    <div class="nav-items" id="navItems">
+      <div class="nav-item active" onclick="switchPage('home', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>首页</span>
+      </div>
+      <div class="nav-item" onclick="switchPage('analytics', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>行业标签</span>
+      </div>
+      <div class="nav-item" onclick="switchPage('ranking', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>企业排名</span>
+      </div>
+      <div class="nav-item" onclick="switchPage('personnel', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>从业人员</span>
+      </div>
+      <div class="nav-item" onclick="switchPage('survey', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>客户调研</span>
+      </div>
+    </div>
+    <div class="nav-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="搜索行业报告、企业、数据..." aria-label="搜索">
+    </div>
+    <div class="nav-actions">
+      <div class="nav-bell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <div class="badge-dot"></div>
+      </div>
+      <div class="nav-avatar"></div>
+    </div>
+  </div>
+</nav>
+
+<main class="main-wrap" id="mainWrap">
+
+  <!-- ===== Page 1: Home ===== -->
+  <div class="page active" id="page-home" data-component="home-feed">
+    <div class="home-hero" data-section="home-hero">
+      <button class="section-edit-btn" onclick="openEditor('home','hero')" title="编辑">✎</button>
+      <div class="home-hero-title" id="heroTitle">商业服务行业研究平台</div>
+      <div class="home-hero-sub" id="heroSub">实时追踪行业趋势 · 数据驱动商业决策</div>
+      <div class="home-hero-stats" id="heroStats"></div>
+    </div>
+
+    <!-- Industry Overview -->
+    <div class="industry-overview" data-section="industry-overview">
+      <button class="section-edit-btn" onclick="openEditor('home','industry')" title="编辑">✎</button>
+      <div class="section-title">行业概览</div>
+      <div class="industry-def" id="industryDef"></div>
+      <div class="sector-grid" id="sectorGrid"></div>
+    </div>
+
+    <!-- Global News -->
+    <div class="global-news" data-section="global-news">
+      <button class="section-edit-btn" onclick="openEditor('home','news-global')" title="编辑">✎</button>
+      <div>
+        <div class="news-section-title"><span class="tag domestic">国内</span> 国内行业要闻</div>
+        <div id="domesticNews"></div>
+      </div>
+      <div>
+        <div class="news-section-title"><span class="tag intl">国际</span> 国际市场动态</div>
+        <div id="intlNews"></div>
+      </div>
+    </div>
+
+    <div class="home-grid">
+      <div class="home-left">
+        <div class="section-title">今日要闻</div>
+        <div data-section="home-news" style="position:relative">
+          <button class="section-edit-btn" onclick="openEditor('home','news')" title="编辑">✎</button>
+          <div id="todayNews"></div>
+        </div>
+      </div>
+      <div class="home-right">
+        <div class="section-title">精选报告</div>
+        <div data-section="home-reports" style="position:relative">
+          <button class="section-edit-btn" onclick="openEditor('home','reports')" title="编辑">✎</button>
+          <div class="report-grid" id="reportGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Page 2: Analytics ===== -->
+  <div class="page" id="page-analytics" data-component="data-analytics">
+    <div data-section="analytics-kpi" style="position:relative">
+      <button class="section-edit-btn" onclick="openEditor('analytics','kpi')" title="编辑">✎</button>
+      <div class="kpi-grid" id="kpiGrid"></div>
+    </div>
+
+    <div class="chart-card" data-section="analytics-tag-acc" style="position:relative">
+      <button class="section-edit-btn" onclick="openEditor('analytics','tagAcc')" title="编辑">✎</button>
+      <div class="section-title">内部标签准确性</div>
+      <div id="tagAccChart"></div>
+    </div>
+
+    <div class="chart-card" style="margin-top:20px" data-section="analytics-funnel" data-component="posting-funnel">
+      <button class="section-edit-btn" onclick="openEditor('analytics','funnel')" title="编辑">✎</button>
+      <div class="section-title">活跃发帖漏斗</div>
+      <div id="funnelChart"></div>
+    </div>
+
+    <div class="chart-card" style="margin-top:20px" data-section="analytics-industry-paid" style="position:relative">
+      <button class="section-edit-btn" onclick="openEditor('analytics','industryPaid')" title="编辑">✎</button>
+      <div class="section-title">付费客户行业分布（25年VS26年）</div>
+      <div id="industryPaidChart" style="margin-top:12px"></div>
+    </div>
+
+    <div class="chart-card" style="margin-top:20px" data-section="analytics-risk" data-component="risk-breakdown">
+      <button class="section-edit-btn" onclick="openEditor('analytics','risk')" title="编辑">✎</button>
+      <div class="section-title">风控处理账号明细</div>
+      <div id="riskChart"></div>
+    </div>
+
+    <div class="chart-card" style="margin-top:24px" data-section="analytics-jobs" data-component="job-analysis">
+      <button class="section-edit-btn" onclick="openEditor('analytics','jobs')" title="编辑">✎</button>
+      <div class="section-title" style="font-size:16px;margin-bottom:4px">真商业服务企业在58招聘的岗位分析</div>
+      <div id="jobSummary" style="font-size:13px;color:var(--seed-muted);line-height:1.7;margin-bottom:16px"></div>
+
+      <div class="section-title" style="font-size:14px;border-left:3px solid var(--seed-primary-dark);padding-left:10px;margin-top:20px">一、岗位类型分布</div>
+      <div class="chart-grid" style="margin-top:12px">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--seed-fg);margin-bottom:8px">二级类（大类）TOP5</div>
+          <div style="overflow-x:auto"><table class="risk-table" id="jobCat2Table"></table></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--seed-fg);margin-bottom:8px">四级类（最细粒度岗位）TOP5</div>
+          <div style="overflow-x:auto"><table class="risk-table" id="jobCat4Table"></table></div>
+        </div>
+      </div>
+      <div id="jobCatConclusion" style="margin-top:14px"></div>
+
+      <div class="section-title" style="font-size:14px;border-left:3px solid var(--seed-primary-dark);padding-left:10px;margin-top:24px">二、城市分布与集中度</div>
+      <div id="cityAnalysis" style="margin-top:12px"></div>
+
+      <div class="section-title" style="font-size:14px;border-left:3px solid var(--seed-primary-dark);padding-left:10px;margin-top:24px">三、企业集中度</div>
+      <div id="companyConcentration" style="margin-top:12px"></div>
+      <div style="overflow-x:auto;margin-top:14px"><table class="risk-table" id="companyTop5Table"></table></div>
+
+      <div class="section-title" style="font-size:14px;border-left:3px solid var(--seed-primary-dark);padding-left:10px;margin-top:24px">四、值得关注的企业TOP10（综合评分）</div>
+      <div id="notableIntro" style="font-size:13px;color:var(--seed-muted);line-height:1.7;margin:8px 0 14px"></div>
+      <div style="overflow-x:auto"><table class="risk-table" id="notableTop10Table"></table></div>
+      <div id="notableConclusion" style="margin-top:14px"></div>
+
+      <div id="jobSourceFooter" style="margin-top:18px"></div>
+    </div>
+  </div>
+
+  <!-- ===== Page 3: Ranking ===== -->
+  <div class="page" id="page-ranking" data-component="enterprise-ranking">
+    <div class="cat-tags" id="rankTabs">
+      <span class="cat-tag active" onclick="switchRankTab(0, this)">全球品牌价值TOP50</span>
+      <span class="cat-tag" onclick="switchRankTab(1, this)">中国竞争力TOP50</span>
+    </div>
+    <div id="rankNote" style="font-size:12px;color:var(--seed-meta);margin-bottom:16px">数据来源：Brand Finance 2026 全球商业服务品牌价值TOP50</div>
+    <div data-section="ranking-list" style="position:relative">
+      <button class="section-edit-btn" onclick="openEditor('ranking','list')" title="编辑">✎</button>
+      <div class="rank-list" id="rankList"></div>
+    </div>
+  </div>
+
+  <!-- ===== Page 4: Personnel ===== -->
+  <div class="page" id="page-personnel" data-component="personnel-report">
+    <div class="personnel-hero" data-section="personnel-hero">
+      <button class="section-edit-btn" onclick="openEditor('personnel','hero')" title="编辑">✎</button>
+      <div class="personnel-hero-title" id="personnelTitle">商业服务行业人才全景</div>
+      <div class="personnel-hero-sub" id="personnelSub">2026年Q2 · 基于2,840万从业人员数据</div>
+      <div class="personnel-hero-stats" id="personnelStats"></div>
+    </div>
+    <div class="personnel-grid">
+      <div class="chart-card" data-section="personnel-edu" style="position:relative">
+        <button class="section-edit-btn" onclick="openEditor('personnel','edu')" title="编辑">✎</button>
+        <div class="section-title">学历分布</div>
+        <div class="pie-chart-wrap" id="eduChart"></div>
+      </div>
+      <div class="chart-card" data-section="personnel-skills" style="position:relative">
+        <button class="section-edit-btn" onclick="openEditor('personnel','skills')" title="编辑">✎</button>
+        <div class="section-title">TOP技能需求</div>
+        <div class="tag-cloud" id="skillTags"></div>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-top:20px" data-section="personnel-cities" data-component="city-chart">
+      <button class="section-edit-btn" onclick="openEditor('personnel','cities')" title="编辑">✎</button>
+      <div class="section-title">城市集中度 TOP5</div>
+      <div id="cityBars" style="margin-top:12px;display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+  </div>
+
+  <!-- ===== Page 5: Survey (客户调研) ===== -->
+  <div class="page" id="page-survey" data-component="customer-survey">
+    <div class="survey-hero" data-section="survey-hero">
+      <button class="section-edit-btn" onclick="openEditor('survey','hero')" title="编辑">✎</button>
+      <div class="survey-hero-title" id="surveyTitle">商业服务TOP客户</div>
+      <div class="survey-hero-sub" id="surveySub">数据共 908条客户记录，涵盖直销、渠道、战K三种模式</div>
+      <div class="survey-hero-stats" id="surveyStats"></div>
+    </div>
+
+    <div class="survey-full" data-section="survey-payment" style="position:relative">
+      <button class="section-edit-btn" onclick="openEditor('survey','payment')" title="编辑">✎</button>
+      <div class="section-title">一、真"商业服务"客户付款分布总结</div>
+      <div id="paymentSummary" style="font-size:13px;color:var(--seed-muted);line-height:1.7;margin:10px 0 14px"></div>
+      <div style="overflow-x:auto"><table class="risk-table" id="paymentTable"></table></div>
+      <div id="paymentBullets" style="margin-top:14px;display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <div class="survey-full" data-section="survey-product" style="position:relative;margin-top:20px">
+      <button class="section-edit-btn" onclick="openEditor('survey','product')" title="编辑">✎</button>
+      <div class="section-title">二、客户消耗产品分布总结</div>
+      <div id="productSummary" style="font-size:13px;color:var(--seed-muted);line-height:1.7;margin:10px 0 14px"></div>
+      <div style="overflow-x:auto"><table class="risk-table" id="productTable"></table></div>
+      <div id="productBullets" style="margin-top:14px;display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <div class="survey-full" data-section="survey-ranking" style="position:relative;margin-top:20px">
+      <button class="section-edit-btn" onclick="openEditor('survey','ranking')" title="编辑">✎</button>
+      <div class="section-title">三、直销/渠道/战K TOP10消费客户榜单</div>
+      <div id="channelRankings"></div>
+    </div>
+
+    <div class="method-note" id="methodNote"></div>
+  </div>
+
+</main>
+
+<!-- Editor FAB -->
+<div class="editor-fab" id="editorFab" onclick="toggleEditMode()" title="切换编辑模式">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+</div>
+<div class="edit-mode-badge" id="editBadge">
+  <span>✎</span> 编辑模式已开启
+</div>
+
+<!-- Editor Overlay -->
+<div class="editor-overlay" id="editorOverlay">
+  <div class="editor-panel">
+    <div class="editor-header">
+      <h3 id="editorTitle">内容编辑器</h3>
+      <button class="editor-close" onclick="closeEditor()">&times;</button>
+    </div>
+    <div class="editor-tabs" id="editorTabs"></div>
+    <div class="editor-body" id="editorBody"></div>
+    <div class="editor-footer">
+      <button class="btn-primary" onclick="saveEditorData()">保存更改</button>
+      <button class="btn-secondary" onclick="analyzeContent()">自动分析</button>
+      <button class="btn-secondary" onclick="exportJSON()">导出</button>
+      <button class="btn-secondary" onclick="importJSON()">导入</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========================================
+   DATA MODEL
+   ======================================== */
+var siteData = {
+  home: {
+    hero: {
+      title: '商业服务行业研究平台',
+      sub: '实时追踪行业趋势 · 数据驱动商业决策',
+      stats: [
+        { val: '4.8万亿', lbl: '行业规模' },
+        { val: '36.7万', lbl: '企业数量' },
+        { val: '67.3%', lbl: '数字化渗透率' }
+      ]
+    },
+    industry: {
+      definition: '商业服务行业（Business Services）是指为企业和组织提供专业化支持服务的产业集合，涵盖管理咨询、人力资源、财税法律、IT服务、市场营销等领域。作为现代服务业的核心组成部分，中国商业服务行业2026年市场规模预计突破<a href="#" onclick="switchPage(\'analytics\',document.querySelectorAll(\'.nav-item\')[1]);return false;">4.8万亿元</a>，年均复合增长率达12.3%，从业人员超过2,840万人。行业正经历从传统人力密集型向数字化、智能化转型的关键阶段，<a href="#" onclick="switchPage(\'analytics\',document.querySelectorAll(\'.nav-item\')[1]);return false;">AI技术渗透率</a>已达67.3%。',
+      sectors: [
+        { name: '企业咨询', icon: '\u{1F4CA}', share: '28%', growth: '+15.2%', desc: '战略·运营·IT咨询' },
+        { name: '人力资源', icon: '\u{1F465}', share: '22%', growth: '+12.8%', desc: '招聘·培训·薪酬' },
+        { name: '财税法律', icon: '\u{2696}\u{FE0F}', share: '18%', growth: '+9.5%', desc: '审计·税务·合规' },
+        { name: 'IT服务', icon: '\u{1F4BB}', share: '20%', growth: '+18.7%', desc: '云计算·AI·安全' },
+        { name: '营销服务', icon: '\u{1F4E3}', share: '12%', growth: '+14.3%', desc: '数字营销·品牌' }
+      ]
+    },
+    domesticNews: [
+      { title: '国务院发布服务业高质量发展指导意见，明确2026-2030年发展目标', source: '新华社', time: '1小时前', url: '' },
+      { title: '北京CBD商业服务企业营收增长18%，数字经济贡献率超60%', source: '北京日报', time: '3小时前', url: '' },
+      { title: '深圳前海出台跨境专业服务新规，港澳机构准入门槛大幅降低', source: '南方都市报', time: '5小时前', url: '' },
+      { title: '上海市商务委：2026上半年专业服务业合同额突破3200亿', source: '第一财经', time: '6小时前', url: '' }
+    ],
+    intlNews: [
+      { title: 'McKinsey发布2026全球商业服务报告：AI驱动行业效率提升40%', source: 'Financial Times', time: '2小时前', url: '' },
+      { title: 'Accenture宣布30亿美元收购数字化咨询企业，加码AI转型服务', source: 'Reuters', time: '4小时前', url: '' },
+      { title: '全球ESG合规咨询市场规模达1200亿美元，年增长25%', source: 'Bloomberg', time: '6小时前', url: '' },
+      { title: '日本商业服务市场持续萎缩，人手不足推动AI替代加速', source: '日经新闻', time: '8小时前', url: '' }
+    ],
+    news: [
+      { source: '36氪 · 2小时前', title: '2026年商业服务行业规模突破4.8万亿，同比增长12.3%', reads: '1.2万', comments: '328' },
+      { source: '亿欧 · 4小时前', title: 'AI智能客服渗透率达67%，企业服务赛道加速数字化', reads: '8.9k', comments: '215' }
+    ],
+    reports: [
+      { title: '2026年Q2商业服务行业发展趋势白皮书', category: '行业趋势报告', date: '6月12日', reads: '5.6k', url: '', colorA: 'var(--seed-report-1a)', colorB: 'var(--seed-report-1b)' },
+      { title: 'TOP50商业服务企业竞争力排名', category: '企业排名', date: '6月10日', reads: '3.2k', url: '', colorA: 'var(--seed-report-2a)', colorB: 'var(--seed-report-2b)' },
+      { title: '2026商业服务行业薪酬与人才流动报告', category: '人才洞察', date: '6月8日', reads: '4.1k', url: '', colorA: 'var(--seed-report-3a)', colorB: 'var(--seed-report-3b)' },
+      { title: '企业客户满意度与需求调研报告', category: '客户调研', date: '6月5日', reads: '2.8k', url: '', colorA: 'var(--seed-report-4a)', colorB: 'var(--seed-report-4b)' }
+    ]
+  },
+  analytics: {
+    kpi: [
+      { label: '签约发帖UID', value: '663', change: '26年Q2' },
+      { label: '商业服务标签', value: '960', change: '真227/假732' },
+      { label: '活跃发帖数', value: '6,195', change: '4.1-6.7' },
+      { label: '风控处理账号', value: '175', change: '真21/假154' }
+    ],
+    tagAccuracy: {
+      pct: 23.7,
+      total: 959,
+      businessSvc: 960,
+      truePositive: 227,
+      falsePositive: 351,
+      otherIndustry: 212,
+      riskControl: 169,
+      riskAccounts: 169,
+      note: '2026年Q2签约发帖或更新帖子的客户中，被标注为"商业服务"共960条',
+      errorSummary: '在"标签准确校验"表中，共有960条标注为"商业服务"的客户，其中732条被判定为假（非真商业服务），错误率高达76.3%。错误原因可归纳为三大类：',
+      errors: [
+        { reason: '风控/异常账号', count: 169, pct: 23.1 },
+        { reason: '实际属于其他行业', count: 212, pct: 29.0 },
+        { reason: '行业细分不匹配', count: 351, pct: 48.0 }
+      ],
+      industryErrors: [
+        { name: '文化传媒', count: 98, pct: 13.4 },
+        { name: '互联网', count: 38, pct: 5.2 },
+        { name: '制造业', count: 22, pct: 3.0 },
+        { name: '交通运输', count: 8, pct: 1.1 },
+        { name: '其他', count: 46, pct: 6.3 }
+      ]
+    },
+    funnel: [
+      { label: 'Q2活跃发帖', value: '6,195', detail: '涉及663个企业主体', pct: 100, color: 'var(--seed-primary-dark)' },
+      { label: '成交合同(25&26Q2)', value: '1,019', detail: '定制33 + 框架54 + 套餐932', pct: 60, color: 'var(--seed-primary)' },
+      { label: '当前服务中合同', value: '801', detail: '定制24 + 框架13 + 套餐764', pct: 48, color: 'var(--seed-primary-light)' },
+      { label: '未活跃发帖合同', value: '138', detail: '801-663=138个服务中合同未发帖', pct: 8, color: 'var(--seed-accent)' }
+    ],
+    contractActive: {
+      total: 683,
+      data: [
+        { name: '商业服务', framework: 17, custom: 14, package: 450, total: 480 },
+        { name: '文化传媒', framework: 0, custom: 2, package: 100, total: 103 },
+        { name: '互联网', framework: 0, custom: 1, package: 34, total: 35 },
+        { name: '制造业', framework: 0, custom: 1, package: 19, total: 20 },
+        { name: '其他', framework: 0, custom: 0, package: 8, total: 8 },
+        { name: '交通运输', framework: 0, custom: 0, package: 6, total: 6 }
+      ]
+    },
+    industryPaid: [
+      { name: '商业服务', y25: 280, y26: 635, total: 915 },
+      { name: '文化传媒', y25: 38, y26: 85, total: 123 },
+      { name: '互联网', y25: 15, y26: 33, total: 48 },
+      { name: '制造业', y25: 8, y26: 19, total: 27 },
+      { name: '交通运输', y25: 3, y26: 6, total: 9 },
+      { name: '其他行业', y25: 11, y26: 24, total: 35 }
+    ],
+    jobAnalysis: {
+      summary: '共 <b style="color:var(--seed-fg)">1473条</b>发帖记录，涵盖 <b style="color:var(--seed-fg)">226家企业</b>、分布 <b style="color:var(--seed-fg)">135个城市</b>，21个二级类、75个三级类、182个四级类岗位。',
+      cat2: [
+        { rank: 1, name: '销售', count: 517, pct: '35.10%', bold: true },
+        { rank: 2, name: '运营/客服', count: 275, pct: '18.67%', bold: false },
+        { rank: 3, name: '人事/行政/财务', count: 257, pct: '17.45%', bold: false },
+        { rank: 4, name: '咨询/翻译/法律', count: 100, pct: '6.79%', bold: false },
+        { rank: 5, name: '金融/贸易', count: 73, pct: '4.96%', bold: false }
+      ],
+      cat4: [
+        { rank: 1, name: '电话销售', count: 178, pct: '12.08%', bold: true },
+        { rank: 2, name: '电话客服', count: 173, pct: '11.74%', bold: true },
+        { rank: 3, name: '销售专员', count: 142, pct: '9.64%', bold: true },
+        { rank: 4, name: '客服专员/助理', count: 60, pct: '4.07%', bold: false },
+        { rank: 5, name: '前台/接待', count: 48, pct: '3.26%', bold: false }
+      ],
+      catConclusion: '商业服务行业在58招聘的岗位高度集中于<b style="color:var(--seed-primary-dark)">销售类和客服类</b>，电话销售+电话客服+销售专员合计占比 <b style="color:var(--seed-fg)">33.46%</b>，岗位偏重营销获客和客户服务。',
+      cityBullets: [
+        'TOP5城市：<b style="color:var(--seed-fg)">成都(5.50%)、济宁(5.23%)、深圳(4.34%)、北京(4.01%)、武汉(3.87%)</b>',
+        'TOP5城市集中度：<b style="color:var(--seed-fg)">22.95%</b>，TOP10城市集中度：<b style="color:var(--seed-fg)">36.39%</b>',
+        '城市分布较为分散（135个城市），没有单一城市占比超6%，说明商业服务企业在58招聘的城市覆盖广泛，不依赖个别城市。'
+      ],
+      companyBullets: [
+        'TOP5企业发帖占比：<b style="color:var(--seed-fg)">15.48%</b>',
+        'TOP10企业发帖占比：<b style="color:var(--seed-fg)">20.92%</b>',
+        '<b style="color:var(--seed-primary-dark)">集中度偏低</b>，没有一家企业发帖占比超7%——商业服务行业在58招聘的竞争格局相对分散'
+      ],
+      companyTop5: [
+        { rank: 1, name: '山东万森企业管理咨询有限公司德州分公司', count: 97 },
+        { rank: 2, name: '深圳市胜启活动策划有限公司', count: 51 },
+        { rank: 3, name: '河南省佳人相约商务咨询有限公司', count: 32 },
+        { rank: 4, name: '北京合建研信息咨询中心', count: 28 },
+        { rank: 5, name: '湖北律智星法服咨询有限公司', count: 20 }
+      ],
+      notableIntro: '从<b style="color:var(--seed-fg)">发帖量、商业推广投入、岗位多样性</b>三个维度综合评分：',
+      notableTop10: [
+        { rank: 1, name: '山东万森企业管理咨询有限公司德州分公司', posts: 97, promoted: '是', types: '8种', cities: '济宁、汶上、德州', jobs: '电话客服、客服专员' },
+        { rank: 2, name: '深圳市胜启活动策划有限公司', posts: 51, promoted: '是', types: '10种', cities: '深圳', jobs: '店员/营业员、艺人助理' },
+        { rank: 3, name: '河南省佳人相约商务咨询有限公司', posts: 32, promoted: '是', types: '7种', cities: '郑州、南阳', jobs: '婚恋咨询、前台/接待' },
+        { rank: 4, name: '湖北律智星法服咨询有限公司', posts: 20, promoted: '是', types: '8种', cities: '襄阳', jobs: '法律/法务顾问、电话销售' },
+        { rank: 5, name: '长沙珅偲法律咨询有限公司', posts: 15, promoted: '是', types: '9种', cities: '长沙、成都', jobs: '销售专员、网络销售' },
+        { rank: 6, name: '内蒙古双晨财税顾问有限公司', posts: 12, promoted: '是', types: '8种', cities: '鄂尔多斯', jobs: '财务文员、销售顾问' },
+        { rank: 7, name: '武汉市融联信咨询服务有限公司大悟县分公司', posts: 14, promoted: '是', types: '6种', cities: '大悟', jobs: '催收、电话销售' },
+        { rank: 8, name: '内蒙古京政财务有限公司', posts: 8, promoted: '是', types: '8种', cities: '鄂尔多斯', jobs: '销售专员、财务经理' },
+        { rank: 9, name: '辽宁腾坤律师事务所', posts: 10, promoted: '是', types: '6种', cities: '沈阳、本溪', jobs: '律师助理、律师' },
+        { rank: 10, name: '洛阳班大师信息咨询有限公司', posts: 7, promoted: '是', types: '6种', cities: '洛阳', jobs: '销售专员、课程顾问' }
+      ],
+      notableConclusion: '这10家企业均使用了商业推广功能，岗位覆盖面广，招聘活跃度高，值得重点关注。',
+      sourceLabel: '商业服务岗位类型与分布分析.xlsx',
+      sourceUrl: 'https://docs.58corp.com/page/attachment/2066175485938786304/view?fileId=2066176015046041600&alias='
+    },
+    risk: {
+      total: 190,
+      riskControl: 175,
+      riskTrue: 21,
+      riskFalse: 154,
+      cancelled: 15,
+      note: '风控账号175条 + 已注销15条，共190条异常记录'
+    }
+  },
+  ranking: {
+    global: [
+      { rank:1, name:'德勤 Deloitte', logo:'德勤', loc:'美国', score:'$42.3B', growth:'+2.9%', changeDir:'up', desc:'审计、管理咨询、数字化转型、风控服务' },
+      { rank:2, name:'美国运通 AmEx', logo:'运通', loc:'美国', score:'$41.2B', growth:'+4.0%', changeDir:'up', desc:'企业商旅支付、B端信贷、高端金融服务' },
+      { rank:3, name:'VISA', logo:'VS', loc:'美国', score:'$35.1B', growth:'+9.0%', changeDir:'up', desc:'全球B2B清算、跨境支付、企业结算服务' },
+      { rank:4, name:'安永 EY', logo:'安永', loc:'英国', score:'$26.5B', growth:'+6.0%', changeDir:'up', desc:'审计、税务、并购咨询、ESG可持续发展' },
+      { rank:5, name:'毕马威 KPMG', logo:'毕马', loc:'荷兰', score:'$24.8B', growth:'+7.4%', changeDir:'up', desc:'政企审计、供应链风控、ESG咨询' },
+      { rank:6, name:'万事达 Mastercard', logo:'万事', loc:'美国', score:'$24.2B', growth:'+7.6%', changeDir:'up', desc:'跨境企业收付、供应链金融、B2B支付' },
+      { rank:7, name:'PayPal', logo:'PP', loc:'美国', score:'$20.1B', growth:'+8.6%', changeDir:'up', desc:'跨境商户结算、中小企业收付金融' },
+      { rank:8, name:'普华永道 PwC', logo:'普华', loc:'英国', score:'$17.5B', growth:'+8.0%', changeDir:'up', desc:'并购投行、战略咨询、全球审计' },
+      { rank:9, name:'埃森哲 Accenture', logo:'埃森', loc:'爱尔兰', score:'$16.8B', growth:'+12.0%', changeDir:'up', desc:'数字化转型、AI落地、全栈技术咨询' },
+      { rank:10, name:'SAP 思爱普', logo:'SAP', loc:'德国', score:'$14.2B', growth:'+5.9%', changeDir:'up', desc:'企业ERP、工业数字化、企业云服务' },
+      { rank:11, name:'ADP', logo:'AD', loc:'美国', score:'$12.3B', growth:'+7.0%', changeDir:'up', desc:'全球人力外包、薪酬代发、人事托管' },
+      { rank:12, name:'麦肯锡 McKinsey', logo:'麦肯', loc:'美国', score:'$11.8B', growth:'+6.3%', changeDir:'up', desc:'顶级战略管理咨询、企业转型' },
+      { rank:13, name:'索迪斯 Sodexo', logo:'索迪', loc:'法国', score:'$10.5B', growth:'+4.8%', changeDir:'up', desc:'企业后勤、餐饮、设施运维、员工福利' },
+      { rank:14, name:'任仕达 Randstad', logo:'任仕', loc:'荷兰', score:'$9.8B', growth:'+5.2%', changeDir:'up', desc:'中高端猎头、全球灵活用工' },
+      { rank:15, name:'西科姆 SECOM', logo:'西科', loc:'日本', score:'$9.2B', growth:'+6.5%', changeDir:'up', desc:'楼宇安防、企业安保、智能楼宇' },
+      { rank:16, name:'欧艾斯 ISS', logo:'IS', loc:'丹麦', score:'$8.9B', growth:'+4.5%', changeDir:'up', desc:'物业保洁、商业空间托管、设施管理' },
+      { rank:17, name:'波士顿咨询 BCG', logo:'BC', loc:'美国', score:'$8.7B', growth:'+5.8%', changeDir:'up', desc:'数字化转型、增长战略咨询' },
+      { rank:18, name:'贝恩 Bain', logo:'贝恩', loc:'美国', score:'$8.5B', growth:'+6.2%', changeDir:'up', desc:'私募配套咨询、运营优化' },
+      { rank:19, name:'标普全球 S&P', logo:'SP', loc:'美国', score:'$8.3B', growth:'+7.1%', changeDir:'up', desc:'企业信用评级、行业大数据、风控' },
+      { rank:20, name:'怡安 Aon', logo:'怡安', loc:'英国', score:'$8.1B', growth:'+6.8%', changeDir:'up', desc:'保险经纪、企业风险、员工福利' },
+      { rank:21, name:'韦莱韬悦 WTW', logo:'WT', loc:'英美', score:'$7.8B', growth:'+5.5%', changeDir:'up', desc:'薪酬调研、保险风控、人力咨询' },
+      { rank:22, name:'德科 Adecco', logo:'德科', loc:'瑞士', score:'$7.6B', growth:'+4.2%', changeDir:'up', desc:'蓝领白领灵活用工、人力派遣' },
+      { rank:23, name:'爱玛客 Aramark', logo:'爱玛', loc:'美国', score:'$7.4B', growth:'+3.8%', changeDir:'up', desc:'场馆医院企业后勤配套、餐饮管理' },
+      { rank:24, name:'BDO 德豪国际', logo:'BD', loc:'跨国', score:'$7.2B', growth:'+6.1%', changeDir:'up', desc:'中小企审计、跨境财税、咨询' },
+      { rank:25, name:'尼尔森 Nielsen', logo:'尼尔', loc:'美国', score:'$7.0B', growth:'+5.3%', changeDir:'up', desc:'市场调研、零售消费数据分析' },
+      { rank:26, name:'益普索 Ipsos', logo:'益普', loc:'法国', score:'$6.8B', growth:'+4.9%', changeDir:'up', desc:'全球民调、品牌消费者洞察' },
+      { rank:27, name:'万宝盛华 Manpower', logo:'万宝', loc:'美国', score:'$6.6B', growth:'+5.1%', changeDir:'up', desc:'灵活用工、蓝领人力外包' },
+      { rank:28, name:'凯捷 Capgemini', logo:'凯捷', loc:'法国', score:'$6.5B', growth:'+8.2%', changeDir:'up', desc:'企业IT数字化、云实施、系统集成' },
+      { rank:29, name:'仲量联行 JLL', logo:'JL', loc:'美国', score:'$6.4B', growth:'+7.5%', changeDir:'up', desc:'商业地产租赁、楼宇管理、资产服务' },
+      { rank:30, name:'世邦魏理仕 CBRE', logo:'CB', loc:'美国', score:'$6.3B', growth:'+7.3%', changeDir:'up', desc:'商业地产投资、运维、估值、租赁' },
+      { rank:31, name:'高力国际 Colliers', logo:'高力', loc:'加拿大', score:'$6.1B', growth:'+6.9%', changeDir:'up', desc:'商业地产经纪、资产托管' },
+      { rank:32, name:'Equifax 艾可菲', logo:'EQ', loc:'美国', score:'$5.9B', growth:'+8.1%', changeDir:'up', desc:'企业征信、风控数据、身份验证' },
+      { rank:33, name:'科法斯 Coface', logo:'科法', loc:'法国', score:'$5.7B', growth:'+5.6%', changeDir:'up', desc:'国际贸易信用保险、海外风控' },
+      { rank:34, name:'戴德梁行 C&W', logo:'戴德', loc:'美国', score:'$5.6B', growth:'+6.3%', changeDir:'up', desc:'商办地产全链条、资产估值' },
+      { rank:35, name:'凯度 Kantar', logo:'凯度', loc:'英国', score:'$5.5B', growth:'+4.8%', changeDir:'up', desc:'媒介调研、品牌营销数据监测' },
+      { rank:36, name:'FIS', logo:'FI', loc:'美国', score:'$5.4B', growth:'+6.2%', changeDir:'up', desc:'银行B端系统、金融科技、支付' },
+      { rank:37, name:'Fiserv', logo:'Fs', loc:'美国', score:'$5.3B', growth:'+5.9%', changeDir:'up', desc:'零售银行、支付系统、金融科技' },
+      { rank:38, name:'TransUnion 环联', logo:'TU', loc:'美国', score:'$5.2B', growth:'+6.5%', changeDir:'up', desc:'企业征信风控、身份验证服务' },
+      { rank:39, name:'野村综研 NRI', logo:'野村', loc:'日本', score:'$5.1B', growth:'+10.2%', changeDir:'up', desc:'产业咨询、数字化方案、经济研究' },
+      { rank:40, name:'达信 Marsh', logo:'达信', loc:'英国', score:'$5.0B', growth:'+6.8%', changeDir:'up', desc:'大型企业保险经纪、巨灾风险管理' },
+      { rank:41, name:'美世 Mercer', logo:'美世', loc:'美国', score:'$4.9B', growth:'+5.7%', changeDir:'up', desc:'高管薪酬、养老金、员工福利' },
+      { rank:42, name:'奥纬 Oliver Wyman', logo:'奥纬', loc:'美国', score:'$4.8B', growth:'+6.1%', changeDir:'up', desc:'金融、航空、医疗行业深度咨询' },
+      { rank:43, name:'罗兰贝格', logo:'罗兰', loc:'德国', score:'$4.7B', growth:'+5.3%', changeDir:'up', desc:'欧洲龙头战略、制造业转型咨询' },
+      { rank:44, name:'FTI Consulting', logo:'FT', loc:'美国', score:'$4.6B', growth:'+5.5%', changeDir:'up', desc:'危机公关、法务尽调、破产重组' },
+      { rank:45, name:'施耐德商务服务', logo:'施耐', loc:'法国', score:'$4.5B', growth:'+6.2%', changeDir:'up', desc:'工业能耗管理、工厂数字化运维' },
+      { rank:46, name:'西门子工业商务', logo:'西门', loc:'德国', score:'$4.4B', growth:'+5.8%', changeDir:'up', desc:'智能制造、产线全周期服务' },
+      { rank:47, name:'三井物产咨询', logo:'三井', loc:'日本', score:'$4.3B', growth:'+6.5%', changeDir:'up', desc:'大宗商品供应链、跨境商贸咨询' },
+      { rank:48, name:'东方财富', logo:'东财', loc:'中国', score:'$4.2B', growth:'+15.2%', changeDir:'up', desc:'机构金融数据、投研、金融信息' },
+      { rank:49, name:'新东方', logo:'新东', loc:'中国', score:'$4.1B', growth:'+8.5%', changeDir:'up', desc:'企业培训、职业教育、人才发展' },
+      { rank:50, name:'怡亚通', logo:'怡亚', loc:'中国', score:'$4.0B', growth:'+12.3%', changeDir:'up', desc:'全球供应链分销、跨境商贸服务' }
+    ],
+    domestic: [
+      { rank:1, name:'蚂蚁集团', logo:'蚂蚁', loc:'浙江', score:'220亿美元', growth:'品牌价值', changeDir:'up', desc:'企业支付、供应链金融、数字化风控' },
+      { rank:2, name:'京东科技', logo:'京东', loc:'北京', score:'2600亿元', growth:'营收', changeDir:'up', desc:'供应链服务、政企数字化、物流B端' },
+      { rank:3, name:'阿里云', logo:'阿里', loc:'浙江', score:'1350亿元', growth:'营收', changeDir:'up', desc:'企业云、算力、数字化转型全栈' },
+      { rank:4, name:'腾讯企服', logo:'腾讯', loc:'广东', score:'1100亿元', growth:'营收', changeDir:'up', desc:'企业微信、腾讯云、B端数字化' },
+      { rank:5, name:'东方财富', logo:'东财', loc:'上海', score:'42亿美元', growth:'品牌', changeDir:'up', desc:'机构金融数据、投研服务' },
+      { rank:6, name:'新东方', logo:'新东', loc:'北京', score:'41亿美元', growth:'品牌', changeDir:'up', desc:'企业培训、职业教育、人才发展' },
+      { rank:7, name:'用友网络', logo:'用友', loc:'北京', score:'170亿元', growth:'营收', changeDir:'up', desc:'本土ERP、制造业数字化、管理软件' },
+      { rank:8, name:'怡亚通', logo:'怡亚', loc:'广东', score:'40亿美元', growth:'品牌', changeDir:'up', desc:'全球供应链分销、跨境商贸' },
+      { rank:9, name:'建发股份', logo:'建发', loc:'福建', score:'8600亿元', growth:'营收', changeDir:'up', desc:'大宗商品供应链、跨境商贸' },
+      { rank:10, name:'国贸控股', logo:'国贸', loc:'福建', score:'7800亿元', growth:'营收', changeDir:'up', desc:'供应链服务、跨境商贸、产业运营' },
+      { rank:11, name:'物产中大', logo:'物产', loc:'浙江', score:'7500亿元', growth:'营收', changeDir:'up', desc:'大宗商品供应链、商贸流通' },
+      { rank:12, name:'中化国际', logo:'中化', loc:'上海', score:'6800亿元', growth:'营收', changeDir:'up', desc:'化工供应链、国际贸易、产业服务' },
+      { rank:13, name:'厦门象屿', logo:'象屿', loc:'福建', score:'6500亿元', growth:'营收', changeDir:'up', desc:'大宗商品供应链、物流服务' },
+      { rank:14, name:'顺丰供应链', logo:'顺丰', loc:'广东', score:'2300亿元', growth:'营收', changeDir:'up', desc:'企业供应链、物流、冷链服务' },
+      { rank:15, name:'中通供应链', logo:'中通', loc:'浙江', score:'1800亿元', growth:'营收', changeDir:'up', desc:'企业物流、供应链、跨境物流' },
+      { rank:16, name:'圆通供应链', logo:'圆通', loc:'上海', score:'1600亿元', growth:'营收', changeDir:'up', desc:'企业物流、供应链、航空货运' },
+      { rank:17, name:'申通供应链', logo:'申通', loc:'上海', score:'1400亿元', growth:'营收', changeDir:'up', desc:'企业物流、供应链、跨境物流' },
+      { rank:18, name:'韵达供应链', logo:'韵达', loc:'上海', score:'1300亿元', growth:'营收', changeDir:'up', desc:'企业物流、供应链、快递物流' },
+      { rank:19, name:'极兔供应链', logo:'极兔', loc:'上海', score:'1200亿元', growth:'营收', changeDir:'up', desc:'企业物流、供应链、跨境物流' },
+      { rank:20, name:'满帮集团', logo:'满帮', loc:'贵州', score:'800亿元', growth:'营收', changeDir:'up', desc:'公路货运、供应链物流、车货匹配' },
+      { rank:21, name:'货拉拉', logo:'货拉', loc:'广东', score:'700亿元', growth:'营收', changeDir:'up', desc:'同城货运、企业物流、供应链' },
+      { rank:22, name:'滴滴企业服务', logo:'滴滴', loc:'北京', score:'600亿元', growth:'营收', changeDir:'up', desc:'企业出行、商旅服务、车队管理' },
+      { rank:23, name:'高德企业服务', logo:'高德', loc:'浙江', score:'500亿元', growth:'营收', changeDir:'up', desc:'企业地图、位置服务、物流导航' },
+      { rank:24, name:'百度智能云', logo:'百度', loc:'北京', score:'450亿元', growth:'营收', changeDir:'up', desc:'企业云、AI服务、数字化转型' },
+      { rank:25, name:'华为云', logo:'华为', loc:'广东', score:'400亿元', growth:'营收', changeDir:'up', desc:'企业云、算力服务、数字化方案' },
+      { rank:26, name:'金山云', logo:'金山', loc:'北京', score:'350亿元', growth:'营收', changeDir:'up', desc:'企业云、游戏云、政企云服务' },
+      { rank:27, name:'优刻得 UCloud', logo:'UC', loc:'上海', score:'300亿元', growth:'营收', changeDir:'up', desc:'企业云、中立云、政企云服务' },
+      { rank:28, name:'青云 QingCloud', logo:'青云', loc:'北京', score:'250亿元', growth:'营收', changeDir:'up', desc:'企业云、混合云、政企云服务' },
+      { rank:29, name:'北森', logo:'北森', loc:'北京', score:'200亿元', growth:'营收', changeDir:'up', desc:'人力云、HR SaaS、企业人力服务' },
+      { rank:30, name:'肯耐珂萨', logo:'肯耐', loc:'上海', score:'180亿元', growth:'营收', changeDir:'up', desc:'HR SaaS、人力服务、企业培训' },
+      { rank:31, name:'理才网', logo:'理才', loc:'广东', score:'160亿元', growth:'营收', changeDir:'up', desc:'HR SaaS、人力服务、企业招聘' },
+      { rank:32, name:'科锐国际', logo:'科锐', loc:'北京', score:'150亿元', growth:'营收', changeDir:'up', desc:'人力猎头、灵活用工、人力服务' },
+      { rank:33, name:'万宝盛华中国', logo:'万宝', loc:'上海', score:'140亿元', growth:'营收', changeDir:'up', desc:'灵活用工、人力外包、企业招聘' },
+      { rank:34, name:'任仕达中国', logo:'任仕', loc:'上海', score:'130亿元', growth:'营收', changeDir:'up', desc:'中高端猎头、灵活用工' },
+      { rank:35, name:'德科中国', logo:'德科', loc:'上海', score:'120亿元', growth:'营收', changeDir:'up', desc:'灵活用工、人力派遣、企业招聘' },
+      { rank:36, name:'中智集团', logo:'中智', loc:'北京', score:'110亿元', growth:'营收', changeDir:'up', desc:'人力服务、劳务派遣、企业培训' },
+      { rank:37, name:'外服集团', logo:'外服', loc:'上海', score:'100亿元', growth:'营收', changeDir:'up', desc:'人力服务、劳务派遣、企业福利' },
+      { rank:38, name:'金蝶国际', logo:'金蝶', loc:'广东', score:'90亿元', growth:'营收', changeDir:'up', desc:'ERP软件、企业管理、数字化服务' },
+      { rank:39, name:'浪潮国际', logo:'浪潮', loc:'山东', score:'80亿元', growth:'营收', changeDir:'up', desc:'ERP软件、企业管理、数字化服务' },
+      { rank:40, name:'用友金融', logo:'用友', loc:'北京', score:'70亿元', growth:'营收', changeDir:'up', desc:'金融科技、银行系统、企业金融' },
+      { rank:41, name:'恒生电子', logo:'恒生', loc:'浙江', score:'60亿元', growth:'营收', changeDir:'up', desc:'金融科技、证券系统、机构金融' },
+      { rank:42, name:'同花顺', logo:'同花', loc:'浙江', score:'50亿元', growth:'营收', changeDir:'up', desc:'金融数据、投研服务、机构金融' },
+      { rank:43, name:'大智慧', logo:'大智', loc:'上海', score:'40亿元', growth:'营收', changeDir:'up', desc:'金融数据、投研服务、机构金融' },
+      { rank:44, name:'东方证券', logo:'东方', loc:'上海', score:'30亿元', growth:'营收', changeDir:'up', desc:'投行服务、机构金融、企业咨询' },
+      { rank:45, name:'中信证券', logo:'中信', loc:'广东', score:'20亿元', growth:'营收', changeDir:'up', desc:'投行服务、机构金融、企业咨询' },
+      { rank:46, name:'中金公司', logo:'中金', loc:'北京', score:'10亿元', growth:'营收', changeDir:'up', desc:'投行服务、机构金融、企业咨询' },
+      { rank:47, name:'万物云', logo:'万物', loc:'广东', score:'300亿元', growth:'营收', changeDir:'up', desc:'商办物业、园区运营、企业后勤' },
+      { rank:48, name:'绿城管理', logo:'绿城', loc:'浙江', score:'200亿元', growth:'营收', changeDir:'up', desc:'商办物业、园区运营、企业后勤' },
+      { rank:49, name:'保利物业', logo:'保利', loc:'广东', score:'180亿元', growth:'营收', changeDir:'up', desc:'商办物业、园区运营、企业后勤' },
+      { rank:50, name:'中海物业', logo:'中海', loc:'广东', score:'160亿元', growth:'营收', changeDir:'up', desc:'商办物业、园区运营、企业后勤' }
+    ]
+  },
+  personnel: {
+    hero: {
+      title: '商业服务行业人才全景',
+      sub: '2026年Q2 · 基于2,840万从业人员数据',
+      stats: [
+        { val: '2,840万', lbl: '从业人员' },
+        { val: '18.7K', lbl: '平均月薪' },
+        { val: '28.5%', lbl: '同比增幅' }
+      ]
+    },
+    education: [
+      { name: '硕士及以上', pct: 12, color: 'var(--seed-primary-dark)' },
+      { name: '本科', pct: 35, color: 'var(--seed-primary)' },
+      { name: '大专', pct: 31, color: 'var(--seed-primary-light)' },
+      { name: '高中及以下', pct: 14, color: 'var(--seed-accent)' },
+      { name: '其他', pct: 8, color: 'var(--seed-border)' }
+    ],
+    skills: ['数据分析', 'AI应用', '项目管理', '云计算', '商务谈判', 'Python', 'SQL', '英语'],
+    cities: [
+      { name: '北京', pct: 82, val: '18.2%', color: 'var(--seed-primary-dark)' },
+      { name: '上海', pct: 70, val: '15.6%', color: 'var(--seed-primary)' },
+      { name: '深圳', pct: 55, val: '12.3%', color: 'var(--seed-primary-light)' },
+      { name: '广州', pct: 40, val: '8.9%', color: 'var(--seed-accent)' },
+      { name: '杭州', pct: 30, val: '6.7%', color: 'var(--seed-accent-light)' }
+    ]
+  },
+  survey: {
+    hero: {
+      title: '商业服务TOP客户',
+      sub: '数据共 908条客户记录，涵盖直销、渠道、战K三种模式',
+      stats: [
+        { val: '908', lbl: '客户记录数' },
+        { val: '562.38万', lbl: '总实付金额' },
+        { val: '50.61万', lbl: '企业服务消耗' }
+      ]
+    },
+    paymentSummary: '<b style="color:var(--seed-fg)">企业服务</b>产品有消耗的客户共 <b style="color:var(--seed-fg)">907家</b>（覆盖率99.89%），总实付金额 <b style="color:var(--seed-fg)">562.38万元</b>，总企业服务消耗 <b style="color:var(--seed-fg)">50.61万元</b>。',
+    payment: [
+      { range: '0-1000元', count: 0, pct: '0%', amount: '0', consume: '0', highlight: false },
+      { range: '1000-2000元', count: 64, pct: '7.06%', amount: '12.50万', consume: '1.65万', highlight: false },
+      { range: '2000-3000元', count: 168, pct: '18.52%', amount: '46.61万', consume: '5.66万', highlight: false },
+      { range: '3000-5000元', count: 439, pct: '48.40%', amount: '174.36万', consume: '15.51万', highlight: true },
+      { range: '5000-10000元', count: 123, pct: '13.56%', amount: '84.34万', consume: '7.33万', highlight: false },
+      { range: '10000-50000元', count: 109, pct: '12.02%', amount: '210.06万', consume: '17.22万', highlight: false },
+      { range: '50000元以上', count: 4, pct: '0.44%', amount: '34.50万', consume: '3.24万', highlight: false }
+    ],
+    paymentBullets: [
+      '<b style="color:var(--seed-primary-dark)">核心区间</b>：3000-5000元为最大群体，占近一半客户（48.4%）',
+      '<b style="color:var(--seed-primary-dark)">高价值客户</b>：万元以上的客户占12.46%，贡献了43.5%的实付金额',
+      '平均实付 <b style="color:var(--seed-fg)">6,200元/客户</b>，平均企业服务消耗 <b style="color:var(--seed-fg)">558元/客户</b>'
+    ],
+    productSummary: '按总消耗金额排序，TOP5产品：',
+    product: [
+      { name: '企业服务', consume: '50.61万', clients: 907, coverage: '99.89%', avg: '558元', bold: true },
+      { name: '黄金展位', consume: '22.56万', clients: 265, coverage: '29.19%', avg: '851元', bold: true },
+      { name: '超职卡', consume: '21.88万', clients: 398, coverage: '43.83%', avg: '550元', bold: true },
+      { name: '简历下载', consume: '4.29万', clients: 34, coverage: '3.74%', avg: '1,261元', bold: true },
+      { name: '线上人才雷达', consume: '2.44万', clients: 90, coverage: '9.91%', avg: '271元', bold: true }
+    ],
+    productBullets: [
+      '<b style="color:var(--seed-primary-dark)">企业服务</b>是绝对主力产品，几乎全覆盖（99.89%）',
+      '<b style="color:var(--seed-primary-dark)">黄金展位</b>和<b style="color:var(--seed-primary-dark)">超职卡</b>分列二三位，覆盖率分别为29%和44%',
+      '<b style="color:var(--seed-primary-dark)">简历下载</b>虽然客户数少（34家），但客均消耗最高（1,261元）',
+      '会员产品覆盖率99.89%但客均仅4.71元，属于基础标配'
+    ],
+    channels: [
+      {
+        name: '直销 TOP10',
+        note: '最高：奥的斯电梯管理（上海）有限公司，10万元',
+        rows: [
+          { rank: '1', client: '奥的斯电梯管理（上海）有限公司', sales: '唐举艳', amount: '100,000元' },
+          { rank: '2', client: '上海富侨品牌管理有限公司', sales: '刘帅', amount: '50,000元' },
+          { rank: '3', client: '西安博耀星辉企业管理咨询有限公司', sales: '高飒', amount: '37,930元' },
+          { rank: '4', client: '瑞幸运营管理（北京）有限公司', sales: '刘倬亚', amount: '36,000元' },
+          { rank: '5-10', client: '胜启活动策划/利兴影秀/柚言活动策划/领腾/卓尚领烁/利戴工业', sales: '各销售', amount: '30,000-30,010元' }
+        ]
+      },
+      {
+        name: '渠道 TOP10',
+        note: '最高：山东万森企业管理咨询有限公司德州分公司，12.30万元',
+        rows: [
+          { rank: '1', client: '山东万森企业管理咨询有限公司德州分公司', sales: '赵学普', amount: '122,950元' },
+          { rank: '2', client: '中山市佳桦企业管理咨询服务有限公司', sales: '林艺', amount: '61,857元' },
+          { rank: '3', client: '新疆疆域华盛企业管理服务有限公司', sales: '马春', amount: '45,600元' },
+          { rank: '4', client: '枫悦活动策划（深圳）有限公司', sales: '陈楷明', amount: '45,600元' },
+          { rank: '5-10', client: '艺禾活动策划/军铭广告/联正财务/丛台得翔/吉格斯/奥海', sales: '各销售', amount: '30,911-33,450元' }
+        ]
+      },
+      {
+        name: '战K TOP10',
+        note: '仅1位客户',
+        rows: [
+          { rank: '1', client: '中国融通旅业发展集团有限公司', sales: '王震', amount: '22,825.51元' }
+        ]
+      }
+    ],
+    channelNote: '战K渠道仅1位客户，故榜单仅1条。',
+    sourceUrl: 'https://docs.58corp.com/#/space/2066167246115409920?tab=89a7f6',
+    sourceLabel: 'AI销售TOP客户分析总结-20260614223352.xlsx'
+  }
+};
+
+/* ========================================
+   KEYWORD DICTIONARY for auto-linking
+   ======================================== */
+var keywordDict = {
+  '德勤': { page: 'ranking', label: '企业排名' },
+  '安永': { page: 'ranking', label: '企业排名' },
+  '普华永道': { page: 'ranking', label: '企业排名' },
+  '用友': { page: 'ranking', label: '企业排名' },
+  '金蝶': { page: 'ranking', label: '企业排名' },
+  '浪潮': { page: 'ranking', label: '企业排名' },
+  'McKinsey': { page: 'ranking', label: '企业排名' },
+  'Accenture': { page: 'ranking', label: '企业排名' },
+  '数字化': { page: 'analytics', label: '行业标签' },
+  'AI': { page: 'analytics', label: '行业标签' },
+  '人工智能': { page: 'analytics', label: '行业标签' },
+  '市场规模': { page: 'analytics', label: '行业标签' },
+  '渗透率': { page: 'analytics', label: '行业标签' },
+  '人才': { page: 'personnel', label: '从业人员' },
+  '薪酬': { page: 'personnel', label: '从业人员' },
+  '从业人员': { page: 'personnel', label: '从业人员' },
+  '满意度': { page: 'survey', label: '客户调研' },
+  'NPS': { page: 'survey', label: '客户调研' },
+  '客户': { page: 'survey', label: '客户调研' }
+};
+
+/* ========================================
+   RENDER FUNCTIONS
+   ======================================== */
+function renderAll() {
+  renderHome();
+  renderAnalytics();
+  renderRanking();
+  renderPersonnel();
+  renderSurvey();
+}
+
+function renderHome() {
+  var h = siteData.home;
+  // Hero
+  document.getElementById('heroTitle').textContent = h.hero.title;
+  document.getElementById('heroSub').textContent = h.hero.sub;
+  var statsHtml = '';
+  h.hero.stats.forEach(function(s) {
+    statsHtml += '<div class="home-hero-stat"><div class="val">' + s.val + '</div><div class="lbl">' + s.lbl + '</div></div>';
+  });
+  document.getElementById('heroStats').innerHTML = statsHtml;
+
+  // Industry overview
+  document.getElementById('industryDef').innerHTML = h.industry.definition;
+  var sectorHtml = '';
+  h.industry.sectors.forEach(function(s) {
+    sectorHtml += '<div class="sector-card"><div class="sector-icon">' + s.icon + '</div><div class="sector-name">' + s.name + '</div><div class="sector-share">' + s.share + '</div><div class="sector-growth">' + s.growth + '</div><div style="font-size:11px;color:var(--seed-meta);margin-top:2px">' + s.desc + '</div></div>';
+  });
+  document.getElementById('sectorGrid').innerHTML = sectorHtml;
+
+  // Domestic news
+  var dnHtml = '';
+  h.domesticNews.forEach(function(n) {
+    var titleHtml = n.url ? '<a href="' + n.url + '" target="_blank">' + n.title + '</a>' : autoLink(n.title);
+    dnHtml += '<div class="global-news-item"><div class="gn-title">' + titleHtml + '</div><div class="gn-meta"><span>' + n.source + '</span><span>' + n.time + '</span></div></div>';
+  });
+  document.getElementById('domesticNews').innerHTML = dnHtml;
+
+  // Intl news
+  var inHtml = '';
+  h.intlNews.forEach(function(n) {
+    var titleHtml = n.url ? '<a href="' + n.url + '" target="_blank">' + n.title + '</a>' : autoLink(n.title);
+    inHtml += '<div class="global-news-item"><div class="gn-title">' + titleHtml + '</div><div class="gn-meta"><span>' + n.source + '</span><span>' + n.time + '</span></div></div>';
+  });
+  document.getElementById('intlNews').innerHTML = inHtml;
+
+  // Today news
+  var tnHtml = '';
+  h.news.forEach(function(n) {
+    tnHtml += '<div class="news-card"><div class="source">' + n.source + '</div><div class="title">' + autoLink(n.title) + '</div><div class="meta"><span>' + n.reads + '阅读</span><span>' + n.comments + '评论</span></div></div>';
+  });
+  document.getElementById('todayNews').innerHTML = tnHtml;
+
+  // Reports
+  var rpHtml = '';
+  h.reports.forEach(function(r) {
+    var hasUrl = r.url && r.url.length > 0;
+    var tag = hasUrl ? 'a' : 'div';
+    var linkAttr = hasUrl ? ' href="' + escHtml(r.url) + '" target="_blank" rel="noopener"' : '';
+    var cls = 'report-card' + (hasUrl ? ' clickable' : '');
+    var linkIcon = hasUrl ? '<div class="card-link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>' : '';
+    rpHtml += '<' + tag + ' class="' + cls + '"' + linkAttr + '>' + linkIcon + '<div class="card-img" style="background:linear-gradient(135deg,' + r.colorA + ',' + r.colorB + ')">' + r.category + '</div><div class="card-body"><div class="card-title">' + r.title + '</div><div class="card-meta">' + r.date + ' · ' + r.reads + '阅读</div></div></' + tag + '>';
+  });
+  document.getElementById('reportGrid').innerHTML = rpHtml;
+}
+
+function renderAnalytics() {
+  var a = siteData.analytics;
+  // KPI
+  var kpiHtml = '';
+  a.kpi.forEach(function(k) {
+    kpiHtml += '<div class="kpi-card"><div class="kpi-label">' + k.label + '</div><div class="kpi-value">' + k.value + '</div><div class="kpi-change">' + k.change + '</div></div>';
+  });
+  document.getElementById('kpiGrid').innerHTML = kpiHtml;
+
+  // Tag Accuracy Gauge - 4-segment breakdown
+  var ta = a.tagAccuracy;
+  var truePct = (ta.truePositive / ta.total * 100).toFixed(1);
+  var falsePct = (ta.falsePositive / ta.total * 100).toFixed(1);
+  var oiPct = (ta.otherIndustry / ta.total * 100).toFixed(1);
+  var rcPct = (ta.riskControl / ta.total * 100).toFixed(1);
+  var seg1 = parseFloat(truePct);
+  var seg2 = seg1 + parseFloat(falsePct);
+  var seg3 = seg2 + parseFloat(oiPct);
+  var gradParts = 'var(--seed-primary) 0% ' + seg1.toFixed(1) + '%, var(--seed-danger) ' + seg1.toFixed(1) + '% ' + seg2.toFixed(1) + '%, var(--seed-industry-other) ' + seg2.toFixed(1) + '% ' + seg3.toFixed(1) + '%, var(--seed-warn) ' + seg3.toFixed(1) + '% 100%';
+  var gaugeHtml = '<div class="gauge-wrap">';
+  gaugeHtml += '<div class="gauge-ring" style="background:conic-gradient(' + gradParts + ')">';
+  gaugeHtml += '<div class="gauge-ring-inner"><span class="gauge-val" style="color:var(--seed-danger)">' + ta.pct + '%</span><span class="gauge-lbl">标签准确率</span></div></div>';
+  gaugeHtml += '<div class="gauge-detail">';
+  gaugeHtml += '<div class="gd-row"><span class="gd-dot" style="background:var(--seed-primary)"></span><span class="gd-label">真商业服务</span><span class="gd-value">' + ta.truePositive + '</span></div>';
+  gaugeHtml += '<div class="gd-row"><span class="gd-dot" style="background:var(--seed-danger)"></span><span class="gd-label">假商业服务</span><span class="gd-value" style="color:var(--seed-danger)">' + ta.falsePositive + '（48.0%）</span></div>';
+  gaugeHtml += '<div class="gd-row"><span class="gd-dot" style="background:var(--seed-industry-other)"></span><span class="gd-label">其他行业</span><span class="gd-value">' + ta.otherIndustry + '（29.0%）</span></div>';
+  gaugeHtml += '<div class="gd-row"><span class="gd-dot" style="background:var(--seed-warn)"></span><span class="gd-label">风控处理</span><span class="gd-value">' + ta.riskControl + '（23.1%）</span></div>';
+  gaugeHtml += '<div style="font-size:11px;color:var(--seed-meta);margin-top:4px">' + ta.note + '</div>';
+  gaugeHtml += '</div></div>';
+  // Error breakdown section - Full text analysis
+  gaugeHtml += '<div style="margin-top:18px;border-top:1px solid var(--seed-border);padding-top:14px">';
+  gaugeHtml += '<div style="font-size:13px;font-weight:700;color:var(--seed-fg);margin-bottom:8px">二、其他商业服务标签标注错误的原因分析</div>';
+  gaugeHtml += '<div style="font-size:12px;color:var(--seed-muted);margin-bottom:14px;line-height:1.6">在"标签准确校验"表中，共有<b style="color:var(--seed-fg)">960条</b>标注为"商业服务"的客户，其中<b style="color:var(--seed-danger)">732条</b>被判定为假（非真商业服务），错误率高达 <b style="color:var(--seed-danger)">76.3%</b>。错误原因可归纳为三大类：</div>';
+  // Bar summary
+  ta.errors.forEach(function(e) {
+    gaugeHtml += '<div class="h-bar-row" style="margin-bottom:6px"><span class="h-bar-label" style="font-size:11px;min-width:110px">' + e.reason + '</span><div class="h-bar-track"><div class="h-bar-fill" style="width:' + e.pct + '%;background:var(--seed-danger);opacity:0.7"></div></div><span class="h-bar-val" style="font-size:11px">' + e.count + ' (' + e.pct + '%)</span></div>';
+  });
+  // Reason 1
+  gaugeHtml += '<div style="margin-top:16px;padding:12px;background:var(--seed-surface);border-radius:var(--seed-radius-sm);border-left:3px solid var(--seed-warn)">';
+  gaugeHtml += '<div style="font-size:12px;font-weight:700;color:var(--seed-fg);margin-bottom:6px">原因1：风控/异常账号（169条，占23.1%）</div>';
+  gaugeHtml += '<div style="font-size:11px;color:var(--seed-muted);line-height:1.7">';
+  gaugeHtml += '风控处理账号 <b style="color:var(--seed-fg)">175条</b>（其中真商业服务 <b style="color:var(--seed-primary)">21条</b>，假商业服务 <b style="color:var(--seed-danger)">154条</b>）<br>';
+  gaugeHtml += '已注销 <b style="color:var(--seed-fg)">15条</b><br>';
+  gaugeHtml += '风控账号从旧文件的29条大幅增加至175条，<b style="color:var(--seed-danger)">变化最为显著</b>。这类客户账号存在异常风险，需重点关注标签准确性';
+  gaugeHtml += '</div></div>';
+  // Reason 2
+  gaugeHtml += '<div style="margin-top:10px;padding:12px;background:var(--seed-surface);border-radius:var(--seed-radius-sm);border-left:3px solid var(--seed-primary-light)">';
+  gaugeHtml += '<div style="font-size:12px;font-weight:700;color:var(--seed-fg);margin-bottom:6px">原因2：实际属于其他行业（212条，占29.0%）</div>';
+  gaugeHtml += '<div style="font-size:11px;color:var(--seed-muted);line-height:1.7;margin-bottom:8px">手动合并时已纠正为非商业服务，但原始标注未更新。主要误标行业：</div>';
+  // Industry error table
+  gaugeHtml += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px">';
+  gaugeHtml += '<thead><tr style="border-bottom:1px solid var(--seed-border)"><th style="text-align:left;padding:4px 8px;color:var(--seed-muted)">实际行业</th><th style="text-align:right;padding:4px 8px;color:var(--seed-muted)">错误数量</th><th style="text-align:right;padding:4px 8px;color:var(--seed-muted)">占比</th></tr></thead><tbody>';
+  gaugeHtml += '<tr><td style="padding:3px 8px">文化传媒</td><td style="text-align:right;padding:3px 8px">98条</td><td style="text-align:right;padding:3px 8px">13.4%</td></tr>';
+  gaugeHtml += '<tr><td style="padding:3px 8px">互联网</td><td style="text-align:right;padding:3px 8px">38条</td><td style="text-align:right;padding:3px 8px">5.2%</td></tr>';
+  gaugeHtml += '<tr><td style="padding:3px 8px">制造业</td><td style="text-align:right;padding:3px 8px">22条</td><td style="text-align:right;padding:3px 8px">3.0%</td></tr>';
+  gaugeHtml += '<tr><td style="padding:3px 8px">交通运输</td><td style="text-align:right;padding:3px 8px">8条</td><td style="text-align:right;padding:3px 8px">1.1%</td></tr>';
+  gaugeHtml += '<tr><td style="padding:3px 8px">其他（房产/物业、医疗、批发零售、金融等）</td><td style="text-align:right;padding:3px 8px">46条</td><td style="text-align:right;padding:3px 8px">6.3%</td></tr>';
+  gaugeHtml += '</tbody></table>';
+  gaugeHtml += '<div style="font-size:11px;color:var(--seed-muted);line-height:1.6"><b style="color:var(--seed-fg)">原因分析：</b>这些客户的天眼查所属行业与商业服务差异明显（如文化传媒/广告、IT/互联网、制造业等），主要是标注时未能将天眼查行业信息与"商业服务"标签做有效校验。</div>';
+  gaugeHtml += '</div>';
+  // Reason 3
+  gaugeHtml += '<div style="margin-top:10px;padding:12px;background:var(--seed-surface);border-radius:var(--seed-radius-sm);border-left:3px solid var(--seed-danger)">';
+  gaugeHtml += '<div style="font-size:12px;font-weight:700;color:var(--seed-fg);margin-bottom:6px">原因3：虽属商务服务业范畴但行业细分不匹配（351条，占48.0%，最大占比）</div>';
+  gaugeHtml += '<div style="font-size:11px;color:var(--seed-muted);line-height:1.7;margin-bottom:8px">这些客户的天眼查行业确实属于商务服务大类（含财税、法律、咨询、投资等子类），手动合并时也被归为"商业服务"，但实际招聘的岗位与"商业服务"不匹配，被判定为假。</div>';
+  gaugeHtml += '<div style="font-size:11px;font-weight:600;color:var(--seed-fg);margin-bottom:4px">核心细分特征：</div>';
+  gaugeHtml += '<div style="font-size:11px;color:var(--seed-muted);line-height:1.7">';
+  gaugeHtml += '天眼查为<b style="color:var(--seed-fg)">商务服务业</b>（含子类）、<b style="color:var(--seed-fg)">财税服务</b>、<b style="color:var(--seed-fg)">法律服务</b>等<br>';
+  gaugeHtml += '但招聘岗位以<b style="color:var(--seed-fg)">传统服务类岗位</b>为主：店员/服务员、娱乐休闲、保洁/保姆、保安、厨师等<br>';
+  gaugeHtml += '其次为<b style="color:var(--seed-fg)">普工/配送类</b>及<b style="color:var(--seed-fg)">会计</b>、<b style="color:var(--seed-fg)">主播</b>、<b style="color:var(--seed-fg)">房产</b>等';
+  gaugeHtml += '</div>';
+  gaugeHtml += '<div style="font-size:11px;color:var(--seed-muted);line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px dashed var(--seed-border)"><b style="color:var(--seed-danger)">根本原因：</b>这些公司虽然工商注册行业属于商务服务大类，但它们实际招聘的岗位（店员、保洁、保安、普工等）并非传统意义上的"商业服务"岗位（如咨询、法务、财税、人力资源等），更像是一些挂靠在商务服务公司名下的实体业务（如物业管理、劳务派遣、实体门店运营等），<b style="color:var(--seed-fg)">行业边界模糊，实际业务与行业标签不符</b>。</div>';
+  gaugeHtml += '</div>';
+  gaugeHtml += '</div>';
+  document.getElementById('tagAccChart').innerHTML = gaugeHtml;
+
+  // Funnel
+  var funnelHtml = '<div class="funnel-wrap">';
+  a.funnel.forEach(function(f, i) {
+    if (i > 0) funnelHtml += '<div class="funnel-arrow">\u25BC</div>';
+    funnelHtml += '<div class="funnel-step">';
+    funnelHtml += '<span class="funnel-label">' + f.label + '</span>';
+    funnelHtml += '<div class="funnel-bar-wrap"><div class="funnel-bar" style="width:' + f.pct + '%;background:' + f.color + '">' + f.value + '</div></div>';
+    funnelHtml += '<span class="funnel-value">' + f.detail + '</span>';
+    funnelHtml += '</div>';
+  });
+  funnelHtml += '</div>';
+  document.getElementById('funnelChart').innerHTML = funnelHtml;
+
+  // Industry Paid Distribution (25 vs 26)
+  var ipHtml = '<div style="display:flex;gap:16px;margin-bottom:14px;font-size:11px;color:var(--seed-muted)">';
+  ipHtml += '<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--seed-primary-light);vertical-align:middle;margin-right:4px"></span>2025年</span>';
+  ipHtml += '<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--seed-primary-dark);vertical-align:middle;margin-right:4px"></span>2026年</span></div>';
+  var maxVal = 0;
+  a.industryPaid.forEach(function(d) { if (d.y25 > maxVal) maxVal = d.y25; if (d.y26 > maxVal) maxVal = d.y26; });
+  a.industryPaid.forEach(function(d) {
+    var w25 = (d.y25 / maxVal * 100).toFixed(1);
+    var w26 = (d.y26 / maxVal * 100).toFixed(1);
+    ipHtml += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">';
+    ipHtml += '<span class="h-bar-label">' + d.name + '</span>';
+    ipHtml += '<div style="flex:1;display:flex;flex-direction:column;gap:4px">';
+    ipHtml += '<div style="display:flex;align-items:center;gap:6px"><div class="h-bar-track" style="flex:1"><div class="h-bar-fill" style="width:' + w25 + '%;background:var(--seed-primary-light);border-radius:10px"></div></div><span style="font-size:12px;color:var(--seed-muted);width:36px;text-align:right">' + d.y25 + '</span></div>';
+    ipHtml += '<div style="display:flex;align-items:center;gap:6px"><div class="h-bar-track" style="flex:1"><div class="h-bar-fill" style="width:' + w26 + '%;background:var(--seed-primary-dark);border-radius:10px"></div></div><span style="font-size:12px;color:var(--seed-muted);width:36px;text-align:right">' + d.y26 + '</span></div>';
+    ipHtml += '</div></div>';
+  });
+  document.getElementById('industryPaidChart').innerHTML = ipHtml;
+
+  // Risk Table
+  var rk = a.risk;
+  var riskHtml = '<div style="font-size:12px;color:var(--seed-meta);margin-bottom:10px">' + rk.note + '</div>';
+  riskHtml += '<table class="risk-table"><thead><tr><th>类型</th><th>数量</th><th>占比</th><th>状态</th></tr></thead><tbody>';
+  riskHtml += '<tr><td>风控账号</td><td class="num">' + rk.riskControl + '</td><td class="num">' + (rk.riskControl/rk.total*100).toFixed(1) + '%</td><td><span class="risk-badge danger">高风险</span></td></tr>';
+  riskHtml += '<tr><td style="padding-left:20px;color:var(--seed-muted)">  ├ 真商业服务</td><td class="num" style="color:var(--seed-primary)">' + rk.riskTrue + '</td><td class="num">' + (rk.riskTrue/rk.riskControl*100).toFixed(1) + '%</td><td><span class="risk-badge" style="background:var(--seed-surface);color:var(--seed-primary)">有效</span></td></tr>';
+  riskHtml += '<tr><td style="padding-left:20px;color:var(--seed-muted)">  └ 假商业服务</td><td class="num" style="color:var(--seed-danger)">' + rk.riskFalse + '</td><td class="num">' + (rk.riskFalse/rk.riskControl*100).toFixed(1) + '%</td><td><span class="risk-badge danger">异常</span></td></tr>';
+  riskHtml += '<tr><td>已注销</td><td class="num">' + rk.cancelled + '</td><td class="num">' + (rk.cancelled/rk.total*100).toFixed(1) + '%</td><td><span class="risk-badge warn">已失效</span></td></tr>';
+  riskHtml += '<tr class="total-row"><td>合计</td><td class="num">' + rk.total + '</td><td class="num">100%</td><td></td></tr>';
+  riskHtml += '</tbody></table>';
+  document.getElementById('riskChart').innerHTML = riskHtml;
+
+  // === Job Analysis Section ===
+  var ja = a.jobAnalysis;
+  if (ja) {
+    // Summary
+    document.getElementById('jobSummary').innerHTML = '<b style="color:var(--seed-muted)">数据概况：</b>' + ja.summary;
+
+    // Cat2 Table
+    var c2Html = '<thead><tr><th style="width:50px">排名</th><th>二级类</th><th style="text-align:right">发帖数</th><th style="text-align:right">占比</th></tr></thead><tbody>';
+    ja.cat2.forEach(function(r) {
+      var fw = r.bold ? 'font-weight:600;color:var(--seed-primary-dark)' : '';
+      c2Html += '<tr><td style="text-align:center;font-weight:700">' + r.rank + '</td>';
+      c2Html += '<td style="' + fw + '">' + r.name + '</td>';
+      c2Html += '<td style="text-align:right;' + fw + '">' + r.count + '</td>';
+      c2Html += '<td style="text-align:right">' + r.pct + '</td></tr>';
+    });
+    c2Html += '</tbody>';
+    document.getElementById('jobCat2Table').innerHTML = c2Html;
+
+    // Cat4 Table
+    var c4Html = '<thead><tr><th style="width:50px">排名</th><th>岗位</th><th style="text-align:right">发帖数</th><th style="text-align:right">占比</th></tr></thead><tbody>';
+    ja.cat4.forEach(function(r) {
+      var fw = r.bold ? 'font-weight:600;color:var(--seed-primary-dark)' : '';
+      c4Html += '<tr><td style="text-align:center;font-weight:700">' + r.rank + '</td>';
+      c4Html += '<td style="' + fw + '">' + r.name + '</td>';
+      c4Html += '<td style="text-align:right;' + fw + '">' + r.count + '</td>';
+      c4Html += '<td style="text-align:right">' + r.pct + '</td></tr>';
+    });
+    c4Html += '</tbody>';
+    document.getElementById('jobCat4Table').innerHTML = c4Html;
+
+    // Category Conclusion
+    document.getElementById('jobCatConclusion').innerHTML = '<div style="font-size:13px;color:var(--seed-muted);line-height:1.6;padding:12px;background:var(--seed-surface);border-radius:var(--seed-radius-sm);border-left:3px solid var(--seed-primary-light)"><b style="color:var(--seed-fg)">结论：</b>' + ja.catConclusion + '</div>';
+
+    // City Analysis
+    var cityHtml = '<div style="display:flex;flex-direction:column;gap:6px">';
+    ja.cityBullets.forEach(function(b) {
+      cityHtml += '<div style="font-size:13px;color:var(--seed-muted);line-height:1.6;padding-left:12px;border-left:3px solid var(--seed-primary-light)">' + b + '</div>';
+    });
+    cityHtml += '</div>';
+    document.getElementById('cityAnalysis').innerHTML = cityHtml;
+
+    // Company Concentration
+    var compHtml = '<div style="display:flex;flex-direction:column;gap:6px">';
+    ja.companyBullets.forEach(function(b) {
+      compHtml += '<div style="font-size:13px;color:var(--seed-muted);line-height:1.6;padding-left:12px;border-left:3px solid var(--seed-primary-light)">' + b + '</div>';
+    });
+    compHtml += '</div>';
+    document.getElementById('companyConcentration').innerHTML = compHtml;
+
+    // Company TOP5 Table
+    var ct5Html = '<thead><tr><th style="width:50px">排名</th><th>公司名称</th><th style="text-align:right">发帖数</th></tr></thead><tbody>';
+    ja.companyTop5.forEach(function(r) {
+      ct5Html += '<tr><td style="text-align:center;font-weight:700">' + r.rank + '</td>';
+      ct5Html += '<td>' + r.name + '</td>';
+      ct5Html += '<td style="text-align:right;font-weight:600">' + r.count + '</td></tr>';
+    });
+    ct5Html += '</tbody>';
+    document.getElementById('companyTop5Table').innerHTML = ct5Html;
+
+    // Notable TOP10
+    document.getElementById('notableIntro').innerHTML = ja.notableIntro;
+
+    var ntHtml = '<thead><tr><th style="width:40px">排名</th><th>公司名称</th><th style="text-align:right">发帖量</th><th style="text-align:center">有推广</th><th>岗位种类</th><th>主要城市</th><th>核心岗位</th></tr></thead><tbody>';
+    ja.notableTop10.forEach(function(r) {
+      var isTop = r.rank <= 3;
+      ntHtml += '<tr><td style="text-align:center;font-weight:700">' + r.rank + '</td>';
+      ntHtml += '<td' + (isTop ? ' style="font-weight:600;color:var(--seed-primary-dark)"' : '') + '>' + r.name + '</td>';
+      ntHtml += '<td style="text-align:right;font-weight:600">' + r.posts + '</td>';
+      ntHtml += '<td style="text-align:center"><span class="risk-badge' + (r.promoted === '是' ? ' warn' : '') + '">' + r.promoted + '</span></td>';
+      ntHtml += '<td>' + r.types + '</td>';
+      ntHtml += '<td style="font-size:12px;color:var(--seed-meta)">' + r.cities + '</td>';
+      ntHtml += '<td style="font-size:12px">' + r.jobs + '</td></tr>';
+    });
+    ntHtml += '</tbody>';
+    document.getElementById('notableTop10Table').innerHTML = ntHtml;
+
+    document.getElementById('notableConclusion').innerHTML = '<div style="font-size:13px;color:var(--seed-muted);line-height:1.6;padding:12px;background:var(--seed-surface);border-radius:var(--seed-radius-sm);border-left:3px solid var(--seed-primary-light)">' + ja.notableConclusion + '</div>';
+
+    // Source footer
+    if (ja.sourceUrl) {
+      document.getElementById('jobSourceFooter').innerHTML = '<div style="font-size:12px;color:var(--seed-muted);border-top:1px dashed var(--seed-border);padding-top:12px">详细数据：<a href="' + ja.sourceUrl + '" target="_blank" style="color:var(--seed-primary)">' + ja.sourceLabel + '</a></div>';
+    }
+  }
+}
+
+var _rankTab = 0;
+function switchRankTab(idx, el) {
+  _rankTab = idx;
+  document.querySelectorAll('#rankTabs .cat-tag').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  var note = document.getElementById('rankNote');
+  if (note) note.textContent = idx === 0 ? '数据来源：Brand Finance 2026 全球商业服务品牌价值TOP50' : '数据来源：2026 中国本土商业服务企业竞争力TOP50';
+  renderRanking();
+}
+function renderRanking() {
+  var list = _rankTab === 0 ? siteData.ranking.global : siteData.ranking.domestic;
+  var html = '';
+  list.forEach(function(r) {
+    var numCls = r.rank === 1 ? 'gold' : r.rank === 2 ? 'silver' : r.rank === 3 ? 'bronze' : 'normal';
+    html += '<div class="rank-item">';
+    html += '<span class="rank-num ' + numCls + '">' + r.rank + '</span>';
+    html += '<span class="rank-logo">' + r.logo + '</span>';
+    html += '<div class="rank-info"><div class="rank-name">' + r.name + '</div><div class="rank-desc">' + r.desc + '</div></div>';
+    html += '<span class="rank-loc">' + r.loc + '</span>';
+    html += '<div class="rank-score">' + r.score + '</div>';
+    html += '<span class="rank-change ' + r.changeDir + '">' + r.growth + '</span>';
+    html += '</div>';
+  });
+  document.getElementById('rankList').innerHTML = html;
+}
+
+function renderPersonnel() {
+  var p = siteData.personnel;
+  document.getElementById('personnelTitle').textContent = p.hero.title;
+  document.getElementById('personnelSub').textContent = p.hero.sub;
+  var statsHtml = '';
+  p.hero.stats.forEach(function(s) {
+    statsHtml += '<div class="personnel-hero-stat"><div class="val">' + s.val + '</div><div class="lbl">' + s.lbl + '</div></div>';
+  });
+  document.getElementById('personnelStats').innerHTML = statsHtml;
+
+  // Education pie
+  var gradParts = [];
+  var cumulative = 0;
+  p.education.forEach(function(e) {
+    gradParts.push(e.color + ' ' + cumulative + '% ' + (cumulative + e.pct) + '%');
+    cumulative += e.pct;
+  });
+  var legendHtml = '';
+  p.education.forEach(function(e) {
+    legendHtml += '<span style="color:' + e.color + '">' + e.name + ' ' + e.pct + '%</span>';
+  });
+  document.getElementById('eduChart').innerHTML = '<div class="pie-chart" style="background:conic-gradient(' + gradParts.join(', ') + ')"><div class="pie-chart-inner"></div></div><div class="pie-legend">' + legendHtml + '</div>';
+
+  // Skills
+  var skillHtml = '';
+  p.skills.forEach(function(s) {
+    skillHtml += '<span class="skill-tag">' + s + '</span>';
+  });
+  document.getElementById('skillTags').innerHTML = skillHtml;
+
+  // Cities
+  var cityHtml = '';
+  p.cities.forEach(function(c) {
+    cityHtml += '<div class="h-bar-row"><span class="h-bar-label">' + c.name + '</span><div class="h-bar-track"><div class="h-bar-fill" style="width:' + c.pct + '%;background:' + c.color + '"></div></div><span class="h-bar-val">' + c.val + '</span></div>';
+  });
+  document.getElementById('cityBars').innerHTML = cityHtml;
+}
+
+function renderSurvey() {
+  var s = siteData.survey;
+
+  // Hero
+  document.getElementById('surveyTitle').textContent = s.hero.title;
+  document.getElementById('surveySub').textContent = s.hero.sub;
+  var statsHtml = '';
+  s.hero.stats.forEach(function(st) {
+    statsHtml += '<div class="survey-hero-stat"><div class="val">' + st.val + '</div><div class="lbl">' + st.lbl + '</div></div>';
+  });
+  document.getElementById('surveyStats').innerHTML = statsHtml;
+
+  // Section 1: Payment Distribution
+  document.getElementById('paymentSummary').innerHTML = s.paymentSummary;
+  var ptHtml = '<thead><tr><th>付款区间</th><th>客户数</th><th>客户占比</th><th>总实付金额</th><th>总企业服务消耗</th></tr></thead><tbody>';
+  s.payment.forEach(function(r) {
+    var hl = r.highlight ? ' style="background:var(--seed-surface);font-weight:600"' : '';
+    ptHtml += '<tr' + hl + '><td>' + (r.highlight ? '<b>' + r.range + '</b>' : r.range) + '</td>';
+    ptHtml += '<td>' + (r.highlight ? '<b>' + r.count + '</b>' : r.count) + '</td>';
+    ptHtml += '<td>' + (r.highlight ? '<b>' + r.pct + '</b>' : r.pct) + '</td>';
+    ptHtml += '<td>' + (r.highlight ? '<b>' + r.amount + '</b>' : r.amount) + '</td>';
+    ptHtml += '<td>' + (r.highlight ? '<b>' + r.consume + '</b>' : r.consume) + '</td></tr>';
+  });
+  ptHtml += '</tbody>';
+  document.getElementById('paymentTable').innerHTML = ptHtml;
+
+  var pbHtml = '';
+  s.paymentBullets.forEach(function(b) {
+    pbHtml += '<div style="font-size:13px;color:var(--seed-muted);line-height:1.6;padding-left:12px;border-left:3px solid var(--seed-primary-light)">' + b + '</div>';
+  });
+  document.getElementById('paymentBullets').innerHTML = pbHtml;
+
+  // Section 2: Product Consumption
+  document.getElementById('productSummary').innerHTML = s.productSummary;
+  var pdHtml = '<thead><tr><th>产品</th><th>总消耗</th><th>使用客户数</th><th>覆盖率</th><th>客户平均消耗</th></tr></thead><tbody>';
+  s.product.forEach(function(p) {
+    var fw = p.bold ? 'font-weight:600' : '';
+    pdHtml += '<tr><td style="' + fw + '">' + p.name + '</td>';
+    pdHtml += '<td style="' + fw + '">' + p.consume + '</td>';
+    pdHtml += '<td>' + p.clients + '</td>';
+    pdHtml += '<td>' + p.coverage + '</td>';
+    pdHtml += '<td>' + p.avg + '</td></tr>';
+  });
+  pdHtml += '</tbody>';
+  document.getElementById('productTable').innerHTML = pdHtml;
+
+  var prbHtml = '';
+  s.productBullets.forEach(function(b) {
+    prbHtml += '<div style="font-size:13px;color:var(--seed-muted);line-height:1.6;padding-left:12px;border-left:3px solid var(--seed-primary-light)">' + b + '</div>';
+  });
+  document.getElementById('productBullets').innerHTML = prbHtml;
+
+  // Section 3: Channel Rankings
+  var chHtml = '';
+  s.channels.forEach(function(ch, ci) {
+    chHtml += '<div style="margin-' + (ci < s.channels.length - 1 ? 'bottom:24px' : 'top:0') + '">';
+    chHtml += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">';
+    chHtml += '<span style="font-size:14px;font-weight:700;color:var(--seed-fg)">' + ch.name + '</span>';
+    chHtml += '<span style="font-size:12px;color:var(--seed-muted)">（' + ch.note + '）</span>';
+    chHtml += '</div>';
+    chHtml += '<table class="risk-table"><thead><tr><th style="width:60px">排名</th><th>客户名称</th><th>销售</th><th style="text-align:right">实付金额</th></tr></thead><tbody>';
+    ch.rows.forEach(function(r) {
+      var isFirst = r.rank === '1';
+      chHtml += '<tr><td style="text-align:center;font-weight:700">' + r.rank + '</td>';
+      chHtml += '<td' + (isFirst ? ' style="font-weight:600;color:var(--seed-primary-dark)"' : '') + '>' + r.client + '</td>';
+      chHtml += '<td>' + r.sales + '</td>';
+      chHtml += '<td style="text-align:right;font-weight:600;white-space:nowrap">' + r.amount + '</td></tr>';
+    });
+    chHtml += '</tbody></table>';
+    if (ci === s.channels.length - 1 && s.channelNote) {
+      chHtml += '<div style="font-size:12px;color:var(--seed-muted);margin-top:8px;font-style:italic">' + s.channelNote + '</div>';
+    }
+    chHtml += '</div>';
+  });
+  document.getElementById('channelRankings').innerHTML = chHtml;
+
+  // Source footer
+  if (s.sourceUrl) {
+    document.getElementById('methodNote').innerHTML = '数据来源：<a href="' + s.sourceUrl + '" target="_blank" style="color:var(--seed-primary)">' + s.sourceLabel + '</a>';
+  }
+}
+
+/* ========================================
+   AUTO-LINK FUNCTION
+   ======================================== */
+function autoLink(text) {
+  var result = text;
+  for (var kw in keywordDict) {
+    if (result.indexOf(kw) !== -1) {
+      var info = keywordDict[kw];
+      var linkHtml = '<a href="#" onclick="switchPage(\'' + info.page + '\',document.querySelectorAll(\'.nav-item\')[\'' + info.page + '\'===\'home\'?0:\'' + info.page + '\'===\'analytics\'?1:\'' + info.page + '\'===\'ranking\'?2:\'' + info.page + '\'===\'personnel\'?3:4]);return false;" title="\u67E5\u770B' + info.label + '">' + kw + '</a>';
+      result = result.replace(kw, linkHtml);
+    }
+  }
+  return result;
+}
+
+/* ========================================
+   PAGE SWITCHING
+   ======================================== */
+function switchPage(pageId, el) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('page-' + pageId).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  document.getElementById('navItems').classList.remove('mobile-open');
+  window.scrollTo(0, 0);
+}
+function toggleTag(el) {
+  var parent = el.parentElement;
+  parent.querySelectorAll('.cat-tag').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+}
+function toggleMobileNav() {
+  document.getElementById('navItems').classList.toggle('mobile-open');
+}
+
+/* ========================================
+   EDITOR SYSTEM
+   ======================================== */
+var editMode = false;
+var currentEditorPage = '';
+var currentEditorSection = '';
+
+function toggleEditMode() {
+  editMode = !editMode;
+  var fab = document.getElementById('editorFab');
+  var badge = document.getElementById('editBadge');
+  var wrap = document.getElementById('mainWrap');
+  if (editMode) {
+    fab.classList.add('active');
+    badge.classList.add('show');
+    wrap.classList.add('edit-mode');
+  } else {
+    fab.classList.remove('active');
+    badge.classList.remove('show');
+    wrap.classList.remove('edit-mode');
+    closeEditor();
+  }
+}
+
+function openEditor(page, section) {
+  if (!editMode) { toggleEditMode(); }
+  currentEditorPage = page;
+  currentEditorSection = section;
+  document.getElementById('editorOverlay').classList.add('open');
+  buildEditorUI(page, section);
+}
+
+function closeEditor() {
+  document.getElementById('editorOverlay').classList.remove('open');
+}
+
+var sectionNames = {
+  home: [
+    { key: 'hero', label: '首页横幅' },
+    { key: 'industry', label: '行业概览' },
+    { key: 'news-global', label: '国内外要闻' },
+    { key: 'news', label: '今日要闻' },
+    { key: 'reports', label: '精选报告' }
+  ],
+  analytics: [
+    { key: 'kpi', label: '核心指标' },
+    { key: 'trend', label: '市场趋势' },
+    { key: 'segments', label: '细分赛道' }
+  ],
+  ranking: [
+    { key: 'list', label: '企业排名' }
+  ],
+  personnel: [
+    { key: 'hero', label: '概览数据' },
+    { key: 'edu', label: '学历分布' },
+    { key: 'skills', label: '技能需求' },
+    { key: 'cities', label: '城市分布' }
+  ],
+  survey: [
+    { key: 'hero', label: '调研概览' },
+    { key: 'satisfaction', label: '满意度分析' },
+    { key: 'industry', label: '行业分布' },
+    { key: 'metrics', label: '核心发现' },
+    { key: 'findings', label: '关键洞察' },
+    { key: 'quotes', label: '客户声音' }
+  ]
+};
+
+var pageLabels = { home: '首页', analytics: '行业标签', ranking: '企业排名', personnel: '从业人员', survey: '客户调研' };
+
+function buildEditorUI(page, section) {
+  // Title
+  document.getElementById('editorTitle').textContent = pageLabels[page] + ' - 内容编辑';
+
+  // Tabs
+  var sections = sectionNames[page];
+  var tabsHtml = '';
+  sections.forEach(function(s) {
+    tabsHtml += '<div class="editor-tab' + (s.key === section ? ' active' : '') + '" onclick="switchEditorTab(\'' + page + '\',\'' + s.key + '\')">' + s.label + '</div>';
+  });
+  document.getElementById('editorTabs').innerHTML = tabsHtml;
+
+  // Build form for current section
+  buildSectionForm(page, section);
+}
+
+function switchEditorTab(page, section) {
+  currentEditorSection = section;
+  document.querySelectorAll('.editor-tab').forEach(function(t) { t.classList.remove('active'); });
+  event.target.classList.add('active');
+  buildSectionForm(page, section);
+}
+
+function buildSectionForm(page, section) {
+  var body = document.getElementById('editorBody');
+  var html = '';
+
+  if (page === 'home') {
+    if (section === 'hero') {
+      var d = siteData.home.hero;
+      html += field('标题', 'input', 'ed_heroTitle', d.title);
+      html += field('副标题', 'input', 'ed_heroSub', d.sub);
+      html += listEditor('统计数据', d.stats, [{ k: 'val', l: '数值' }, { k: 'lbl', l: '标签' }]);
+    } else if (section === 'industry') {
+      var d = siteData.home.industry;
+      html += field('行业定义（支持HTML链接）', 'textarea', 'ed_industryDef', d.definition);
+      html += listEditor('细分领域', d.sectors, [{ k: 'name', l: '名称' }, { k: 'icon', l: '图标(emoji)' }, { k: 'share', l: '占比' }, { k: 'growth', l: '增长率' }, { k: 'desc', l: '描述' }]);
+    } else if (section === 'news-global') {
+      html += '<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--seed-muted)">国内要闻</label></div>';
+      html += listEditor('国内要闻', siteData.home.domesticNews, [{ k: 'title', l: '标题' }, { k: 'source', l: '来源' }, { k: 'time', l: '时间' }, { k: 'url', l: '链接URL' }]);
+      html += '<div style="margin:16px 0 12px"><label style="font-size:12px;font-weight:600;color:var(--seed-muted)">国际要闻</label></div>';
+      html += listEditor('国际要闻', siteData.home.intlNews, [{ k: 'title', l: '标题' }, { k: 'source', l: '来源' }, { k: 'time', l: '时间' }, { k: 'url', l: '链接URL' }]);
+    } else if (section === 'news') {
+      html += listEditor('今日要闻', siteData.home.news, [{ k: 'source', l: '来源' }, { k: 'title', l: '标题' }, { k: 'reads', l: '阅读量' }, { k: 'comments', l: '评论数' }]);
+    } else if (section === 'reports') {
+      html += listEditor('精选报告', siteData.home.reports, [{ k: 'title', l: '标题' }, { k: 'category', l: '分类' }, { k: 'date', l: '日期' }, { k: 'reads', l: '阅读量' }, { k: 'url', l: '链接URL（留空则不可点击）' }]);
+    }
+  } else if (page === 'analytics') {
+    if (section === 'kpi') {
+      html += listEditor('核心指标', siteData.analytics.kpi, [{ k: 'label', l: '指标名' }, { k: 'value', l: '数值' }, { k: 'change', l: '变化率' }]);
+    } else if (section === 'trend') {
+      html += listEditor('年度趋势', siteData.analytics.trend, [{ k: 'year', l: '年份' }, { k: 'height', l: '柱高(px)' }, { k: 'color', l: '颜色' }]);
+    } else if (section === 'segments') {
+      html += listEditor('细分赛道', siteData.analytics.segments, [{ k: 'name', l: '名称' }, { k: 'pct', l: '百分比' }, { k: 'color', l: '颜色' }]);
+    }
+  } else if (page === 'ranking') {
+    if (section === 'list') {
+      html += listEditor('企业排名', siteData.ranking.list, [{ k: 'rank', l: '排名' }, { k: 'name', l: '企业名' }, { k: 'logo', l: 'Logo文字' }, { k: 'desc', l: '描述' }, { k: 'score', l: '评分' }, { k: 'change', l: '变化' }, { k: 'changeDir', l: '方向(up/down)' }]);
+    }
+  } else if (page === 'personnel') {
+    if (section === 'hero') {
+      var d = siteData.personnel.hero;
+      html += field('标题', 'input', 'ed_persTitle', d.title);
+      html += field('副标题', 'input', 'ed_persSub', d.sub);
+      html += listEditor('统计数据', d.stats, [{ k: 'val', l: '数值' }, { k: 'lbl', l: '标签' }]);
+    } else if (section === 'edu') {
+      html += listEditor('学历分布', siteData.personnel.education, [{ k: 'name', l: '类别' }, { k: 'pct', l: '百分比' }, { k: 'color', l: '颜色' }]);
+    } else if (section === 'skills') {
+      html += '<div class="editor-field"><label>技能标签（逗号分隔）</label><textarea id="ed_skills">' + siteData.personnel.skills.join(', ') + '</textarea></div>';
+    } else if (section === 'cities') {
+      html += listEditor('城市分布', siteData.personnel.cities, [{ k: 'name', l: '城市' }, { k: 'pct', l: '柱宽%' }, { k: 'val', l: '显示值' }, { k: 'color', l: '颜色' }]);
+    }
+  } else if (page === 'survey') {
+    if (section === 'hero') {
+      var d = siteData.survey.hero;
+      html += field('标题', 'input', 'ed_survTitle', d.title);
+      html += field('副标题', 'input', 'ed_survSub', d.sub);
+      html += listEditor('统计数据', d.stats, [{ k: 'val', l: '数值' }, { k: 'lbl', l: '标签' }]);
+    } else if (section === 'payment') {
+      html += listEditor('付款分布', siteData.survey.payment, [{ k: 'range', l: '付款区间' }, { k: 'count', l: '客户数' }, { k: 'pct', l: '客户占比' }, { k: 'amount', l: '总实付金额' }, { k: 'consume', l: '企业服务消耗' }]);
+    } else if (section === 'product') {
+      html += listEditor('产品消耗', siteData.survey.product, [{ k: 'name', l: '产品名' }, { k: 'consume', l: '总消耗' }, { k: 'clients', l: '使用客户数' }, { k: 'coverage', l: '覆盖率' }, { k: 'avg', l: '客均消耗' }]);
+    } else if (section === 'ranking') {
+      html += '<div style="font-size:13px;color:var(--seed-muted);line-height:1.6;padding:12px;background:var(--seed-surface);border-radius:var(--seed-radius)">编辑渠道榜单数据请直接修改 JSON（使用下方导出/导入功能），每个渠道包含 name、note 和 rows 数组。</div>';
+    }
+  }
+
+  // JSON import/export section
+  html += '<div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--seed-border)">';
+  html += '<div style="font-size:12px;font-weight:600;color:var(--seed-muted);margin-bottom:8px;letter-spacing:0.02em">数据管理</div>';
+  html += '<div style="display:flex;gap:8px"><button class="btn-secondary" onclick="exportJSON()" style="flex:1">导出JSON</button><button class="btn-secondary" onclick="importJSON()" style="flex:1">导入JSON</button></div>';
+  html += '<textarea class="json-area" id="jsonArea" style="margin-top:10px;display:none" placeholder="JSON数据将显示在此处..."></textarea>';
+  html += '</div>';
+
+  body.innerHTML = html;
+}
+
+function field(label, type, id, value) {
+  var input = type === 'textarea'
+    ? '<textarea id="' + id + '">' + escHtml(value) + '</textarea>'
+    : '<input type="text" id="' + id + '" value="' + escHtml(value) + '">';
+  return '<div class="editor-field"><label>' + label + '</label>' + input + '</div>';
+}
+
+function listEditor(label, items, fields) {
+  var html = '<div style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;color:var(--seed-muted);margin-bottom:8px;letter-spacing:0.02em">' + label + '</label>';
+  items.forEach(function(item, idx) {
+    html += '<div class="editor-list-item" data-idx="' + idx + '">';
+    html += '<button class="remove-btn" onclick="removeListItem(this)" title="删除">&times;</button>';
+    fields.forEach(function(f) {
+      var val = item[f.k] !== undefined ? item[f.k] : '';
+      html += '<input type="text" data-field="' + f.k + '" value="' + escHtml(String(val)) + '" placeholder="' + f.l + '">';
+    });
+    html += '</div>';
+  });
+  html += '<button class="add-item-btn" onclick="addListItem(this)" data-fields=\'' + JSON.stringify(fields) + '\'>+ 添加' + label.slice(0, 4) + '</button>';
+  html += '</div>';
+  return html;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function removeListItem(btn) {
+  btn.parentElement.remove();
+}
+
+function addListItem(btn) {
+  var fields = JSON.parse(btn.getAttribute('data-fields'));
+  var item = document.createElement('div');
+  item.className = 'editor-list-item';
+  var inner = '<button class="remove-btn" onclick="removeListItem(this)" title="删除">&times;</button>';
+  fields.forEach(function(f) {
+    inner += '<input type="text" data-field="' + f.k + '" value="" placeholder="' + f.l + '">';
+  });
+  item.innerHTML = inner;
+  btn.parentElement.insertBefore(item, btn);
+}
+
+/* ========================================
+   SAVE EDITOR DATA
+   ======================================== */
+function saveEditorData() {
+  var page = currentEditorPage;
+  var section = currentEditorSection;
+
+  if (page === 'home') {
+    if (section === 'hero') {
+      siteData.home.hero.title = gv('ed_heroTitle') || siteData.home.hero.title;
+      siteData.home.hero.sub = gv('ed_heroSub') || siteData.home.hero.sub;
+      siteData.home.hero.stats = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+    } else if (section === 'industry') {
+      siteData.home.industry.definition = gv('ed_industryDef') || siteData.home.industry.definition;
+      siteData.home.industry.sectors = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+    } else if (section === 'news-global') {
+      var allLists = document.getElementById('editorBody').querySelectorAll('[style*="margin-bottom:16px"], [style*="margin:16px"]');
+      // Read all list items from the form
+      var items = document.getElementById('editorBody').querySelectorAll('.editor-list-item');
+      var half = Math.ceil(items.length / 2);
+      var domestic = [], intl = [];
+      items.forEach(function(item, idx) {
+        var obj = readListItem(item);
+        if (idx < half) domestic.push(obj); else intl.push(obj);
+      });
+      siteData.home.domesticNews = domestic;
+      siteData.home.intlNews = intl;
+    } else if (section === 'news') {
+      siteData.home.news = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+    } else if (section === 'reports') {
+      var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+      // Preserve colors
+      items.forEach(function(item, idx) {
+        if (siteData.home.reports[idx]) {
+          item.colorA = siteData.home.reports[idx].colorA;
+          item.colorB = siteData.home.reports[idx].colorB;
+        } else {
+          item.colorA = 'var(--seed-surface)';
+          item.colorB = 'var(--seed-border)';
+        }
+      });
+      siteData.home.reports = items;
+    }
+  } else if (page === 'analytics') {
+    if (section === 'kpi') {
+      siteData.analytics.kpi = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+    } else if (section === 'trend') {
+      var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+      items.forEach(function(t) { t.height = parseInt(t.height) || 50; t.highlight = (t.year.indexOf('E') !== -1); });
+      siteData.analytics.trend = items;
+    } else if (section === 'segments') {
+      var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+      items.forEach(function(s) { s.pct = parseInt(s.pct) || 0; });
+      siteData.analytics.segments = items;
+    }
+  } else if (page === 'ranking') {
+    var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+    items.forEach(function(r) {
+      r.rank = parseInt(r.rank) || 1;
+      r.score = parseFloat(r.score) || 0;
+      r.color = siteData.ranking.list[r.rank - 1] ? siteData.ranking.list[r.rank - 1].color : 'var(--seed-neutral)';
+    });
+    siteData.ranking.list = items;
+  } else if (page === 'personnel') {
+    if (section === 'hero') {
+      siteData.personnel.hero.title = gv('ed_persTitle') || siteData.personnel.hero.title;
+      siteData.personnel.hero.sub = gv('ed_persSub') || siteData.personnel.hero.sub;
+      siteData.personnel.hero.stats = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+    } else if (section === 'edu') {
+      var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+      items.forEach(function(e) { e.pct = parseInt(e.pct) || 0; });
+      siteData.personnel.education = items;
+    } else if (section === 'skills') {
+      siteData.personnel.skills = gv('ed_skills').split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+    } else if (section === 'cities') {
+      var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+      items.forEach(function(c) { c.pct = parseInt(c.pct) || 0; });
+      siteData.personnel.cities = items;
+    }
+  } else if (page === 'survey') {
+    if (section === 'hero') {
+      siteData.survey.hero.title = gv('ed_survTitle') || siteData.survey.hero.title;
+      siteData.survey.hero.sub = gv('ed_survSub') || siteData.survey.hero.sub;
+      siteData.survey.hero.stats = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+    } else if (section === 'payment') {
+      var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+      items.forEach(function(p) { p.count = parseInt(p.count) || 0; p.highlight = (p.range === '3000-5000元'); });
+      siteData.survey.payment = items;
+    } else if (section === 'product') {
+      var items = readListItems(document.getElementById('editorBody').querySelectorAll('.editor-list-item'));
+      items.forEach(function(p) { p.clients = parseInt(p.clients) || 0; p.bold = true; });
+      siteData.survey.product = items;
+    }
+  }
+
+  renderAll();
+  showSaveToast();
+}
+
+function gv(id) {
+  var el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function readListItem(item) {
+  var obj = {};
+  item.querySelectorAll('input[data-field]').forEach(function(inp) {
+    obj[inp.getAttribute('data-field')] = inp.value;
+  });
+  return obj;
+}
+
+function readListItems(items) {
+  var arr = [];
+  items.forEach(function(item) { arr.push(readListItem(item)); });
+  return arr;
+}
+
+function showSaveToast() {
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--seed-primary);color:var(--seed-white);padding:10px 24px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(107,69,163,0.3);transition:opacity 0.3s';
+  toast.textContent = '已保存并更新页面';
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 2000);
+}
+
+/* ========================================
+   AUTO-ANALYSIS
+   ======================================== */
+function analyzeContent() {
+  // Collect all text from current page section
+  var allText = '';
+  var section = currentEditorSection;
+  var page = currentEditorPage;
+
+  // Get text from all visible editor fields
+  document.getElementById('editorBody').querySelectorAll('input, textarea').forEach(function(el) {
+    allText += ' ' + el.value;
+  });
+
+  // Find keywords and generate analysis
+  var found = [];
+  var suggestions = [];
+  for (var kw in keywordDict) {
+    if (allText.indexOf(kw) !== -1) {
+      var info = keywordDict[kw];
+      found.push({ keyword: kw, page: info.page, label: info.label });
+      suggestions.push({ text: '\u201C' + kw + '\u201D \u2192 \u53EF\u94FE\u63A5\u5230\u300C' + pageLabels[info.page] + '\u300D\u9875\u9762', page: info.page });
+    }
+  }
+
+  // Build analysis result HTML
+  var html = '<div class="analysis-results"><h4>自动分析结果</h4>';
+  if (found.length === 0) {
+    html += '<div style="font-size:12px;color:var(--seed-muted)">未发现可关联的关键词</div>';
+  } else {
+    html += '<div style="margin-bottom:8px">';
+    found.forEach(function(f) {
+      html += '<span class="analysis-tag linked" onclick="this.classList.toggle(\'linked\')"><span class="link-icon">\u{1F517}</span> ' + f.keyword + ' \u2192 ' + f.label + '</span>';
+    });
+    html += '</div>';
+    html += '<div class="analysis-suggest"><div class="suggest-title">建议添加的链接：</div>';
+    suggestions.forEach(function(s) {
+      html += '<a class="suggest-link" href="#" onclick="switchPage(\'' + s.page + '\',document.querySelectorAll(\'.nav-item\')[\'' + s.page + '\'===\'home\'?0:\'' + s.page + '\'===\'analytics\'?1:\'' + s.page + '\'===\'ranking\'?2:\'' + s.page + '\'===\'personnel\'?3:4]);return false;">' + s.text + '</a>';
+    });
+    html += '</div>';
+  }
+
+  // Word count stats
+  var charCount = allText.replace(/\s/g, '').length;
+  html += '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--seed-border);font-size:11px;color:var(--seed-meta)">';
+  html += '当前内容字数：' + charCount + ' | 发现关键词：' + found.length + '个';
+  html += '</div>';
+  html += '</div>';
+
+  // Append to editor body
+  var existing = document.getElementById('editorBody').querySelector('.analysis-results');
+  if (existing) existing.remove();
+  document.getElementById('editorBody').insertAdjacentHTML('beforeend', html);
+}
+
+/* ========================================
+   JSON IMPORT / EXPORT
+   ======================================== */
+function exportJSON() {
+  var area = document.getElementById('jsonArea');
+  if (area.style.display === 'none') {
+    area.style.display = 'block';
+    area.value = JSON.stringify(siteData, null, 2);
+  } else {
+    area.style.display = 'none';
+  }
+}
+
+function importJSON() {
+  var area = document.getElementById('jsonArea');
+  if (area.style.display === 'none') {
+    area.style.display = 'block';
+    area.value = '';
+    area.placeholder = '请粘贴JSON数据到此处，然后再次点击"导入"按钮...';
+    return;
+  }
+  try {
+    var data = JSON.parse(area.value);
+    if (data && typeof data === 'object') {
+      siteData = data;
+      renderAll();
+      showSaveToast();
+      area.style.display = 'none';
+    }
+  } catch (e) {
+    alert('JSON格式错误：' + e.message);
+  }
+}
+
+/* ========================================
+   INIT
+   ======================================== */
+renderAll();
+</script>
+</body>
+</html>
