@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>账号权益对比 · 伯小乐 / 赶集直招 / 职小乐</title>
+<style>
+  :root {
+    --tab-accent: #2563eb;
+    --tab-accent-soft: #eef3ff;
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --ink: #18181b;
+    --ink-soft: #3f3f46;
+    --muted: #71717a;
+    --faint: #a1a1aa;
+    --line: #ececef;
+    --line-soft: #f3f3f5;
+    --ok: #16a34a;
+    --ok-soft: #effaf2;
+    --warn: #c2740a;
+    --warn-soft: #fdf6ec;
+    --cta: #18181b;
+    --serif: "Songti SC","STSong","SimSun",Georgia,"Times New Roman",serif;
+    --radius: 18px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(24,24,27,.04), 0 8px 24px rgba(24,24,27,.05);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+
+  /* ===== Hero (登月计划 style) ===== */
+  .hero {
+    position:relative; text-align:center;
+    padding:74px 20px 30px;
+    background:
+      radial-gradient(120% 120% at 50% -10%, var(--tab-accent-soft) 0%, rgba(255,255,255,0) 55%),
+      linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+    border-bottom:1px solid var(--line);
+    transition:background .5s ease;
+    overflow:hidden;
+  }
+  .hero-eyebrow {
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:12px; font-weight:600; letter-spacing:2px;
+    color:var(--tab-accent); margin-bottom:18px;
+    padding:5px 14px; border:1px solid var(--tab-accent);
+    border-radius:999px; background:rgba(255,255,255,.6);
+    transition:color .4s, border-color .4s;
+  }
+  .hero-eyebrow .dot { width:6px; height:6px; border-radius:50%; background:var(--tab-accent); }
+  .hero h1 {
+    font-family:var(--serif); font-size:42px; font-weight:700;
+    letter-spacing:3px; line-height:1.25; color:var(--ink); margin-bottom:14px;
+  }
+  .hero p { font-size:15px; color:var(--muted); max-width:600px; margin:0 auto; line-height:1.75; }
+  .hero-key {
+    font-size:42px; line-height:1; margin-bottom:18px; opacity:.92;
+    color:var(--tab-accent); transition:color .4s;
+  }
+
+  /* ===== Segmented tabs (pill) ===== */
+  .tabs-wrap { display:flex; justify-content:center; padding:26px 20px 0; }
+  .tabs-container {
+    display:inline-flex; gap:4px; padding:5px;
+    background:#fff; border:1px solid var(--line); border-radius:999px;
+    box-shadow:var(--shadow);
+  }
+  .tab-btn {
+    padding:9px 26px; border:none; border-radius:999px; cursor:pointer;
+    font-size:14px; font-weight:600; color:var(--muted); background:transparent;
+    transition:all .22s ease;
+  }
+  .tab-btn:hover { color:var(--ink); }
+  .tab-btn.active { background:var(--cta); color:#fff; }
+
+  /* ===== View toggle ===== */
+  .view-toggle {
+    display:flex; justify-content:flex-end; align-items:center; gap:9px;
+    max-width:1180px; margin:22px auto 0; padding:0 20px;
+    font-size:13px; color:var(--muted);
+  }
+  .toggle-switch {
+    position:relative; width:42px; height:24px; background:var(--line);
+    border-radius:12px; cursor:pointer; transition:background .25s;
+  }
+  .toggle-switch.on { background:var(--cta); }
+  .toggle-switch::after {
+    content:''; position:absolute; width:18px; height:18px; border-radius:50%;
+    background:#fff; top:3px; left:3px; transition:transform .25s; box-shadow:0 1px 3px rgba(0,0,0,.2);
+  }
+  .toggle-switch.on::after { transform:translateX(18px); }
+
+  .main { max-width:1180px; margin:0 auto; padding:26px 20px 64px; }
+
+  /* ===== Cards ===== */
+  .cards-view { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; animation:fade .35s ease; }
+  .cards-view.hide { display:none; }
+  @keyframes fade { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+  .plan-card {
+    position:relative; display:flex; flex-direction:column;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden; transition:transform .25s, box-shadow .25s, border-color .25s;
+  }
+  .plan-card:hover { transform:translateY(-4px); box-shadow:0 12px 34px rgba(24,24,27,.10); }
+  .plan-card.recommended { border-color:var(--tab-accent); }
+  .rec-pill {
+    position:absolute; top:14px; right:14px; z-index:2;
+    font-size:11px; font-weight:700; letter-spacing:1px; color:#fff;
+    background:var(--tab-accent); padding:3px 11px; border-radius:999px;
+  }
+  .card-header { padding:24px 22px 18px; border-bottom:1px solid var(--line-soft); }
+  .name-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px; }
+  .plan-name { font-family:var(--serif); font-size:21px; font-weight:700; letter-spacing:.5px; }
+  .bundle-pill {
+    font-size:11px; font-weight:600; color:var(--warn);
+    background:var(--warn-soft); border:1px solid #f0d8b0;
+    padding:2px 9px; border-radius:999px; white-space:nowrap;
+  }
+  .plan-tag {
+    display:inline-block; font-size:12px; padding:3px 10px; border-radius:999px;
+    background:var(--tab-accent-soft); color:var(--tab-accent); font-weight:600; margin-bottom:16px;
+  }
+  .price-row { display:flex; align-items:baseline; gap:5px; margin-bottom:4px; }
+  .price-currency { font-size:18px; font-weight:700; }
+  .price-value { font-size:38px; font-weight:800; line-height:1; letter-spacing:-1px; }
+  .price-unit { font-size:12px; color:var(--muted); font-weight:500; }
+  .price-subtitle { font-size:12px; color:var(--faint); margin-top:5px; }
+  .subscribe-btn {
+    width:100%; padding:12px; border:none; border-radius:var(--radius-sm);
+    font-size:14px; font-weight:700; cursor:pointer; margin-top:16px;
+    background:var(--cta); color:#fff; transition:opacity .2s, transform .2s;
+  }
+  .subscribe-btn:hover { opacity:.88; transform:translateY(-1px); }
+
+  .card-highlights { display:flex; border-bottom:1px solid var(--line-soft); background:var(--line-soft); }
+  .hl-item { flex:1; padding:13px 9px; text-align:center; }
+  .hl-item + .hl-item { border-left:1px solid #e6e6ea; }
+  .hl-label { font-size:10px; color:var(--faint); letter-spacing:1px; margin-bottom:4px; font-weight:600; }
+  .hl-value { font-size:12.5px; font-weight:700; color:var(--ink-soft); line-height:1.45; }
+
+  .card-body { padding:18px 22px 22px; flex:1; display:flex; flex-direction:column; }
+  .feature-list { list-style:none; }
+  .section-title {
+    font-size:11px; font-weight:700; color:var(--faint); letter-spacing:1.5px;
+    padding:12px 0 6px; margin-top:6px; border-top:1px solid var(--line-soft);
+  }
+  .section-title:first-child { border-top:none; margin-top:0; padding-top:0; }
+  .feature-item { display:flex; align-items:flex-start; gap:9px; padding:6px 0; font-size:13px; line-height:1.5; }
+  .icon {
+    flex-shrink:0; width:18px; height:18px; border-radius:50%; display:flex;
+    align-items:center; justify-content:center; font-size:11px; margin-top:1px;
+    background:var(--ok-soft); color:var(--ok);
+  }
+  .icon.warn { background:var(--warn-soft); color:var(--warn); }
+  .icon.gift { background:#fef2f6; }
+  .feature-label { color:var(--muted); min-width:64px; flex-shrink:0; }
+  .feature-value { font-weight:500; word-break:break-word; }
+
+  /* 刊例价 block */
+  .listprice {
+    margin:14px 0 4px; padding:13px 14px; border-radius:var(--radius-sm);
+    background:var(--tab-accent-soft); border:1px solid color-mix(in srgb, var(--tab-accent) 22%, #fff);
+  }
+  .listprice-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+  .lp-label { font-size:11.5px; font-weight:700; letter-spacing:.5px; color:var(--tab-accent); }
+  .lp-result { font-size:16px; font-weight:800; color:var(--ink); }
+  .lp-formula {
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:11px;
+    color:var(--ink-soft); line-height:1.6; word-break:break-word;
+  }
+  .lp-formula strong { color:var(--tab-accent); }
+  .gift-list { margin-top:2px; }
+
+  /* ===== Compare table (权益) ===== */
+  .table-view { display:none; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow-x:auto; animation:fade .35s ease; }
+  .table-view.show { display:block; }
+  .compare-table { width:100%; border-collapse:collapse; min-width:760px; font-size:13px; }
+  .compare-table th, .compare-table td { padding:13px 15px; text-align:left; border-bottom:1px solid var(--line-soft); }
+  .compare-table th { background:#fafafb; font-weight:700; }
+  .compare-table th.plan-col { text-align:center; color:var(--tab-accent); min-width:130px; }
+  .compare-table th.plan-col small { font-weight:400; color:var(--muted); }
+  .compare-table td:first-child { font-weight:600; color:var(--muted); white-space:nowrap; background:#fcfcfd; }
+  .compare-table td:not(:first-child) { text-align:center; }
+  .compare-table tr.grp td { background:var(--tab-accent-soft); color:var(--tab-accent); font-weight:700; }
+  .compare-table tr:hover td { background:#fbfbfc; }
+  .compare-table tr.grp:hover td { background:var(--tab-accent-soft); }
+  .table-badge { display:inline-block; padding:2px 9px; border-radius:999px; font-size:11px; font-weight:600; }
+  .badge-green { background:var(--ok-soft); color:var(--ok); }
+  .badge-orange { background:var(--warn-soft); color:var(--warn); }
+  .badge-blue { background:#eef3ff; color:#2563eb; }
+
+  /* ===== 效果机制 board (哪个计划更适合你 style) ===== */
+  .mech-board {
+    margin-top:30px; background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow); padding:28px 28px 8px; animation:fade .35s ease;
+  }
+  .mech-board-head { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; margin-bottom:18px; }
+  .mech-eyebrow { font-size:12px; font-weight:600; letter-spacing:2px; color:var(--tab-accent); margin-bottom:6px; }
+  .mech-title { font-family:var(--serif); font-size:24px; font-weight:700; letter-spacing:1px; }
+  .mech-note { font-size:12px; color:var(--faint); max-width:340px; line-height:1.6; }
+  .mech-scroll { overflow-x:auto; }
+  .mech-table { width:100%; border-collapse:collapse; min-width:680px; font-size:13px; }
+  .mech-table th, .mech-table td { padding:14px 16px; text-align:left; vertical-align:middle; border-bottom:1px solid var(--line-soft); }
+  .mech-corner { font-size:13px; font-weight:700; color:var(--muted); width:150px; }
+  .mech-col { text-align:left; vertical-align:bottom; min-width:150px; }
+  .mech-vname { font-family:var(--serif); font-size:15px; font-weight:700; color:var(--ink); }
+  .mech-vprice { font-size:12px; color:var(--muted); font-weight:500; margin-top:3px; }
+  .mech-dim { font-weight:600; color:var(--muted); white-space:nowrap; background:#fcfcfd; }
+  .mc { color:var(--ink-soft); }
+  .mc.muted { color:var(--faint); text-align:center; }
+  .mc.ok { color:var(--ok); font-weight:600; }
+  .mc.warn { color:var(--warn); font-weight:600; }
+  .mech-table tbody tr:last-child td { border-bottom:none; }
+  .mech-table tbody tr:hover td { background:#fbfbfc; }
+  .mech-table tbody tr:hover .mech-dim { background:#f7f7f9; }
+
+  .footer { text-align:center; padding:26px 20px; color:var(--faint); font-size:12px; border-top:1px solid var(--line); background:var(--card); }
+
+  @media (max-width:768px) {
+    .hero { padding:54px 18px 26px; }
+    .hero h1 { font-size:30px; letter-spacing:2px; }
+    .cards-view { grid-template-columns:1fr; }
+    .tabs-container { width:100%; max-width:340px; }
+    .tab-btn { flex:1; padding:9px 0; }
+    .mech-board { padding:22px 18px 6px; }
+  }
+</style>
+</head>
+<body data-tab="bxl">
+
+<!-- ===== Hero ===== -->
+<header class="hero" id="hero">
+  <div class="hero-key" id="heroKey">❖</div>
+  <div class="hero-eyebrow" id="heroEyebrow"><span class="dot"></span><span id="heroEyebrowText">伯小乐 · 营销 + 直招</span></div>
+  <h1 id="heroHeadline">招聘提效，由此启程</h1>
+  <p id="heroSubtitle">资源型与容器型双轨权益，覆盖淡旺季、多城多岗与效果加持，帮客户选对版本、用足额度。</p>
+</header>
+
+<!-- ===== Tabs ===== -->
+<div class="tabs-wrap">
+  <div class="tabs-container"><button class="tab-btn active" data-tab="bxl" onclick="switchTab('bxl')">伯小乐</button><button class="tab-btn" data-tab="ganji" onclick="switchTab('ganji')">赶集直招</button><button class="tab-btn" data-tab="zhixiaole" onclick="switchTab('zhixiaole')">职小乐</button></div>
+</div>
+
+<!-- ===== View toggle ===== -->
+<div class="view-toggle">
+  <span id="viewLabel">卡片视图</span>
+  <div class="toggle-switch on" id="viewToggle" onclick="toggleView()"></div>
+</div>
+
+<!-- ===== Content ===== -->
+<div class="main">
+
+  <div class="tab-content" id="content-bxl">
+    <div class="cards-view" id="cards-bxl">
+      <div class="plan-card">
+        
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">季度资源版</div></div>
+          <span class="plan-tag">短期招聘</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">2300</span>
+            <span class="price-unit">/ 92天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥25 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">同时在线30个职位<br>短期招聘</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">淡旺季用</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">直招 + 营销类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">92天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📌</span><span class="feature-label">劲爆资源点</span><span class="feature-value">30个 × 92天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 92天</span></li>
+<li class="feature-item"><span class="icon">✓</span><span class="feature-label">类目</span><span class="feature-value">不限类 ✅</span></li>
+<li class="feature-item"><span class="icon">—</span><span class="feature-label">增值产品</span><span class="feature-value">无</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥2,280</span></div>
+            <div class="lp-formula">I = 1×200 + 30×66 + 1×100 + 0×1300 + 0×1780 + 0×1400 = <strong>2,280</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">UID套餐</span><span class="feature-value">92天 / 15个 / 30天 / uid</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-card recommended">
+        <span class="rec-pill">推荐</span>
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">年度资源版</div></div>
+          <span class="plan-tag">高性价比 ⭐</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">1800</span>
+            <span class="price-unit">+ 500招聘币 / 年</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥6 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">岗位单一<br>长期稳定招聘</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">年度锁定</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">直招 + 营销类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">365天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📌</span><span class="feature-label">劲爆资源点</span><span class="feature-value">8个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 365天</span></li>
+<li class="feature-item"><span class="icon">✓</span><span class="feature-label">类目</span><span class="feature-value">不限类 ✅</span></li>
+<li class="feature-item"><span class="icon">📈</span><span class="feature-label">增值产品</span><span class="feature-value">500招聘币</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥1,800</span></div>
+            <div class="lp-formula">I = 1×500 + 8×125 + 1×300 + 0×2400 + 0×1780 + 0×1400 = <strong>1,800</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">UID套餐</span><span class="feature-value">92天 / 15个 / 30天 / uid</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-card">
+        
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">年度容器版</div></div>
+          <span class="plan-tag">多变需求</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">3600</span>
+            <span class="price-unit">/ 365天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥10 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">招聘需求多变<br>长期稳定招聘</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">多城多岗</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">直招 + 营销类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">365天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📦</span><span class="feature-label">劲爆容器</span><span class="feature-value">5个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 365天</span></li>
+<li class="feature-item"><span class="icon">✓</span><span class="feature-label">类目</span><span class="feature-value">不限类 ✅</span></li>
+<li class="feature-item"><span class="icon">—</span><span class="feature-label">增值产品</span><span class="feature-value">无</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥3,600</span></div>
+            <div class="lp-formula">I = 1×500 + 5×560 + 1×300 + 0×2400 + 0×1780 + 0×1400 = <strong>3,600</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">UID套餐</span><span class="feature-value">92天 / 15个 / 30天 / uid</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-card">
+        
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">年度容器Pro</div></div>
+          <span class="plan-tag">效果加持</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">6000</span>
+            <span class="price-unit">/ 365天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥16 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">招聘需求多变<br>效果加持</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">营销-伯小乐</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">直招 + 营销类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">365天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📦</span><span class="feature-label">劲爆容器</span><span class="feature-value">5个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 365天</span></li>
+<li class="feature-item"><span class="icon">✓</span><span class="feature-label">类目</span><span class="feature-value">不限类 ✅</span></li>
+<li class="feature-item"><span class="icon">📈</span><span class="feature-label">增值产品</span><span class="feature-value">12张7天超级置顶曝光 / 30天 / 1个职位</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥6,000</span></div>
+            <div class="lp-formula">I = 1×500 + 5×560 + 1×300 + 1×2400 + 0×1780 + 0×1400 = <strong>6,000</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">UID套餐</span><span class="feature-value">92天 / 15个 / 30天 / uid</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="table-view" id="table-bxl">
+      <table class="compare-table">
+        <thead><tr><th>对比项</th><th class="plan-col">季度资源版<br><small>¥2300</small></th><th class="plan-col">年度资源版<br><small>¥1800 ⭐</small></th><th class="plan-col">年度容器版<br><small>¥3600</small></th><th class="plan-col">年度容器Pro<br><small>¥6000</small></th></tr></thead>
+        <tbody><tr><td>时长</td><td><span class="table-badge badge-blue">92天</span></td><td><span class="table-badge badge-green">365天</span></td><td><span class="table-badge badge-green">365天</span></td><td><span class="table-badge badge-green">365天</span></td></tr><tr><td>日均成本</td><td>¥25</td><td><strong style="color:var(--ok)">¥6</strong></td><td>¥10</td><td>¥16</td></tr><tr><td>核心卖点</td><td>同时在线30个职位<br>短期招聘</td><td>岗位单一<br>长期稳定招聘</td><td>招聘需求多变<br>长期稳定招聘</td><td>招聘需求多变<br>效果加持</td></tr><tr><td>客户需求</td><td>淡旺季用</td><td>年度锁定</td><td>多城多岗</td><td>营销-伯小乐</td></tr><tr><td>典型客户</td><td>直招 + 营销类</td><td>直招 + 营销类</td><td>直招 + 营销类</td><td>直招 + 营销类</td></tr><tr class="grp"><td colspan="5">▎ 权益详情</td></tr><tr><td>劲爆资源</td><td>📌 30个 × 92天</td><td>📌 8个 × 365天</td><td>📦 5个 × 365天</td><td>📦 5个 × 365天</td></tr><tr><td>主动开聊</td><td>100人/日 × 92天</td><td>100人/日 × 365天</td><td>100人/日 × 365天</td><td>100人/日 × 365天</td></tr><tr><td>类目</td><td><span class="table-badge badge-green">不限类</span></td><td><span class="table-badge badge-green">不限类</span></td><td><span class="table-badge badge-green">不限类</span></td><td><span class="table-badge badge-green">不限类</span></td></tr><tr><td>增值产品</td><td>无</td><td>500招聘币</td><td>无</td><td>12张7天超级置顶曝光 / 30天 / 1个职位</td></tr><tr><td>刊例价</td><td>¥2,280</td><td>¥1,800</td><td>¥3,600</td><td>¥6,000</td></tr><tr><td>叠加上限</td><td>3个</td><td>3个</td><td>3个</td><td>3个</td></tr><tr><td>赠送权益</td><td>92天 / 15个 / 30天 / uid</td><td>92天 / 15个 / 30天 / uid</td><td>92天 / 15个 / 30天 / uid</td><td>92天 / 15个 / 30天 / uid</td></tr></tbody>
+      </table>
+    </div>
+    <div class="mech-board">
+      <div class="mech-board-head">
+        <div>
+          <div class="mech-eyebrow">效果机制</div>
+          <h3 class="mech-title">哪个版本更适合你的客户</h3>
+        </div>
+        <p class="mech-note">* 效果机制为影响各版本流量与转化的关键因子，供销售沟通与客户预期管理参考。</p>
+      </div>
+      <div class="mech-scroll">
+        <table class="mech-table">
+          <thead><tr><th class="mech-corner">效果机制</th><th class="mech-col"><div class="mech-vname">季度资源版</div><div class="mech-vprice">¥2300 92天</div></th><th class="mech-col"><div class="mech-vname">年度资源版 ⭐</div><div class="mech-vprice">¥1800 +500招聘币 年</div></th><th class="mech-col"><div class="mech-vname">年度容器版</div><div class="mech-vprice">¥3600 365天</div></th><th class="mech-col"><div class="mech-vname">年度容器Pro</div><div class="mech-vprice">¥6000 365天</div></th></tr></thead>
+          <tbody>
+<tr><td class="mech-dim">叠加效应</td><td class="mc ok">1+1 &gt; 2</td><td class="mc ok">1+1 &gt; 2</td><td class="mc warn">1+1 &lt; 2 ⚠️</td><td class="mc warn">1+1 &lt; 2 ⚠️</td></tr>
+<tr><td class="mech-dim">账号等级</td><td class="mc">会员季度 &gt; 非会员月度</td><td class="mc">会员季度 &gt; 非会员月度</td><td class="mc">会员月度 = 非会员月度</td><td class="mc">会员月度 = 非会员月度</td></tr>
+<tr><td class="mech-dim">资源 / 容器型</td><td class="mc">短期资源</td><td class="mc">短期资源 + 长期容器</td><td class="mc">长期容器</td><td class="mc">长期容器</td></tr>
+<tr><td class="mech-dim">勤奋度（回复率）</td><td class="mc muted">—</td><td class="mc">回复率↑ → 流量↑</td><td class="mc">回复率↑ → 流量↑</td><td class="mc">回复率↑ → 流量↑</td></tr>
+<tr><td class="mech-dim">职位质量</td><td class="mc muted">—</td><td class="mc">质量高 → 流量↑</td><td class="mc">质量高 → 流量↑</td><td class="mc muted">—</td></tr>
+<tr><td class="mech-dim">新账号优势</td><td class="mc">新账号 &gt; 老账号</td><td class="mc">新账号 &gt; 旧账号</td><td class="mc muted">—</td><td class="mc muted">—</td></tr>
+<tr><td class="mech-dim">商业曝光</td><td class="mc">独立曝光 → 流量↑</td><td class="mc">独立曝光 → 流量↑（质量高于开聊）</td><td class="mc muted">—</td><td class="mc muted">—</td></tr>
+<tr><td class="mech-dim">新发职位</td><td class="mc">发帖3–7天自然流量好</td><td class="mc muted">—</td><td class="mc">灵活多变 → 总流量兜底</td><td class="mc muted">—</td></tr>
+<tr><td class="mech-dim">客户效果体验</td><td class="mc">新发贴 · 新账号 · 会员 · 商业</td><td class="mc">登录 · 回复率 · 新发 · 增值</td><td class="mc">职位质量 · 回复率 · 新发周期 · 增值</td><td class="mc">职位质量 · 回复率 · 新发周期 · 增值</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content" id="content-ganji" style="display:none;">
+    <div class="cards-view" id="cards-ganji">
+      <div class="plan-card recommended">
+        <span class="rec-pill">推荐</span>
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">年度容器版</div><span class="bundle-pill">套餐打包，不单售</span></div>
+          <span class="plan-tag">直招专属 ⭐</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">2200</span>
+            <span class="price-unit">/ 365天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥6 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">直招专属版</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">大服务</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">仅直招类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">365天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📦</span><span class="feature-label">劲爆容器</span><span class="feature-value">5个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value"><strong style='color:var(--accent)'>200人/日</strong> × 365天（双倍！）</span></li>
+<li class="feature-item"><span class="icon warn">⚠</span><span class="feature-label">类目</span><span class="feature-value" style="color:var(--warn);">单独付费5大类目：<br>普工/技工、生产制造、司机/物流、安保消防、家政服务</span></li>
+<li class="feature-item"><span class="icon">—</span><span class="feature-label">增值产品</span><span class="feature-value">无</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥2,200</span></div>
+            <div class="lp-formula">I = 1×500 + 5×220 + 1×600 + 0×2400 + 0×1780 + 0×1400 = <strong>2,200</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">专享权益</span><span class="feature-value">专享容器 +1 / 套餐（仅限发布5大类）· 不支持主动开聊</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-card">
+        
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">年度容器Pro</div></div>
+          <span class="plan-tag">直招 + 置顶</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">3000</span>
+            <span class="price-unit">/ 365天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥8 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">直招专属版<br>曝光加持</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">大服务</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">仅直招类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">365天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📦</span><span class="feature-label">劲爆容器</span><span class="feature-value">5个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value"><strong style='color:var(--accent)'>200人/日</strong> × 365天（双倍！）</span></li>
+<li class="feature-item"><span class="icon warn">⚠</span><span class="feature-label">类目</span><span class="feature-value" style="color:var(--warn);">单独付费5大类目</span></li>
+<li class="feature-item"><span class="icon">📈</span><span class="feature-label">增值产品</span><span class="feature-value">12张7天超级置顶曝光 / 30天 / 1个职位</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥4,600 × 62.5%</span></div>
+            <div class="lp-formula">I = 1×500 + 5×220 + 1×600 + 1×2400 + 0×1780 + 0×1400 = <strong>4,600 × 62.5%</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">UID套餐</span><span class="feature-value">92天 / 15个 / 30天 / uid</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="table-view" id="table-ganji">
+      <table class="compare-table">
+        <thead><tr><th>对比项</th><th class="plan-col">年度容器版<br><small>¥2200 ⭐</small></th><th class="plan-col">年度容器Pro<br><small>¥3000</small></th></tr></thead>
+        <tbody><tr><td>时长</td><td><span class="table-badge badge-green">365天</span></td><td><span class="table-badge badge-green">365天</span></td></tr><tr><td>日均成本</td><td><strong style="color:var(--ok)">¥6</strong></td><td>¥8</td></tr><tr><td>核心卖点</td><td>直招专属版</td><td>直招专属版<br>曝光加持</td></tr><tr><td>客户需求</td><td>大服务</td><td>大服务</td></tr><tr><td>典型客户</td><td>仅直招类</td><td>仅直招类</td></tr><tr class="grp"><td colspan="3">▎ 权益详情</td></tr><tr><td>劲爆资源</td><td>📦 5个 × 365天</td><td>📦 5个 × 365天</td></tr><tr><td>主动开聊</td><td><strong style='color:var(--accent)'>200人/日</strong> × 365天（双倍！）</td><td><strong style='color:var(--accent)'>200人/日</strong> × 365天（双倍！）</td></tr><tr><td>类目</td><td><span class="table-badge badge-orange">单独/限类</span></td><td><span class="table-badge badge-orange">单独/限类</span></td></tr><tr><td>增值产品</td><td>无</td><td>12张7天超级置顶曝光 / 30天 / 1个职位</td></tr><tr><td>刊例价</td><td>¥2,200</td><td>¥4,600 × 62.5%</td></tr><tr><td>叠加上限</td><td>3个</td><td>3个</td></tr><tr><td>赠送权益</td><td>专享容器 +1 / 套餐（仅限发布5大类）· 不支持主动开聊</td><td>92天 / 15个 / 30天 / uid</td></tr></tbody>
+      </table>
+    </div>
+    <div class="mech-board">
+      <div class="mech-board-head">
+        <div>
+          <div class="mech-eyebrow">效果机制</div>
+          <h3 class="mech-title">哪个版本更适合你的客户</h3>
+        </div>
+        <p class="mech-note">* 效果机制为影响各版本流量与转化的关键因子，供销售沟通与客户预期管理参考。</p>
+      </div>
+      <div class="mech-scroll">
+        <table class="mech-table">
+          <thead><tr><th class="mech-corner">效果机制</th><th class="mech-col"><div class="mech-vname">年度容器版 ⭐</div><div class="mech-vprice">¥2200 365天</div></th><th class="mech-col"><div class="mech-vname">年度容器Pro</div><div class="mech-vprice">¥3000 365天</div></th></tr></thead>
+          <tbody>
+<tr><td class="mech-dim">关注指标</td><td class="mc">到面率、简历质量<br>（年龄不符 / 重合率高 / 爽约率高）</td><td class="mc">到面率、简历质量<br>（年龄不符 / 重合率高 / 爽约率高）</td></tr>
+<tr><td class="mech-dim">商业曝光</td><td class="mc">灵工渠道</td><td class="mc">灵工渠道</td></tr>
+<tr><td class="mech-dim">客户效果体验</td><td class="mc">线索量 · 简历质量</td><td class="mc">线索量 · 简历质量</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content" id="content-zhixiaole" style="display:none;">
+    <div class="cards-view" id="cards-zhixiaole">
+      <div class="plan-card">
+        
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">季度资源版</div></div>
+          <span class="plan-tag">短期代招</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">3600</span>
+            <span class="price-unit">/ 92天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥39 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">同时代招30个职位<br>短期代招</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">人力-职小乐</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">仅代招类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">92天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📌</span><span class="feature-label">劲爆资源点</span><span class="feature-value">30个 × 92天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 365天</span></li>
+<li class="feature-item"><span class="icon">✓</span><span class="feature-label">类目</span><span class="feature-value">不限类 ✅</span></li>
+<li class="feature-item"><span class="icon">📈</span><span class="feature-label">增值产品</span><span class="feature-value">代招公司 50个</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥3,580</span></div>
+            <div class="lp-formula">I = 1×200 + 30×66 + 1×100 + 1×1300 + 0×1780 + 0×1400 = <strong>3,580</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">UID套餐</span><span class="feature-value">92天 / 15个 / 30天 / uid</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-card">
+        
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">季度容器版</div></div>
+          <span class="plan-tag">多变代招</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">3600</span>
+            <span class="price-unit">/ 92天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥39 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">招聘需求多变<br>短期代招</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">人力-职小乐</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">仅代招类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">92天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📦</span><span class="feature-label">劲爆容器</span><span class="feature-value">5个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 365天</span></li>
+<li class="feature-item"><span class="icon warn">⚠</span><span class="feature-label">类目</span><span class="feature-value" style="color:var(--warn);">仅可发布：普工技工、生产制造、司机物流、安保消防</span></li>
+<li class="feature-item"><span class="icon">📈</span><span class="feature-label">增值产品</span><span class="feature-value">代招公司 50个</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥3,540</span></div>
+            <div class="lp-formula">I = 1×200 + 5×388 + 1×100 + 1×1300 + 0×1780 + 0×1400 = <strong>3,540</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">批量采购</span><span class="feature-value">100+个可享折扣 3600 → 1800</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-card recommended">
+        <span class="rec-pill">推荐</span>
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">年度资源版</div></div>
+          <span class="plan-tag">高性价比 ⭐</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">1800</span>
+            <span class="price-unit">+ 500招聘币 / 年</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥6 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">岗位单一<br>长期稳定代招</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">年度锁定</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">仅代招类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">365天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📌</span><span class="feature-label">劲爆资源点</span><span class="feature-value">8个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 365天</span></li>
+<li class="feature-item"><span class="icon">✓</span><span class="feature-label">类目</span><span class="feature-value">不限类 ✅</span></li>
+<li class="feature-item"><span class="icon">📈</span><span class="feature-label">增值产品</span><span class="feature-value">500招聘币现金</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥1,800</span></div>
+            <div class="lp-formula">I = 1×500 + 8×125 + 1×300 + 0×2400 + 0×1780 + 0×1400 = <strong>1,800</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">UID套餐</span><span class="feature-value">92天 / 15个 / 30天 / uid</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan-card">
+        
+        <div class="card-header">
+          <div class="name-row"><div class="plan-name">年度容器版</div></div>
+          <span class="plan-tag">多变代招</span>
+          <div class="price-row">
+            <span class="price-currency">¥</span><span class="price-value">5400</span>
+            <span class="price-unit">/ 365天</span>
+          </div>
+          <div class="price-subtitle">日均成本 ¥16 · 叠加上限 3个</div>
+          <button class="subscribe-btn">了解详情</button>
+        </div>
+        <div class="card-highlights">
+          <div class="hl-item"><div class="hl-label">核心卖点</div><div class="hl-value">招聘需求多变<br>长期代招</div></div>
+          <div class="hl-item"><div class="hl-label">客户需求</div><div class="hl-value">人力-职小乐</div></div>
+          <div class="hl-item"><div class="hl-label">典型客户</div><div class="hl-value">仅代招类</div></div>
+        </div>
+        <div class="card-body">
+          <ul class="feature-list">
+            <li class="section-title">核心信息</li>
+            <li class="feature-item"><span class="icon">✓</span><span class="feature-label">时长</span><span class="feature-value">365天</span></li>
+            <li class="section-title">权益详情</li>
+<li class="feature-item"><span class="icon">📦</span><span class="feature-label">劲爆容器</span><span class="feature-value">5个 × 365天</span></li>
+<li class="feature-item"><span class="icon">💬</span><span class="feature-label">主动开聊</span><span class="feature-value">100人/日 × 365天</span></li>
+<li class="feature-item"><span class="icon warn">⚠</span><span class="feature-label">类目</span><span class="feature-value" style="color:var(--warn);">仅可发布：普工技工、生产制造、司机物流、安保消防</span></li>
+<li class="feature-item"><span class="icon">📈</span><span class="feature-label">增值产品</span><span class="feature-value">代招公司 50个</span></li>
+          </ul>
+          <div class="listprice">
+            <div class="listprice-head"><span class="lp-label">刊例价（权益折算）</span><span class="lp-result">¥5,400</span></div>
+            <div class="lp-formula">I = 1×500 + 5×440 + 1×300 + 1×2400 + 0×1780 + 0×1400 = <strong>5,400</strong></div>
+          </div>
+          <ul class="feature-list gift-list">
+            <li class="section-title">赠送权益</li>
+            <li class="feature-item"><span class="icon gift">🎁</span><span class="feature-label">批量采购</span><span class="feature-value">100+个可享折扣 5400 → 3600</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="table-view" id="table-zhixiaole">
+      <table class="compare-table">
+        <thead><tr><th>对比项</th><th class="plan-col">季度资源版<br><small>¥3600</small></th><th class="plan-col">季度容器版<br><small>¥3600</small></th><th class="plan-col">年度资源版<br><small>¥1800 ⭐</small></th><th class="plan-col">年度容器版<br><small>¥5400</small></th></tr></thead>
+        <tbody><tr><td>时长</td><td><span class="table-badge badge-blue">92天</span></td><td><span class="table-badge badge-blue">92天</span></td><td><span class="table-badge badge-green">365天</span></td><td><span class="table-badge badge-green">365天</span></td></tr><tr><td>日均成本</td><td>¥39</td><td>¥39</td><td><strong style="color:var(--ok)">¥6</strong></td><td>¥16</td></tr><tr><td>核心卖点</td><td>同时代招30个职位<br>短期代招</td><td>招聘需求多变<br>短期代招</td><td>岗位单一<br>长期稳定代招</td><td>招聘需求多变<br>长期代招</td></tr><tr><td>客户需求</td><td>人力-职小乐</td><td>人力-职小乐</td><td>年度锁定</td><td>人力-职小乐</td></tr><tr><td>典型客户</td><td>仅代招类</td><td>仅代招类</td><td>仅代招类</td><td>仅代招类</td></tr><tr class="grp"><td colspan="5">▎ 权益详情</td></tr><tr><td>劲爆资源</td><td>📌 30个 × 92天</td><td>📦 5个 × 365天</td><td>📌 8个 × 365天</td><td>📦 5个 × 365天</td></tr><tr><td>主动开聊</td><td>100人/日 × 365天</td><td>100人/日 × 365天</td><td>100人/日 × 365天</td><td>100人/日 × 365天</td></tr><tr><td>类目</td><td><span class="table-badge badge-green">不限类</span></td><td><span class="table-badge badge-orange">单独/限类</span></td><td><span class="table-badge badge-green">不限类</span></td><td><span class="table-badge badge-orange">单独/限类</span></td></tr><tr><td>增值产品</td><td>代招公司 50个</td><td>代招公司 50个</td><td>500招聘币现金</td><td>代招公司 50个</td></tr><tr><td>刊例价</td><td>¥3,580</td><td>¥3,540</td><td>¥1,800</td><td>¥5,400</td></tr><tr><td>叠加上限</td><td>3个</td><td>3个</td><td>3个</td><td>3个</td></tr><tr><td>赠送权益</td><td>92天 / 15个 / 30天 / uid</td><td>100+个可享折扣 3600 → 1800</td><td>92天 / 15个 / 30天 / uid</td><td>100+个可享折扣 5400 → 3600</td></tr></tbody>
+      </table>
+    </div>
+    <div class="mech-board">
+      <div class="mech-board-head">
+        <div>
+          <div class="mech-eyebrow">效果机制</div>
+          <h3 class="mech-title">哪个版本更适合你的客户</h3>
+        </div>
+        <p class="mech-note">* 效果机制为影响各版本流量与转化的关键因子，供销售沟通与客户预期管理参考。</p>
+      </div>
+      <div class="mech-scroll">
+        <table class="mech-table">
+          <thead><tr><th class="mech-corner">效果机制</th><th class="mech-col"><div class="mech-vname">季度资源版</div><div class="mech-vprice">¥3600 92天</div></th><th class="mech-col"><div class="mech-vname">季度容器版</div><div class="mech-vprice">¥3600 92天</div></th><th class="mech-col"><div class="mech-vname">年度资源版 ⭐</div><div class="mech-vprice">¥1800 +500招聘币 年</div></th><th class="mech-col"><div class="mech-vname">年度容器版</div><div class="mech-vprice">¥5400 365天</div></th></tr></thead>
+          <tbody>
+<tr><td class="mech-dim">关注指标</td><td class="mc">线索量、聊、成本</td><td class="mc">线索量、聊、成本</td><td class="mc">线索量、聊、成本</td><td class="mc">线索量、聊、成本</td></tr>
+<tr><td class="mech-dim">客户效果体验</td><td class="mc">线索量 · 聊 · 成本</td><td class="mc">线索量 · 聊 · 成本</td><td class="mc">线索量 · 聊 · 成本</td><td class="mc">线索量 · 聊 · 成本</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">数据来源：伯小乐职小乐效果预期调研 · 刊例价为权益折算口径 · 仅供参考，具体以实际签约为准</div>
+
+<script>
+const HERO = {"bxl": {"eyebrow": "伯小乐 · 营销 + 直招", "headline": "招聘提效，由此启程", "subtitle": "资源型与容器型双轨权益，覆盖淡旺季、多城多岗与效果加持，帮客户选对版本、用足额度。", "accent": "#2563eb", "accentSoft": "#eef3ff"}, "ganji": {"eyebrow": "赶集直招 · 直招专属", "headline": "直招专属，效果直达", "subtitle": "双倍主动开聊与灵工曝光，聚焦到面率与简历质量，套餐化打包交付。", "accent": "#0d9488", "accentSoft": "#e9f7f4"}, "zhixiaole": {"eyebrow": "职小乐 · 人力代招", "headline": "代招无忧，长短皆宜", "subtitle": "资源版与容器版灵活组合，线索、聊、成本一目了然，规模采购更省。", "accent": "#7c3aed", "accentSoft": "#f3eefe"}};
+let isCardView = true;
+
+function applyHero(tab) {
+  const h = HERO[tab];
+  document.body.dataset.tab = tab;
+  document.documentElement.style.setProperty('--tab-accent', h.accent);
+  document.documentElement.style.setProperty('--tab-accent-soft', h.accentSoft);
+  const hero = document.getElementById('hero');
+  hero.style.opacity = 0;
+  setTimeout(() => {
+    document.getElementById('heroEyebrowText').textContent = h.eyebrow;
+    document.getElementById('heroHeadline').textContent = h.headline;
+    document.getElementById('heroSubtitle').textContent = h.subtitle;
+    hero.style.opacity = 1;
+  }, 160);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  ['bxl','ganji','zhixiaole'].forEach(t => {
+    const el = document.getElementById('content-' + t);
+    if (el) el.style.display = (t === tab) ? '' : 'none';
+  });
+  applyHero(tab);
+}
+
+function toggleView() {
+  isCardView = !isCardView;
+  document.getElementById('viewToggle').classList.toggle('on', isCardView);
+  document.getElementById('viewLabel').textContent = isCardView ? '卡片视图' : '表格对比';
+  ['bxl','ganji','zhixiaole'].forEach(t => {
+    const c = document.getElementById('cards-' + t);
+    const tb = document.getElementById('table-' + t);
+    if (c && tb) {
+      c.classList.toggle('hide', !isCardView);
+      tb.classList.toggle('show', !isCardView);
+    }
+  });
+}
+
+document.getElementById('hero').style.transition = 'opacity .25s ease';
+</script>
+</body>
+</html>
