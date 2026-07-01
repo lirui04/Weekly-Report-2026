@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>合肥58招聘 · 企业市场分析报告 V1.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --ink:#15233B; --ink2:#34435E; --gold:#C8902B; --gold-d:#A9761B; --goldsoft:#F4E7C8;
+  --teal:#1F7A6D; --crimson:#B4452F; --paper:#FAF7F0; --card:#FFFFFF;
+  --line:#E7DFce; --muted:#8C836F; --ink-grad:linear-gradient(135deg,#15233B 0%,#1E3350 60%,#27405F 100%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'PingFang SC','Microsoft YaHei','Hiragino Sans GB',sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.75; font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-family:'Space Grotesk',var(--ink),sans-serif; font-feature-settings:"tnum";}
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(21,35,59,.96);backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(200,144,43,.35)}
+nav .inner{max-width:1140px;margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:6px;
+  height:52px;overflow-x:auto;scrollbar-width:none}
+nav .inner::-webkit-scrollbar{display:none}
+nav .brand{font-family:'Space Grotesk';font-weight:700;color:#fff;font-size:14px;letter-spacing:.5px;
+  white-space:nowrap;margin-right:14px}
+nav .brand b{color:var(--gold)}
+nav a{color:#C7CEDA;text-decoration:none;font-size:12.5px;padding:5px 9px;border-radius:6px;white-space:nowrap;transition:.2s}
+nav a:hover{color:#fff;background:rgba(255,255,255,.08)}
+nav a .n{font-family:'Space Grotesk';color:var(--gold);font-weight:600;margin-right:4px}
+/* ---------- cover ---------- */
+.cover{background:var(--ink-grad);color:#fff;padding:74px 22px 64px}
+.cover .wrap{max-width:1140px;margin:0 auto}
+.eyebrow{font-family:'Space Grotesk';letter-spacing:3px;font-size:12px;color:var(--gold);
+  text-transform:uppercase;font-weight:600}
+.cover h1{font-size:42px;line-height:1.2;font-weight:700;margin:14px 0 10px;letter-spacing:-.5px}
+.cover h1 span{color:var(--gold)}
+.cover .sub{color:#B9C2D2;font-size:16px;max-width:680px}
+.cover .meta{margin-top:8px;color:#8290A8;font-size:13px;font-family:'Space Grotesk'}
+.statstrip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:46px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden}
+.statstrip .s{background:rgba(255,255,255,.03);padding:22px 20px}
+.statstrip .v{font-family:'Space Grotesk';font-size:32px;font-weight:700;color:#fff;line-height:1}
+.statstrip .v small{font-size:16px;color:var(--gold);font-weight:600}
+.statstrip .l{font-size:12.5px;color:#9AA6BC;margin-top:8px}
+/* ---------- layout ---------- */
+main{max-width:1140px;margin:0 auto;padding:0 22px}
+section{padding:62px 0;border-bottom:1px solid var(--line)}
+.modhead{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+.modnum{font-family:'Space Grotesk';font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  padding:3px 9px;border-radius:5px;letter-spacing:1px}
+.modhead h2{font-size:27px;font-weight:700;letter-spacing:-.3px}
+.lede{color:var(--ink2);font-size:16px;max-width:840px;margin:6px 0 26px}
+/* takeaway callout */
+.take{border-left:4px solid var(--gold);background:linear-gradient(90deg,var(--goldsoft) 0%,rgba(244,231,200,.18) 100%);
+  padding:16px 20px;border-radius:0 10px 10px 0;margin:24px 0;font-size:15px}
+.take b{color:var(--gold-d)}
+.take.risk{border-left-color:var(--crimson);background:linear-gradient(90deg,#F6E2DC 0%,rgba(246,226,220,.15) 100%)}
+.take.risk b{color:var(--crimson)}
+.take.win{border-left-color:var(--teal);background:linear-gradient(90deg,#D9ECE7 0%,rgba(217,236,231,.15) 100%)}
+.take.win b{color:var(--teal)}
+/* cards / charts */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+  box-shadow:0 1px 2px rgba(21,35,59,.04)}
+.chart-wrap{position:relative;height:360px}
+.chart-wrap.tall{height:440px}
+.chart-wrap.sm{height:300px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cap{font-size:12.5px;color:var(--muted);margin-top:12px;text-align:center}
+.h4{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--gold);display:inline-block}
+/* mini stat row */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 18px}
+.kpi .v{font-family:'Space Grotesk';font-size:26px;font-weight:700;color:var(--ink)}
+.kpi .v.gold{color:var(--gold-d)} .kpi .v.red{color:var(--crimson)} .kpi .v.teal{color:var(--teal)}
+.kpi .l{font-size:12.5px;color:var(--muted);margin-top:5px}
+/* compare table */
+table.cmp{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+table.cmp th,table.cmp td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+table.cmp th{font-size:12.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+table.cmp td.n{font-family:'Space Grotesk';font-weight:600;text-align:right}
+table.cmp tr.hl td{background:var(--goldsoft)}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;font-family:'Space Grotesk'}
+.tag.hf{background:var(--ink);color:#fff} .tag.cq{background:#E7DFce;color:var(--ink2)}
+/* deathline signature */
+.deathline{display:grid;grid-template-columns:repeat(3,1fr);gap:0;height:300px;margin:10px 0 56px;
+  border-bottom:2px solid var(--ink);padding:0 4%}
+.dl{position:relative;text-align:center;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.dl .bar{margin:0 18%;border-radius:7px 7px 0 0;transition:height 1.2s cubic-bezier(.2,.7,.2,1)}
+.dl .pct{font-family:'Space Grotesk';font-weight:700;font-size:30px;margin-bottom:8px}
+.dl .lab{position:absolute;top:100%;left:0;right:0;font-size:13px;color:var(--ink2);margin-top:10px;font-weight:600}
+.dl .cnt{position:absolute;top:100%;left:0;right:0;font-size:11.5px;color:var(--muted);font-family:'Space Grotesk';margin-top:30px}
+.jump{font-family:'Space Grotesk';font-weight:700;color:var(--gold-d);font-size:13px}
+/* funnel signature */
+.wfunnel{margin-top:8px}
+.wf{display:flex;align-items:center;gap:14px;margin:7px 0}
+.wf .barwrap{flex:1;background:#F0EADC;border-radius:7px;overflow:hidden;height:38px;position:relative}
+.wf .bar{height:100%;display:flex;align-items:center;padding-left:14px;color:#fff;font-family:'Space Grotesk';
+  font-weight:600;font-size:14px;border-radius:7px;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+.wf .lab{width:128px;font-size:13px;color:var(--ink2);text-align:right}
+.wf .conv{width:74px;font-family:'Space Grotesk';font-size:12.5px;color:var(--muted);text-align:left}
+/* attack list */
+.alist{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+.acol{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 20px;border-top:4px solid var(--gold)}
+.acol.p2{border-top-color:var(--ink2)} .acol.p3{border-top-color:var(--muted)}
+.acol .pn{font-family:'Space Grotesk';font-weight:700;font-size:13px;color:var(--gold-d);letter-spacing:.5px}
+.acol.p2 .pn{color:var(--ink2)} .acol.p3 .pn{color:var(--muted)}
+.acol .big{font-family:'Space Grotesk';font-size:30px;font-weight:700;margin:4px 0}
+.acol .desc{font-size:13px;color:var(--ink2);margin-bottom:10px}
+.acol .ex{font-size:12.5px;color:var(--muted);line-height:1.7}
+.acol .ex b{color:var(--ink)}
+/* action plan */
+.plan{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:10px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:22px 24px;position:relative}
+.pcard .pi{font-family:'Space Grotesk';font-size:13px;font-weight:700;color:var(--gold);letter-spacing:1px}
+.pcard h3{font-size:18px;margin:6px 0 8px}
+.pcard p{font-size:14px;color:var(--ink2)}
+.pcard .metric{font-family:'Space Grotesk';font-weight:600;color:var(--teal)}
+
+
+/* ---- 执行摘要 ---- */
+#exec{padding:54px 0 60px;border-bottom:1px solid var(--line)}
+.exhead{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.exhead .tag-exec{font-family:'Space Grotesk';font-size:12px;font-weight:700;letter-spacing:2px;color:#fff;
+  background:var(--gold);padding:4px 12px;border-radius:5px}
+.exhead h2{font-size:26px;font-weight:700}
+.ex-sub{color:var(--ink2);font-size:15px;margin:4px 0 24px}
+.ex-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px}
+.ex-find{display:flex;flex-direction:column;gap:12px}
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 18px;
+  display:flex;gap:14px;align-items:flex-start;border-left:4px solid var(--ink)}
+.fcard.gold{border-left-color:var(--gold)} .fcard.red{border-left-color:var(--crimson)} .fcard.teal{border-left-color:var(--teal)}
+.fcard .fn{font-family:'Space Grotesk';font-weight:700;font-size:13px;color:#fff;background:var(--ink2);
+  min-width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.fcard.gold .fn{background:var(--gold-d)} .fcard.red .fn{background:var(--crimson)} .fcard.teal .fn{background:var(--teal)}
+.fcard .ft{font-size:14px;line-height:1.6}
+.fcard .ft b{color:var(--ink)} .fcard .ft .em{font-family:'Space Grotesk';font-weight:700}
+.ex-side{background:var(--ink-grad);border-radius:14px;padding:22px 24px;color:#fff}
+.ex-side h3{font-size:14px;color:var(--gold);letter-spacing:1px;margin-bottom:14px;font-family:'Space Grotesk';text-transform:uppercase}
+.ex-act{display:flex;flex-direction:column;gap:13px}
+.ex-act .a{display:flex;gap:12px;align-items:baseline;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.12)}
+.ex-act .a:last-child{border-bottom:none;padding-bottom:0}
+.ex-act .av{font-family:'Space Grotesk';font-weight:700;font-size:22px;color:#fff;min-width:78px}
+.ex-act .av small{font-size:12px;color:var(--gold);display:block;font-weight:400}
+.ex-act .al{font-size:13px;color:#C7CEDA;line-height:1.5}
+.ex-act .al b{color:#fff}
+@media(max-width:860px){.ex-grid{grid-template-columns:1fr}}
+
+/* ---- 作战名单 ---- */
+.track{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;margin:20px 0;overflow:hidden}
+.track .thead{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:18px 24px;background:var(--ink);color:#fff;flex-wrap:wrap}
+.track .thead .tt{font-size:18px;font-weight:700}
+.track .thead .tt .tn{font-family:'Space Grotesk';color:var(--gold);margin-right:8px}
+.track .thead .risk-amt{font-family:'Space Grotesk';font-weight:700;font-size:20px;color:var(--gold)}
+.track .thead .risk-amt small{font-size:12px;color:#9AA6BC;font-weight:400}
+.play{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--line)}
+.play .pi{padding:14px 18px;border-right:1px solid var(--line)}
+.play .pi:last-child{border-right:none}
+.play .pi .k{font-size:11px;color:var(--gold-d);font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-family:'Space Grotesk'}
+.play .pi .v{font-size:13px;color:var(--ink2);margin-top:5px;line-height:1.6}
+.tbl{padding:8px 18px 18px}
+.dtable{width:100%;border-collapse:collapse;font-size:13px}
+.dtable th{font-size:11.5px;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:2px solid var(--line);
+  text-transform:uppercase;letter-spacing:.5px;font-weight:600;position:sticky;top:52px;background:var(--card)}
+.dtable td{padding:7px 10px;border-bottom:1px solid #F0EADC}
+.dtable td.n{font-family:'Space Grotesk';text-align:right;white-space:nowrap}
+.dtable tr.hl td{background:var(--goldsoft)}
+.dtable tr:hover td{background:#FBF7EE}
+.scrollwrap{max-height:320px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.minibars{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.mb{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.mb .mlab{width:64px;color:var(--ink2)} .mb .mtk{flex:1;background:#F0EADC;border-radius:4px;height:14px;overflow:hidden}
+.mb .mfill{height:100%;background:var(--gold);border-radius:4px} .mb .mv{width:38px;font-family:'Space Grotesk';color:var(--muted);text-align:right}
+.note-x{font-size:12.5px;color:var(--muted);margin-top:10px}
+
+footer{background:var(--ink);color:#9AA6BC;padding:40px 22px;text-align:center;font-size:13px}
+footer b{color:var(--gold)}
+/* reveal */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}
+  .dl .bar,.wf .bar{transition:none}}
+@media(max-width:860px){
+  .cover h1{font-size:31px}.statstrip{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}
+  .alist{grid-template-columns:1fr}.plan{grid-template-columns:1fr}
+  .modhead h2{font-size:22px}.deathline{padding:0}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="inner">
+  <span class="brand">58<b>·</b>合肥企业市场分析</span>
+  <a href="#exec"><span class="n">★</span>执行摘要</a>
+  <a href="#m1"><span class="n">01</span>覆盖漏斗</a>
+  <a href="#m2"><span class="n">02</span>成交结构</a>
+  <a href="#m3"><span class="n">03</span>地区</a>
+  <a href="#m4"><span class="n">04</span>规模</a>
+  <a href="#m5"><span class="n">05</span>行业</a>
+  <a href="#m6"><span class="n">06</span>画像</a>
+  <a href="#m7"><span class="n">07</span>组织</a>
+  <a href="#m8"><span class="n">08</span>发帖生死线</a>
+  <a href="#m9"><span class="n">09</span>续费风险</a>
+  <a href="#m10"><span class="n">10</span>知名企业</a>
+  <a href="#plan"><span class="n">▸</span>行动计划</a>
+</div></nav>
+
+<header class="cover">
+  <div class="wrap">
+    <div class="eyebrow">58同城 · 城市企业招聘市场 · 内部分析</div>
+    <h1>合肥企业招聘市场<br><span>结构洞察与增长攻坚</span> 报告</h1>
+    <p class="sub">基于 2026-06-28 全量企业发帖数据 + 合作客户与发帖明细，复刻重庆八模块框架，识别合肥市场的独特结构、转化断点与可做量。</p>
+    <p class="meta">VERSION 1.3 · 数据口径 2026-06-28 · 发帖窗口 金三银四(04-01~06-24)</p>
+    <div class="statstrip num">
+      <div class="s"><div class="v">2.11<small>M</small></div><div class="l">在营合肥企业（修复口径）</div></div>
+      <div class="s"><div class="v">0.144<small>%</small></div><div class="l">整体付费渗透率</div></div>
+      <div class="s"><div class="v">+46.7<small>万</small></div><div class="l">数据治理找回的真合肥企业</div></div>
+      <div class="s"><div class="v">8 / 1861</div><div class="l">知名企业付费 / 名单总数</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ===== 执行摘要 ===== -->
+<section id="exec" class="reveal">
+  <div class="exhead"><span class="tag-exec">EXECUTIVE SUMMARY</span><h2>执行摘要</h2></div>
+  <p class="ex-sub">合肥招聘市场：大盘极浅、结构独特、增长点清晰。一页看完核心结论与下一步动作。</p>
+  <div class="ex-grid">
+    <div class="ex-find">
+      <div class="fcard red"><div class="fn">1</div><div class="ft"><b>渗透极低，断点在"认证→成交"。</b> 211 万企业仅 <span class="em">3,037</span> 家付费（渗透 <span class="em">0.144%</span>）；<span class="em">14.4 万</span>家已认证却零商业关系——瓶颈不在付费意愿，在商机承接。</div></div>
+      <div class="fcard gold"><div class="fn">2</div><div class="ft"><b>结构独特：框架（派遣）双高。</b> 框架占付费会员 <span class="em">34.7%</span>（重庆仅 1.8%），HR 框架户均发帖 431、是普通框架 4 倍——合肥付费盘 = 人力派遣主导。</div></div>
+      <div class="fcard teal"><div class="fn">3</div><div class="ft"><b>发帖量=账号生死线。</b> 零发帖付费率 <span class="em">0.08%</span>，发到 21+ 帖则 <span class="em">93%</span> 必付费（1164 倍跨度）。发帖活跃度是最强转化先行指标。</div></div>
+      <div class="fcard"><div class="fn">4</div><div class="ft"><b>靶心明确。</b> 地区看经开·包河双核；规模看 100–500 万甜点段（lift 2.74×）；行业看人力压舱石（撑 25.8% 付费盘）+ 制造大池低渗透洼地。</div></div>
+      <div class="fcard red"><div class="fn">5</div><div class="ft"><b>链主几乎是纯白地。</b> 1,861 家知名企业/链主仅 <span class="em">8</span> 家付费（渗透 0.4%）；制造三主链认证后商业关系近乎归零——京东方、长鑫、晶合、比亚迪们都没被签下。</div></div>
+    </div>
+    <div class="ex-side">
+      <h3>下一步 · 六条作战名单</h3>
+      <div class="ex-act">
+        <div class="a"><div class="av">14<small>家 新开</small></div><div class="al"><b>⑥ 未合作高潜</b>：发帖&gt;10却零成交，稀有高意向，直客立刻打</div></div>
+        <div class="a"><div class="av">54<small>家 升级</small></div><div class="al"><b>⑤ 套餐拉伸</b>：在用高发帖，接近配额→转年度/框架</div></div>
+        <div class="a"><div class="av">23<small>家 直客</small></div><div class="al"><b>④ 链主 P1</b>：制造三主链认证未商业化，从 0 到 1</div></div>
+        <div class="a"><div class="av">¥277<small>万 在险</small></div><div class="al"><b>②③ 续费防御</b>：套餐静默流失 + 框架到期，保存量</div></div>
+        <div class="a"><div class="av">2.2<small>万户 激活</small></div><div class="al"><b>① 低频转化</b>：已发帖未成交广基池，推首单</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 01 漏斗 ===== -->
+<section id="m1" class="reveal">
+  <div class="modhead"><span class="modnum">01</span><h2>覆盖漏斗：渗透极低，认证→成交是最大缺口</h2></div>
+  <p class="lede">口径已先做治理修复（解析功能区地址、找回 <b>46.7 万</b>家被误判的真合肥企业，合肥口径 2,113,818）。从 211 万企业到 3,037 家付费会员，整体渗透 0.144%；漏斗前三层健康，<b>断崖出现在"认证→商业关系"</b>。</p>
+  <div class="card"><div class="h4">覆盖漏斗（企业数 / 层间转化）</div>
+    <div class="wfunnel num" id="funnelM1"></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="v">21.8<small style="font-size:15px">%</small></div><div class="l">账号开通率（重庆 8.8%，高 2.5 倍）</div></div>
+    <div class="kpi"><div class="v red">2.45%</div><div class="l">认证→商业关系（最大流失断点）</div></div>
+    <div class="kpi"><div class="v teal">84.3%</div><div class="l">有商业关系→付费（重庆 72.5%）</div></div>
+    <div class="kpi"><div class="v gold">14.4万</div><div class="l">已认证未商业化（最高优先可做量）</div></div>
+  </div>
+  <div class="take"><b>瓶颈不在付费意愿，在商机承接。</b> 14.7 万家企业已认证认领，却只有 3,603 家建立任何商业关系（2.45%）——<b>143,557 家"裸认证"企业零商业化</b>。一旦进入商业关系，84% 会付费。把认证企业推进到"第一次商业接触"，是整盘转化的总开关。</div>
+</section>
+
+<!-- ===== 02 成交结构 ===== -->
+<section id="m2" class="reveal">
+  <div class="modhead"><span class="modnum">02</span><h2>成交结构：年度 + 框架"双高"，派遣盘指纹</h2></div>
+  <p class="lede">合肥付费会员的成交档分布，与重庆"年度套餐独大"截然不同——<b>框架占付费会员 34.7%，重庆仅 1.8%</b>，相差约 19 倍。</p>
+  <div class="grid2">
+    <div class="card"><div class="h4">付费会员 · 成交档结构（3,037 家）</div>
+      <div class="chart-wrap sm"><canvas id="cTier"></canvas></div>
+    </div>
+    <div class="card"><div class="h4">框架占比 · 合肥 vs 重庆</div>
+      <table class="cmp">
+        <tr><th>成交档</th><th style="text-align:right">合肥占付费会员</th><th style="text-align:right">重庆</th></tr>
+        <tr><td>会员-年度套餐</td><td class="n">43.8%</td><td class="n">75.2%</td></tr>
+        <tr class="hl"><td>会员-框架 <span class="tag hf">HF</span></td><td class="n">34.7%</td><td class="n">1.8%</td></tr>
+        <tr><td>会员-月度套餐</td><td class="n">14.9%</td><td class="n">19.1%</td></tr>
+        <tr><td>会员-定制</td><td class="n">4.4%</td><td class="n">1.2%</td></tr>
+        <tr><td>会员-季度套餐</td><td class="n">2.2%</td><td class="n">2.7%</td></tr>
+      </table>
+      <p class="cap">线上自助 566 家单列（计入"有商业关系"，不计付费会员）</p>
+    </div>
+  </div>
+  <div class="take"><b>合肥是"年度 + 框架"双高结构（合计 78.5%）。</b> 框架按家数已近付费盘三分之一，叠加框架客单价远高于套餐，营收侧集中度更高。这与"框架 ≈ 人力派遣主导"的底色一致——合肥付费盘不只是收入集中在框架，连客户家数都结构性集中在框架。</div>
+</section>
+
+<!-- ===== 03 地区 ===== -->
+<section id="m3" class="reveal">
+  <div class="modhead"><span class="modnum">03</span><h2>地区：经开 · 包河"双核"，外围县域大池低渗透</h2></div>
+  <p class="lede">付费率与产业集聚高度相关。<b>经开区付费率 0.27% 全市第一（约 2 倍均值）</b>，包河付费数 518 家全市最多，两者构成付费双核；庐江、肥西是典型"大池低渗透"洼地。</p>
+  <div class="card"><div class="h4">各区县 · 企业数（柱）× 付费率（线）</div>
+    <div class="chart-wrap"><canvas id="cGeo"></canvas></div>
+  </div>
+  <div class="take"><b>双核守成 + 洼地主攻 + 空白启动。</b> 经开（0.27%）、包河（0.18%）付费率领先，重点在框架续费与防流失；肥西（12.5万家 / 0.06%）、长丰（14万家 / 开通仅 12%）量大渗透低，可做空间最大；庐江（10万家仅 4 家付费、开通 5.8%）近乎平台空白区，先解决账号触达。</div>
+</section>
+
+<!-- ===== 04 规模 ===== -->
+<section id="m4" class="reveal">
+  <div class="modhead"><span class="modnum">04</span><h2>规模：100–500 万是"甜点段"，个体严重欠配</h2></div>
+  <p class="lede">付费率随注册资本上升但非线性，<b>100–500 万档付费率 0.39% 且是非个体里体量最大的桶</b>，是套餐/定制的主战场；个体工商户占企业总数 53%，仅贡献 0.05% 付费率。</p>
+  <div class="card"><div class="h4">各规模档 · 企业数（柱）× 付费率（线）</div>
+    <div class="chart-wrap"><canvas id="cSize"></canvas></div>
+  </div>
+  <div class="take"><b>有效靶心 = 剔除个体后的 50万–5000万主力段，尖峰在 100–500 万。</b> ≥1亿付费率最高（0.49%）但量小（归入大客户专项）；个体（113 万家）用线上自助轻量承接或战略放弃，不投框架/套餐销售资源。非个体盘（98.6 万家）贡献 82% 的付费。</div>
+</section>
+
+<!-- ===== 05 行业 ===== -->
+<section id="m5" class="reveal">
+  <div class="modhead"><span class="modnum">05</span><h2>行业：人力派遣是压舱石，制造业是最大洼地</h2></div>
+  <p class="lede">气泡越靠右上越值得打（企业多 + 付费率高），气泡大小=付费家数。<b>人力一个行业撑起 25.8% 的付费盘</b>，付费率 3.56% 是全市均值的约 25 倍。</p>
+  <div class="card"><div class="h4">行业 · 企业数（对数）× 付费率 × 付费数（气泡）</div>
+    <div class="chart-wrap tall"><canvas id="cIndustry"></canvas></div>
+    <p class="cap">气泡面积 ∝ 付费家数；横轴对数刻度。仅标注关键垂类。</p>
+  </div>
+  <div class="grid2" style="margin-top:20px">
+    <div class="take win" style="margin:0"><b>① 人力压舱石 + ② 用工密集服务腰部盘。</b> 配送(0.79%)、货运(0.82%)、汽车租赁(0.71%)、休闲娱乐(0.47%)付费率均为均值 3–6 倍，是套餐/定制稳定盘。对接"做大二级分销商"轨道。</div>
+    <div class="take risk" style="margin:0"><b>③ 制造业 = 大池低渗透。</b> 8.5 万家、付费率仅 0.23%。合肥产业底色是制造（经开双核 + 链主），低渗透是直客没打透，对接"新能源/半导体配套链"轨道，与模块 10 链主白地同一条增长线。</div>
+  </div>
+</section>
+
+<!-- ===== 06 画像 lift ===== -->
+<section id="m6" class="reveal">
+  <div class="modhead"><span class="modnum">06</span><h2>付费客户画像：中大规模超配，个体严重欠配</h2></div>
+  <p class="lede">付费占比 ÷ 全量占比 = lift（&gt;1 超配 / &lt;1 欠配）。<b>100–500 万 lift 2.74×、≥1亿 lift 3.36×</b>，50万–5000万整段全部超配；个体 lift 仅 0.33×。</p>
+  <div class="card"><div class="h4">规模档 · 付费会员占比 vs 全量占比</div>
+    <div class="chart-wrap"><canvas id="cLift"></canvas></div>
+  </div>
+  <div class="take"><b>规模维度双证据指向 100–500 万。</b> M4 看付费率它次高（0.39%），M6 看 lift 它"既超配又量大"（占付费近 30%）——是套餐/定制最该密集投放的规模段。个体严重欠配（0.33×）再次印证：只用轻量产品承接，不铺销售。</div>
+</section>
+
+<!-- ===== 07 组织 ===== -->
+<section id="m7" class="reveal">
+  <div class="modhead"><span class="modnum">07</span><h2>组织属性：私营基本盘，涉外 / 分支是精准加分</h2></div>
+  <p class="lede">与重庆"总部决策、国有付费高"相反——<b>合肥分支机构付费率 0.40%（总部 1.6 倍）、涉外 0.28% 全市最高，国企仅 0.13% 不是杠杆</b>。</p>
+  <div class="grid2">
+    <div class="card"><div class="h4">决策层级 × 付费率</div>
+      <div class="chart-wrap sm"><canvas id="cDecision"></canvas></div></div>
+    <div class="card"><div class="h4">经济性质 × 付费率</div>
+      <div class="chart-wrap sm"><canvas id="cEcon"></canvas></div></div>
+  </div>
+  <div class="take"><b>私营（98.2% 企业、96% 付费）就是全部基本盘；涉外、分支机构（派遣网点）是"率高量小"的精准加分；国企在合肥不是付费杠杆。</b> 涉外多为大众安徽、联宝、大陆轮胎等外资制造，值得配外资制造大客户专项；分支机构"决策在总部"，签约/续费决策可能不在本地，打法要区分。</div>
+</section>
+
+<!-- ===== 08 发帖生死线 SIGNATURE ===== -->
+<section id="m8" class="reveal">
+  <div class="modhead"><span class="modnum">08</span><h2>发帖活跃度 = 账号生死线</h2></div>
+  <p class="lede">发帖量是最强的付费先行指标，没有之一。零发帖账号付费率 0.08%（基本是死号），一旦发帖跳到 10.4%，发到 21+ 帖则 <b>93% 必付费</b>——约 1164 倍跨度。</p>
+  <div class="card">
+    <div class="h4">付费率 × 发帖活跃度档（仅有账号企业）</div>
+    <div class="deathline num" id="deathline"></div>
+    <div style="display:flex;justify-content:space-around;margin-top:14px">
+      <span class="jump">零发帖 → 低频：约 130×</span>
+      <span class="jump">低频 → 活跃：约 9×</span>
+      <span class="jump">零发帖 → 活跃：约 1164×</span>
+    </div>
+  </div>
+  <div class="take"><b>把账号从"0 发帖"推到"有发帖"，就是转化总开关。</b> 95.2% 的账号零发帖（基本死号）；1–20 低频档有 <span class="num">21,935</span> 个账号已在真实使用平台、付费率 10.4% 但仍有大量未付费——这是确定性最高的转化池。零发帖的付费客户 = 流失高危。</div>
+</section>
+
+<!-- ===== 09 续费风险 ===== -->
+<section id="m9" class="reveal">
+  <div class="modhead"><span class="modnum">09</span><h2>续费风险：套餐"静默流失" vs 框架"到期流失"</h2></div>
+  <p class="lede">两类付费客户黏性截然不同，需要两套预警机制。<b>套餐有真实的"服务中却零发帖"风险群（269 户）；框架（尤其 HR 派遣）在用即在发，风险只在到期窗口。</b></p>
+  <div class="grid2">
+    <div class="card"><div class="h4">套餐 · 发帖档分布 与 服务中零发帖率</div>
+      <div class="chart-wrap sm"><canvas id="cPkg"></canvas></div>
+      <p class="cap">套餐 1,900 户：71% 落在 1–20 低频档；零发帖档服务中 269 户，零发帖率 100%</p>
+    </div>
+    <div class="card"><div class="h4">框架细分 · 户数 与 户均发帖</div>
+      <div class="chart-wrap sm"><canvas id="cFrame"></canvas></div>
+      <p class="cap">HR框架占 72%、户均发帖 431 帖（普通框架 4 倍）；服务中零发帖率全为 0</p>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:20px">
+    <div class="take risk" style="margin:0"><b>套餐 → 防静默流失。</b> 269 户"服务中 + 零发帖"=交了钱不用，立即预警挽留；1,146 户服务中低频要推使用、提发帖频次，否则到期大概率不续。</div>
+    <div class="take win" style="margin:0"><b>框架 → 防到期流失。</b> 在用客户黏性极高（服务中零发帖率 0），风险只在合同临到期窗口——挽留打在"到期前续约"，用发帖环比下滑做预警，而非盯"服务中零发帖"。</div>
+  </div>
+</section>
+
+<!-- ===== 10 知名企业 SIGNATURE ===== -->
+<section id="m10" class="reveal">
+  <div class="modhead"><span class="modnum">10</span><h2>知名企业：1,861 家链主，几乎是纯白地</h2></div>
+  <p class="lede">20 条战新产业链 × TOP100 权威名单，近 1,900 家知名企业/链主——<b>平台上只有 8 家付费、10 家有任何商业关系，渗透 0.4%</b>。链主不是"没触达"，是"没承接"。</p>
+  <div class="grid2">
+    <div class="card"><div class="h4">知名企业整体漏斗（1,861 家）</div>
+      <div class="wfunnel num" id="funnelM10"></div>
+    </div>
+    <div class="card"><div class="h4">制造三主链 · 认证 vs 商业关系</div>
+      <div class="chart-wrap sm"><canvas id="cFlagMfg"></canvas></div>
+      <p class="cap">集成电路 / 新型显示 / 新能源汽车：认证后近乎归零</p>
+    </div>
+  </div>
+  <div class="take"><b>断崖在"认证→商业关系"，从 203 直接掉到 10。</b> 三成链主在企业库、近两成开账号、一成做认证，漏斗前三层正常；但制造三主链商业关系合计仅 1 家。这正是 M5"制造大池低渗透"的同一条线、且更极端——链主招聘大概率走线下直签/猎头/校招，平台连商业触点都没建立。</div>
+
+  <div class="h4" style="margin:34px 0 14px">584 家可触达攻坚名单 · 三档优先级</div>
+  <div class="alist">
+    <div class="acol"><div class="pn">P1 · 直客首攻</div><div class="big num">193</div>
+      <div class="desc">认证未商业化（已有平台认知，差临门一脚）</div>
+      <div class="ex">制造主链 23 家置顶：<b>晶合集成、长鑫存储、京东方、维信诺、康宁、比亚迪、国轩高科、安徽合力</b>…</div></div>
+    <div class="acol p2"><div class="pn">P2 · 先促认领</div><div class="big num">160</div>
+      <div class="desc">有账号未认领（开了账号没认领主体）</div>
+      <div class="ex">先帮认领账号、绑定主体，再进 P1 转化流程。</div></div>
+    <div class="acol p3"><div class="pn">P3 · 覆盖空白</div><div class="big num">229</div>
+      <div class="desc">在库未开账号（纯销售覆盖空白）</div>
+      <div class="ex">按产业链分配地推，链主二级供应链配套企业可一并扫。</div></div>
+  </div>
+  <p class="cap" style="text-align:left;margin-top:14px">另有 1,269 家"未在库"（暂不触达）、8 家已付费（守）。完整名单见配套 Excel《合肥知名企业_攻坚名单》。</p>
+</section>
+
+<!-- ===== 作战名单 ===== -->
+<section id="plan" class="reveal" style="border-bottom:none">
+  <div class="modhead"><span class="modnum">▸</span><h2>增长攻坚 · 客户作战名单</h2></div>
+  <p class="lede">以<b>近30天发帖量</b>为潜力信号（发帖多=真实持续用工需求），分<b>进攻线（高潜挖掘）</b>与<b>防守线（续费保收）</b>。每条线含打法卡 + 客户明细，完整名单见配套 Excel《合肥增长攻坚_客户作战名单》。</p>
+
+  <div class="take win"><b>进攻线的逻辑直接来自"发帖生死线"。</b> 高发帖企业几乎都已成交（21+ 档 93% 付费），所以"高发帖却没合作"是稀有的高意向异常池——去重后仅 <span class="num">14</span> 家（⑥），是最该立刻直客的线索；而"套餐已买、还在高频发帖"的 <span class="num">54</span> 家（⑤）则是确定性最高的升级池。</p>
+
+  <h3 style="font-size:16px;color:var(--teal);margin:30px 0 8px;display:flex;align-items:center;gap:8px">
+    <span style="font-family:'Space Grotesk';background:var(--teal);color:#fff;padding:2px 10px;border-radius:5px;font-size:13px">进攻线</span> 高潜挖掘 · 增量 + 升级</h3>
+
+  <!-- ⑥ 框架新开 -->
+  <div class="track">
+    <div class="thead" style="background:#1F7A6D"><div class="tt"><span class="tn">06</span>未合作高潜 · 框架/直客新开</div>
+      <div class="risk-amt">14<small> 家 · 发帖&gt;10 却零成交</small></div></div>
+    <div class="play">
+      <div class="pi"><div class="k">目标</div><div class="v">近30天发帖 &gt;10、却无任何会员/套餐/框架的企业——强需求、未购买</div></div>
+      <div class="pi"><div class="k">抓手</div><div class="v">"你在平台发了 X 帖却没正式合作"，谈正式方案降本提效</div></div>
+      <div class="pi"><div class="k">动作</div><div class="v">规模分层：规上(≥500万)走框架/直客，中小走套餐电销；制造·人力优先</div></div>
+      <div class="pi"><div class="k">负责</div><div class="v">直客（大）+ 电销（中小）</div></div>
+    </div>
+    <div class="tbl">
+      <div class="h4" style="margin:14px 0 10px">全部 14 家（金色=规上高潜，按发帖降序）</div>
+      <div class="scrollwrap"><table class="dtable">
+        <thead><tr><th>企业名</th><th>区县</th><th>行业</th><th>规模</th><th>近30天发帖</th><th>认证</th></tr></thead>
+        <tbody><tr class=hl><td>安徽云职信息科技有限公司</td><td>瑶海区</td><td>人力</td><td>500-1000万</td><td class="n">70</td><td class="n">认证</td></tr>
+<tr class=hl><td>合肥华凌股份有限公司</td><td>经开区</td><td>制造业</td><td>5000万-1亿</td><td class="n">40</td><td class="n">认证</td></tr>
+<tr class=hl><td>合肥东吉企业管理有限公司</td><td>高新区</td><td>商业服务</td><td>100-500万</td><td class="n">34</td><td class="n">认证</td></tr>
+<tr class=hl><td>安徽禾祺商业运营管理有限公司</td><td>包河区</td><td>家政</td><td>100-500万</td><td class="n">21</td><td class="n">认证</td></tr>
+<tr><td>北京五八信息技术有限公司合肥分公司</td><td>蜀山区</td><td>其他</td><td>无注册资本(非个体)</td><td class="n">20</td><td class="n">认证</td></tr>
+<tr><td>合肥市来源丰汽车租赁有限公司</td><td>庐阳区</td><td>汽车租赁</td><td><10万</td><td class="n">20</td><td class="n">认证</td></tr>
+<tr><td>合肥市新弘基房地产经纪有限公司</td><td>肥西县</td><td>房地产业</td><td><10万</td><td class="n">19</td><td class="n">认证</td></tr>
+<tr><td>合肥来选车汽车服务有限公司</td><td>新站区</td><td>汽车租赁</td><td>100-500万</td><td class="n">16</td><td class="n">认证</td></tr>
+<tr class=hl><td>合肥华凌股份有限公司合肥分公司</td><td>合肥其他</td><td>制造业</td><td>无注册资本(非个体)</td><td class="n">16</td><td class="n">认证</td></tr>
+<tr><td>合肥音速电玩娱乐有限公司</td><td>瑶海区</td><td>其他</td><td><10万</td><td class="n">13</td><td class="n">—</td></tr>
+<tr><td>合肥上钛科技有限公司</td><td>新站区</td><td>其他</td><td>50-100万</td><td class="n">12</td><td class="n">认证</td></tr>
+<tr><td>合肥市庐阳区康颜美美容养生店（个体工商户）</td><td>庐阳区</td><td>美业</td><td>个体工商户(小规模)</td><td class="n">11</td><td class="n">认证</td></tr>
+<tr><td>合肥市包河区玉美美美容服务工作室</td><td>包河区</td><td>美业</td><td>个体工商户(小规模)</td><td class="n">11</td><td class="n">认证</td></tr>
+<tr><td>安徽峻家房地产营销策划有限公司</td><td>高新区</td><td>房地产业</td><td>10-50万</td><td class="n">11</td><td class="n">认证</td></tr></tbody></table></div>
+      <p class="note-x">92.9% 已认证（有平台认知）。安徽云职(人力·70帖)、合肥华凌(制造·40帖)、合肥东吉(34帖)为发帖最高的三家。</p>
+    </div>
+  </div>
+
+  <!-- ⑤ 套餐拉伸 -->
+  <div class="track">
+    <div class="thead" style="background:#1F7A6D"><div class="tt"><span class="tn">05</span>套餐拉伸 · 存量升级</div>
+      <div class="risk-amt">54<small> 家 · 在用合同 ¥83万</small></div></div>
+    <div class="play">
+      <div class="pi"><div class="k">目标</div><div class="v">已买套餐/定制、近30天发帖 &gt;10 的高活跃在用客户，51 家服务中</div></div>
+      <div class="pi"><div class="k">抓手</div><div class="v">发帖接近/超配额→用"已发 X 帖、单帖成本"算账，谈扩容 ROI</div></div>
+      <div class="pi"><div class="k">动作</div><div class="v">续费销售按发帖降序打；定制高发帖户优先转年度/框架，扩收+锁约</div></div>
+      <div class="pi"><div class="k">负责</div><div class="v">绑定续费销售</div></div>
+    </div>
+    <div class="tbl">
+      <div class="h4" style="margin:14px 0 10px">在用高发帖 TOP12（按近30天发帖）</div>
+      <div class="scrollwrap"><table class="dtable">
+        <thead><tr><th>企业名</th><th>区县</th><th>行业</th><th>成交</th><th>合同金额</th><th>服务</th><th>近30天发帖</th></tr></thead>
+        <tbody><tr><td>合肥信汇达物流有限公司</td><td>蜀山区</td><td>配送</td><td>定制</td><td class="n">¥30,000</td><td class="n">服务中</td><td class="n">249</td></tr>
+<tr><td>安徽伟诚人力资源有限公司</td><td>经开区</td><td>人力</td><td>定制</td><td class="n">¥40,000</td><td class="n">服务中</td><td class="n">156</td></tr>
+<tr><td>合肥弘创空间信息技术有限公司</td><td>蜀山区</td><td>人力</td><td>定制</td><td class="n">¥40,000</td><td class="n">服务中</td><td class="n">104</td></tr>
+<tr><td>安徽省申博人才市场管理有限公司</td><td>经开区</td><td>人力</td><td>定制</td><td class="n">¥40,000</td><td class="n">服务中</td><td class="n">91</td></tr>
+<tr><td>安徽省职乐人才市场管理有限公司</td><td>蜀山区</td><td>人力</td><td>定制</td><td class="n">¥40,000</td><td class="n">服务中</td><td class="n">84</td></tr>
+<tr><td>合肥玖州通达物流有限公司</td><td>蜀山区</td><td>配送</td><td>定制</td><td class="n">¥30,000</td><td class="n">服务中</td><td class="n">80</td></tr>
+<tr><td>安徽中祥保安服务有限公司</td><td>新站区</td><td>人力</td><td>定制</td><td class="n">¥40,000</td><td class="n">服务中</td><td class="n">74</td></tr>
+<tr><td>安徽茂泓科技有限公司</td><td>包河区</td><td>制造业</td><td>定制</td><td class="n">¥30,000</td><td class="n">服务中</td><td class="n">62</td></tr>
+<tr><td>安徽帮帮优聘信息科技有限公司</td><td>长丰县</td><td>人力</td><td>定制</td><td class="n">¥40,000</td><td class="n">服务中</td><td class="n">52</td></tr>
+<tr><td>安徽环泽网络科技有限公司肥西分公司</td><td>肥西县</td><td>配送</td><td>套餐</td><td class="n">¥17,800</td><td class="n">服务中</td><td class="n">43</td></tr>
+<tr><td>合肥鸿投科技服务有限公司</td><td>新站区</td><td>货运</td><td>套餐</td><td class="n">¥17,800</td><td class="n">服务中</td><td class="n">40</td></tr>
+<tr><td>安徽优佳才人力资源有限公司</td><td>瑶海区</td><td>人力</td><td>定制</td><td class="n">¥40,000</td><td class="n">服务中</td><td class="n">39</td></tr></tbody></table></div>
+      <p class="note-x">人力/货运/美业为主，定制客户发帖普遍更高（信汇达249、伟诚156、弘创104）——最该转年度/框架。完整 54 家见 Excel sheet⑤。</p>
+    </div>
+  </div>
+
+  <!-- ① 低频转化 -->
+  <div class="track">
+    <div class="thead" style="background:#34435E"><div class="tt"><span class="tn">01</span>低频转化 · 广基激活</div>
+      <div class="risk-amt">21,935<small> 户 · 发帖1–20 未成交</small></div></div>
+    <div class="play">
+      <div class="pi"><div class="k">目标</div><div class="v">已在发帖(1–20)但未成交，60.6% 已认证——离首单最近的广基池</div></div>
+      <div class="pi"><div class="k">抓手</div><div class="v">"发得多但没买"切入，谈职位曝光/效果；推首单转化券</div></div>
+      <div class="pi"><div class="k">动作</div><div class="v">按发帖量降序电销/企微触达，绑定使用习惯，向⑥/⑤升级</div></div>
+      <div class="pi"><div class="k">负责</div><div class="v">电销 + 中小直销，按区县/行业分配</div></div>
+    </div>
+    <div class="tbl">
+      <div class="h4" style="margin:14px 0 10px">集中在主城区 × 生活服务业（前 2000 户分布）</div>
+      <div class="grid2">
+        <div><div class="minibars">
+          <div class="mb"><span class="mlab">餐饮</span><span class="mtk"><span class="mfill" style="width:100%"></span></span><span class="mv">443</span></div>
+          <div class="mb"><span class="mlab">批发零售</span><span class="mtk"><span class="mfill" style="width:53%"></span></span><span class="mv">233</span></div>
+          <div class="mb"><span class="mlab">美业</span><span class="mtk"><span class="mfill" style="width:37%"></span></span><span class="mv">163</span></div>
+          <div class="mb"><span class="mlab">休闲娱乐</span><span class="mtk"><span class="mfill" style="width:30%"></span></span><span class="mv">134</span></div>
+          <div class="mb"><span class="mlab">制造业</span><span class="mtk"><span class="mfill" style="width:19%"></span></span><span class="mv">86</span></div>
+        </div></div>
+        <div><div class="minibars">
+          <div class="mb"><span class="mlab">蜀山区</span><span class="mtk"><span class="mfill" style="width:100%"></span></span><span class="mv">383</span></div>
+          <div class="mb"><span class="mlab">包河区</span><span class="mtk"><span class="mfill" style="width:88%"></span></span><span class="mv">336</span></div>
+          <div class="mb"><span class="mlab">瑶海区</span><span class="mtk"><span class="mfill" style="width:61%"></span></span><span class="mv">235</span></div>
+          <div class="mb"><span class="mlab">庐阳区</span><span class="mtk"><span class="mfill" style="width:55%"></span></span><span class="mv">212</span></div>
+          <div class="mb"><span class="mlab">经开区</span><span class="mtk"><span class="mfill" style="width:45%"></span></span><span class="mv">174</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;color:var(--gold-d);margin:34px 0 8px;display:flex;align-items:center;gap:8px">
+    <span style="font-family:'Space Grotesk';background:var(--gold);color:#fff;padding:2px 10px;border-radius:5px;font-size:13px">防守线</span> 续费保收 · 防流失</h3>
+  <div class="grid2">
+    <div class="track" style="margin:0"><div class="thead"><div class="tt" style="font-size:15px"><span class="tn">02</span>套餐静默流失挽留</div>
+      <div class="risk-amt" style="font-size:16px">¥77万<small> · 155户</small></div></div>
+      <div class="tbl" style="padding:16px 20px">
+        <p style="font-size:13px;color:var(--ink2);margin:0 0 8px">服务中却零发帖=交了钱不用。按合同金额降序，绑定续费销售唤醒使用。含国轩高科套餐(¥3万)。</p>
+        <p class="note-x">明细见 Excel sheet②（带续费销售 OA）</p></div></div>
+    <div class="track" style="margin:0"><div class="thead"><div class="tt" style="font-size:15px"><span class="tn">03</span>框架到期挽留</div>
+      <div class="risk-amt" style="font-size:16px">¥200万<small> · 14户</small></div></div>
+      <div class="tbl" style="padding:16px 20px">
+        <p style="font-size:13px;color:var(--ink2);margin:0 0 8px">3个月内到期，10/14 为高活跃 HR 派遣大户。到期前续约，发帖环比下滑预警。韩建/董真各 3 户。</p>
+        <p class="note-x">明细见 Excel sheet③（带框架销售归属）</p></div></div>
+  </div>
+
+  <div class="take" style="margin-top:26px"><b>一句话收口：进攻挖高潜（⑥新开14 + ⑤升级54 + ①激活2万），防守保存量（②¥77万 + ③¥200万）。</b> 进攻线以"发帖&gt;10"锁定真实需求，防守线以"服务中零发帖/临到期"锁定流失风险——六份名单可直接分配到销售个人，全部明细 + OA 归属见配套 Excel。</div>
+</section>
+
+</main>
+
+<footer>
+  <p><b>合肥58招聘 · 企业市场分析报告 V1.3</b></p>
+  <p style="margin-top:6px">数据口径 2026-06-28 · 发帖窗口金三银四 · 复刻重庆八模块框架 · 配套：SQL 包 / 知名企业攻坚名单 Excel</p>
+</footer>
+
+<script>
+const F={ink:'#15233B',ink2:'#34435E',gold:'#C8902B',goldd:'#A9761B',teal:'#1F7A6D',crimson:'#B4452F',
+  line:'#E7DFce',muted:'#8C836F',paper:'#FAF7F0'};
+Chart.defaults.font.family="'Space Grotesk','PingFang SC','Microsoft YaHei',sans-serif";
+Chart.defaults.font.size=12.5; Chart.defaults.color=F.ink2;
+const fmt=n=>n.toLocaleString('en-US');
+const charts=[]; // lazy build on reveal
+
+/* ---- 00 治理 ---- */
+function cFix(){new Chart(document.getElementById('cFix'),{type:'bar',
+ data:{labels:['修复前 (旧口径)','修复后 (area解析)'],
+   datasets:[{data:[1646482,2113818],backgroundColor:[F.muted,F.gold],borderRadius:7,barThickness:64}]},
+ options:{indexAxis:'y',plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>fmt(c.raw)+' 家'}}},
+   scales:{x:{ticks:{callback:v=>(v/1e6)+'M'},grid:{color:F.line}},y:{grid:{display:false}}}}});}
+function cFixZone(){new Chart(document.getElementById('cFixZone'),{type:'bar',
+ data:{labels:['新站区','高新区','经开区','巢湖市','蜀山区','包河区'],
+   datasets:[{data:[100,99.9,99.9,99.9,19,12.5],
+     backgroundColor:['#B4452F','#C0562F','#CC6A33','#C8902B','#7FA9A0','#9FBDB6'],borderRadius:5}]},
+ options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'原本无区县 '+c.raw+'%'}}},
+   scales:{y:{max:100,ticks:{callback:v=>v+'%'},grid:{color:F.line}},x:{grid:{display:false}}}}});}
+
+/* ---- 01 funnel ---- */
+function funnelM1(){
+ const rows=[['全部企业',2113818,'',F.ink],['有平台账号',459962,'21.8%',F.ink2],
+  ['已认证认领',147160,'32.0%',F.gold],['有商业关系',3603,'2.45% ↓断崖',F.crimson],
+  ['付费会员',3037,'84.3%',F.teal]];
+ const max=2113818,el=document.getElementById('funnelM1');
+ rows.forEach(r=>{const d=document.createElement('div');d.className='wf';
+  d.innerHTML=`<div class="lab">${r[0]}</div><div class="barwrap"><div class="bar" style="width:0;background:${r[3]}">${fmt(r[1])}</div></div><div class="conv">${r[2]}</div>`;
+  el.appendChild(d);
+  requestAnimationFrame(()=>{setTimeout(()=>{d.querySelector('.bar').style.width=Math.max(r[1]/max*100,7)+'%';},120);});});
+}
+
+/* ---- 02 tier ---- */
+function cTier(){new Chart(document.getElementById('cTier'),{type:'bar',
+ data:{labels:['年度套餐','框架','月度套餐','定制','季度套餐'],
+   datasets:[{data:[1330,1054,452,133,68],
+     backgroundColor:[F.ink2,F.gold,'#6E7C93',F.goldd,'#9AA6BC'],borderRadius:6,barThickness:46}]},
+ options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)+' 家'}}},
+   scales:{y:{grid:{color:F.line}},x:{grid:{display:false}}}}});}
+
+/* ---- 03 geo ---- */
+function cGeo(){const L=['蜀山区','包河区','瑶海区','庐阳区','经开区','长丰县','肥东县','肥西县','高新区','新站区','庐江县','巢湖市'];
+ const E=[312651,296356,247095,186959,150298,141609,130241,125325,119082,119074,100900,9210];
+ const R=[0.15,0.17,0.14,0.14,0.27,0.17,0.15,0.06,0.13,0.15,0.0,0.10];
+ new Chart(document.getElementById('cGeo'),{data:{labels:L,datasets:[
+   {type:'bar',label:'企业数',data:E,backgroundColor:L.map(x=>x==='经开区'||x==='包河区'?F.gold:'#C9CFD9'),
+    borderRadius:5,yAxisID:'y',order:2},
+   {type:'line',label:'付费率%',data:R,borderColor:F.crimson,backgroundColor:F.crimson,
+    pointRadius:4,pointBackgroundColor:F.crimson,tension:.3,yAxisID:'y1',order:1}]},
+  options:{plugins:{legend:{position:'top'}},scales:{
+    y:{position:'left',title:{display:true,text:'企业数'},grid:{color:F.line},ticks:{callback:v=>v/1000+'k'}},
+    y1:{position:'right',title:{display:true,text:'付费率%'},grid:{display:false},min:0,max:0.3},
+    x:{grid:{display:false}}}}});}
+
+/* ---- 04 size ---- */
+function cSize(){const L=['个体','无注册','<10万','10-50万','50-100万','100-500万','500-1000万','1000-5000万','5000万-1亿','≥1亿'];
+ const E=[1127503,64319,88911,165961,103710,230063,213471,92219,16543,11118];
+ const R=[0.05,0.35,0.10,0.15,0.23,0.39,0.22,0.25,0.19,0.49];
+ new Chart(document.getElementById('cSize'),{data:{labels:L,datasets:[
+   {type:'bar',label:'企业数',data:E,backgroundColor:L.map(x=>x==='100-500万'?F.gold:'#C9CFD9'),borderRadius:5,yAxisID:'y',order:2},
+   {type:'line',label:'付费率%',data:R,borderColor:F.teal,pointRadius:4,pointBackgroundColor:F.teal,tension:.3,yAxisID:'y1',order:1}]},
+  options:{plugins:{legend:{position:'top'}},scales:{
+    y:{type:'logarithmic',position:'left',title:{display:true,text:'企业数(对数)'},grid:{color:F.line}},
+    y1:{position:'right',title:{display:true,text:'付费率%'},grid:{display:false},min:0,max:0.55},
+    x:{grid:{display:false},ticks:{maxRotation:40,minRotation:40}}}}});}
+
+/* ---- 05 industry bubble ---- */
+function cIndustry(){
+ const D=[['人力',21983,3.56,783],['配送',32952,0.79,259],['休闲娱乐',49759,0.47,232],
+  ['汽车租赁',30457,0.71,215],['制造业',84883,0.23,198],['餐饮',128817,0.15,196],
+  ['货运',22446,0.82,185],['美业',55297,0.28,154],['批发零售',559564,0.03,142],
+  ['其他',645845,0.02,144],['互联网',57017,0.14,77],['影视传媒',35052,0.22,78],
+  ['建筑业',131683,0.02,29],['保安',1853,1.94,36]];
+ const key=['人力','制造业','配送','货运','汽车租赁','餐饮','批发零售','保安'];
+ const pts=D.map(d=>({x:d[1],y:d[2],r:Math.max(Math.sqrt(d[3])*1.5,5),label:d[0],pay:d[3]}));
+ const labelPlugin={id:'lbl',afterDatasetsDraw(c){const ctx=c.ctx;ctx.save();
+   ctx.font="600 12px 'Space Grotesk'";ctx.fillStyle=F.ink;
+   c.getDatasetMeta(0).data.forEach((p,i)=>{const d=pts[i];if(key.includes(d.label)){
+     ctx.textAlign='center';ctx.fillText(d.label,p.x,p.y-p.options.radius-5);}});ctx.restore();}};
+ new Chart(document.getElementById('cIndustry'),{type:'bubble',
+  data:{datasets:[{data:pts,backgroundColor:pts.map(p=>p.label==='人力'?'rgba(200,144,43,.85)':
+    p.label==='制造业'?'rgba(180,69,47,.7)':'rgba(52,67,94,.55)'),
+    borderColor:pts.map(p=>p.label==='人力'?F.goldd:p.label==='制造业'?F.crimson:F.ink2),borderWidth:1.5}]},
+  options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const d=pts[c.dataIndex];
+    return `${d.label}：企业${fmt(d.x)} · 付费率${d.y}% · 付费${d.pay}家`;}}}},
+   scales:{x:{type:'logarithmic',title:{display:true,text:'企业数（对数）'},grid:{color:F.line}},
+     y:{title:{display:true,text:'付费率 %'},grid:{color:F.line},min:0,max:4}}},plugins:[labelPlugin]});}
+
+/* ---- 06 lift ---- */
+function cLift(){const L=['个体','无注册','<10万','10-50万','50-100万','100-500万','500-1000万','1000-5000万','5000万-1亿','≥1亿'];
+ const pay=[17.42,7.51,3.03,8.33,7.84,29.83,15.51,7.7,1.05,1.78];
+ const all=[53.34,3.04,4.21,7.85,4.91,10.88,10.1,4.36,0.78,0.53];
+ new Chart(document.getElementById('cLift'),{type:'bar',
+  data:{labels:L,datasets:[
+   {label:'付费会员占比%',data:pay,backgroundColor:F.gold,borderRadius:4},
+   {label:'全量占比%',data:all,backgroundColor:'#C9CFD9',borderRadius:4}]},
+  options:{plugins:{legend:{position:'top'}},scales:{y:{grid:{color:F.line},title:{display:true,text:'占比 %'}},
+    x:{grid:{display:false},ticks:{maxRotation:40,minRotation:40}}}}});}
+
+/* ---- 07 decision/econ ---- */
+function cDecision(){new Chart(document.getElementById('cDecision'),{type:'bar',
+ data:{labels:['分支机构(决策在总部)','总部/独立法人','个体工商户'],
+   datasets:[{data:[0.40,0.25,0.05],backgroundColor:[F.gold,F.ink2,'#C9CFD9'],borderRadius:6,barThickness:40}]},
+ options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'付费率 '+c.raw+'%'}}},
+   scales:{x:{grid:{color:F.line},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});}
+function cEcon(){new Chart(document.getElementById('cEcon'),{type:'bar',
+ data:{labels:['涉外','私营','国有','其他','集体','公共/社会'],
+   datasets:[{data:[0.28,0.14,0.13,0.06,0.05,0.04],
+     backgroundColor:[F.gold,F.ink2,'#6E7C93','#AEB7C4','#C9CFD9','#DDE1E7'],borderRadius:6,barThickness:30}]},
+ options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'付费率 '+c.raw+'%'}}},
+   scales:{x:{grid:{color:F.line},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});}
+
+/* ---- 08 deathline ---- */
+function deathline(){const rows=[['零发帖',0.08,437605,F.muted],['低频(1-20)',10.36,21935,F.gold],
+  ['活跃(21+)',93.13,422,F.crimson]];
+ const el=document.getElementById('deathline');
+ rows.forEach(r=>{const d=document.createElement('div');d.className='dl';
+  d.innerHTML=`<div class="pct" style="color:${r[3]}">${r[1]}%</div>
+   <div class="bar" style="height:0;background:${r[3]}"></div>
+   <div class="lab">${r[0]}</div><div class="cnt">${fmt(r[2])} 账号</div>`;
+  el.appendChild(d);
+  const h=Math.max(r[1]/93.13*100,1.4);
+  requestAnimationFrame(()=>setTimeout(()=>{d.querySelector('.bar').style.height=h+'%';},150));});
+}
+
+/* ---- 09 pkg / frame ---- */
+function cPkg(){new Chart(document.getElementById('cPkg'),{type:'bar',
+ data:{labels:['零发帖','低频(1-20)','活跃(21+)'],datasets:[
+   {label:'户数',data:[515,1350,35],backgroundColor:'#C9CFD9',borderRadius:5,yAxisID:'y'},
+   {label:'服务中零发帖率%',data:[100,0,0],type:'line',borderColor:F.crimson,
+    pointRadius:5,pointBackgroundColor:F.crimson,yAxisID:'y1'}]},
+ options:{plugins:{legend:{position:'top'}},scales:{
+   y:{title:{display:true,text:'户数'},grid:{color:F.line}},
+   y1:{position:'right',min:0,max:100,grid:{display:false},title:{display:true,text:'零发帖率%'}},
+   x:{grid:{display:false}}}}});}
+function cFrame(){new Chart(document.getElementById('cFrame'),{
+ data:{labels:['HR框架','普通框架','营销加盟'],datasets:[
+   {type:'bar',label:'户数',data:[66,24,2],backgroundColor:[F.gold,'#6E7C93','#C9CFD9'],borderRadius:5,yAxisID:'y'},
+   {type:'line',label:'户均发帖',data:[431.2,106.9,48],borderColor:F.teal,
+    pointRadius:5,pointBackgroundColor:F.teal,yAxisID:'y1'}]},
+ options:{plugins:{legend:{position:'top'}},scales:{
+   y:{title:{display:true,text:'户数'},grid:{color:F.line}},
+   y1:{position:'right',grid:{display:false},title:{display:true,text:'户均发帖'}},
+   x:{grid:{display:false}}}}});}
+
+/* ---- 10 flagship ---- */
+function funnelM10(){
+ const rows=[['名单家数',1861,'',F.ink],['在库命中',592,'31.8%',F.ink2],
+  ['有账号',363,'19.5%',F.gold],['已认证',203,'10.9%',F.goldd],
+  ['有商业关系',10,'0.5% ↓断崖',F.crimson],['付费',8,'0.4%',F.teal]];
+ const max=1861,el=document.getElementById('funnelM10');
+ rows.forEach(r=>{const d=document.createElement('div');d.className='wf';
+  d.innerHTML=`<div class="lab">${r[0]}</div><div class="barwrap"><div class="bar" style="width:0;background:${r[3]}">${fmt(r[1])}</div></div><div class="conv">${r[2]}</div>`;
+  el.appendChild(d);
+  requestAnimationFrame(()=>setTimeout(()=>{d.querySelector('.bar').style.width=Math.max(r[1]/max*100,6)+'%';},120));});
+}
+function cFlagMfg(){new Chart(document.getElementById('cFlagMfg'),{type:'bar',
+ data:{labels:['集成电路','新型显示','新能源汽车'],datasets:[
+   {label:'已认证',data:[7,11,7],backgroundColor:F.gold,borderRadius:5},
+   {label:'有商业关系',data:[0,1,0],backgroundColor:F.crimson,borderRadius:5}]},
+ options:{plugins:{legend:{position:'top'}},scales:{y:{grid:{color:F.line},title:{display:true,text:'家数'}},
+   x:{grid:{display:false}}}}});}
+
+/* ---- reveal + lazy chart build ---- */
+const builders={m1:[funnelM1],m2:[cTier],m3:[cGeo],m4:[cSize],m5:[cIndustry],
+  m6:[cLift],m7:[cDecision,cEcon],m8:[deathline],m9:[cPkg,cFrame],m10:[funnelM10,cFlagMfg]};
+const built={};
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+  e.target.classList.add('in');const id=e.target.id;
+  if(builders[id]&&!built[id]){built[id]=1;builders[id].forEach(fn=>{try{fn();}catch(err){console.error(id,err);}});}
+}});},{threshold:.12});
+document.querySelectorAll('section.reveal').forEach(s=>io.observe(s));
+// build above-the-fold immediately
+window.addEventListener('load',()=>{const ex=document.getElementById('exec');if(ex)ex.classList.add('in');['m1'].forEach(id=>{const s=document.getElementById(id);
+  if(s&&!built[id]){built[id]=1;s.classList.add('in');builders[id].forEach(fn=>{try{fn();}catch(e){console.error(e);}});}});});
+</script>
+</body>
+</html>
