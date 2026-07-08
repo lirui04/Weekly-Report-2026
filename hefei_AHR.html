@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>合肥优质人力资源劳务派遣机构客户评级报告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", -apple-system, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    line-height: 1.7;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+  /* Header */
+  .report-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    padding: 48px 40px;
+    border-radius: 16px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-header::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .report-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; position: relative; z-index: 1; }
+  .report-header .subtitle { font-size: 15px; opacity: 0.7; position: relative; z-index: 1; }
+  .report-header .meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .report-header .meta-item { font-size: 13px; }
+  .report-header .meta-item span { opacity: 0.6; display: block; margin-bottom: 4px; }
+  .report-header .meta-item strong { font-size: 15px; font-weight: 600; }
+
+  /* Section */
+  .section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    padding-left: 14px;
+    border-left: 4px solid #0f3460;
+  }
+  .section-title .num {
+    display: inline-block;
+    width: 28px; height: 28px;
+    background: #0f3460;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* Rule Cards */
+  .rule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .rule-card {
+    border: 1px solid #e8ecf1;
+    border-radius: 10px;
+    padding: 20px;
+    background: #fafbfc;
+  }
+  .rule-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f3460;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rule-card .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .rule-card table { width: 100%; font-size: 13px; border-collapse: collapse; }
+  .rule-card th { text-align: left; padding: 6px 8px; color: #8895a7; font-weight: 500; border-bottom: 1px solid #e8ecf1; }
+  .rule-card td { padding: 6px 8px; border-bottom: 1px solid #f0f2f5; }
+  .rule-card td:last-child { text-align: right; font-weight: 600; }
+
+  /* Grade badges */
+  .grade-system {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .grade-badge {
+    flex: 1;
+    min-width: 140px;
+    padding: 16px;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+  }
+  .grade-badge.s { background: linear-gradient(135deg, #11998e, #38ef7d); }
+  .grade-badge.a { background: linear-gradient(135deg, #2193b0, #6dd5ed); }
+  .grade-badge.b { background: linear-gradient(135deg, #f7971e, #ffd200); }
+  .grade-badge.c { background: linear-gradient(135deg, #e6543b, #f08850); }
+  .grade-badge .grade { font-size: 32px; font-weight: 800; line-height: 1; }
+  .grade-badge .label { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+  .grade-badge .range { font-size: 11px; opacity: 0.8; margin-top: 4px; }
+
+  /* Summary Table */
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .summary-table th {
+    background: #f4f6f9;
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: 600;
+    color: #5a6473;
+    border-bottom: 2px solid #e8ecf1;
+    white-space: nowrap;
+  }
+  .summary-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #f0f2f5;
+    vertical-align: middle;
+  }
+  .summary-table tr:hover td { background: #fafbfc; }
+  .summary-table .grade-cell {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .grade-s { color: #11998e; }
+  .grade-a { color: #2193b0; }
+  .grade-b { color: #e69500; }
+  .grade-c { color: #e6543b; }
+
+  .score-bar {
+    display: inline-block;
+    width: 60px;
+    height: 8px;
+    background: #e8ecf1;
+    border-radius: 4px;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  .score-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+
+  /* Detail Cards */
+  .detail-card {
+    border: 1px solid #e8ecf1;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .detail-card .card-header {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e8ecf1;
+  }
+  .detail-card .card-header .left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .detail-card .card-header .seq {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #f4f6f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #5a6473;
+  }
+  .detail-card .card-header .name {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .detail-card .card-header .type {
+    font-size: 12px;
+    color: #8895a7;
+    margin-top: 2px;
+  }
+  .detail-card .grade-tag {
+    padding: 6px 20px;
+    border-radius: 8px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .detail-card .card-body {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+  }
+  .detail-card .card-body .full { grid-column: 1 / -1; }
+  .score-section h4 {
+    font-size: 13px;
+    color: #8895a7;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .score-rows { display: flex; flex-direction: column; gap: 8px; }
+  .score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .score-row .label { color: #5a6473; }
+  .score-row .value { font-weight: 600; }
+  .score-row .value.good { color: #11998e; }
+  .score-row .value.warn { color: #e69500; }
+  .score-row .value.bad { color: #e6543b; }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-bar label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a2e;
+    white-space: nowrap;
+  }
+  .filter-bar select {
+    flex: 1;
+    min-width: 280px;
+    padding: 10px 16px;
+    border: 2px solid #e8ecf1;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1a1a2e;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .filter-bar select:focus { border-color: #0f3460; }
+  .filter-bar .grade-filter {
+    display: flex;
+    gap: 8px;
+  }
+  .filter-bar .grade-btn {
+    padding: 8px 16px;
+    border: 2px solid #e8ecf1;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #fff;
+    color: #8895a7;
+    transition: all 0.2s;
+  }
+  .filter-bar .grade-btn.active {
+    color: #fff;
+    border-color: transparent;
+  }
+  .filter-bar .grade-btn.active.s { background: #11998e; }
+  .filter-bar .grade-btn.active.a { background: #2193b0; }
+  .filter-bar .grade-btn.active.b { background: #e69500; }
+  .filter-bar .grade-btn.active.c { background: #e6543b; }
+  .filter-bar .grade-btn:hover:not(.active) { border-color: #c4cad3; }
+
+  /* Radar chart */
+  .radar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .radar-svg {
+    width: 300px;
+    height: 300px;
+  }
+  .radar-legend {
+    margin-top: 12px;
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #8895a7;
+  }
+  .radar-legend .dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .detail-placeholder {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8895a7;
+    font-size: 15px;
+  }
+  .detail-placeholder .icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.4;
+  }
+
+  .total-score {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #f4f6f9;
+    border-radius: 8px;
+    margin-top: 12px;
+  }
+  .total-score .label { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .total-score .score { font-size: 24px; font-weight: 800; }
+
+  .risk-note {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .risk-note.info { background: #e8f4fd; color: #1976d2; border-left: 3px solid #2196f3; }
+  .risk-note.warn { background: #fff8e1; color: #e65100; border-left: 3px solid #ff9800; }
+  .risk-note.danger { background: #fbe9e7; color: #bf360c; border-left: 3px solid #e64a19; }
+
+  /* Summary stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .stat-box .num { font-size: 36px; font-weight: 800; }
+  .stat-box .label { font-size: 13px; color: #8895a7; margin-top: 4px; }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: #8895a7;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Report Header -->
+  <div class="report-header">
+    <h1>合肥优质人力资源劳务派遣机构客户评级报告</h1>
+    <div class="subtitle">招聘平台总部策略端 · 15家提报客户风控评级分析</div>
+    <div class="meta">
+      <div class="meta-item">
+        <span>评级日期</span>
+        <strong>2026年7月8日</strong>
+      </div>
+      <div class="meta-item">
+        <span>评估客户数</span>
+        <strong>15家</strong>
+      </div>
+      <div class="meta-item">
+        <span>数据来源</span>
+        <strong>提报表 + 风控记录 + 回款明细</strong>
+      </div>
+      <div class="meta-item">
+        <span>回款统计口径</span>
+        <strong>2025-2026年创建订单</strong>
+      </div>
+      <div class="meta-item">
+        <span>评级维度</span>
+        <strong>5大维度 · 12项指标</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="num grade-s" id="statS">—</div>
+      <div class="label">S级（优先合作）</div>
+    </div>
+    <div class="stat-box">
+      <div class="num grade-a" id="statA">—</div>
+      <div class="label">A级（推荐合作）</div>
+    </div>
+    <div class="stat-box">
+      <div class="num grade-b" id="statB">—</div>
+      <div class="label">B级（观察合作）</div>
+    </div>
+    <div class="stat-box">
+      <div class="num grade-c" id="statC">—</div>
+      <div class="label">C级（审慎合作）</div>
+    </div>
+  </div>
+
+  <!-- Section 1: Rating Rules -->
+  <div class="section">
+    <div class="section-title"><span class="num">1</span>评级规则体系</div>
+    <p style="font-size: 14px; color: #5a6473; margin-bottom: 20px;">
+      本评级体系从<b>风控健康度、投诉密度、商业价值、合作粘性、资质信用</b>五大维度构建，共12项量化指标，满分100分。根据综合得分划分S/A/B/C四个等级。
+    </p>
+
+    <div class="rule-grid">
+      <!-- Dimension 1 -->
+      <div class="rule-card">
+        <h3><span class="icon" style="background:#e3f2fd;color:#1976d2;">🛡</span>维度一：风控健康度（25分）</h3>
+        <table>
+          <tr><th>指标</th><th>评分规则</th></tr>
+          <tr><td>恶意账号占比</td><td>0%得15分；≤3%得12分；≤5%得8分；≤10%得4分；&gt;10%得0分</td></tr>
+          <tr><td>冻结账号率</td><td>0%得5分；≤1%得3分；&gt;1%得0分</td></tr>
+          <tr><td>注销账号率</td><td>0%得5分；≤5%得3分；≤15%得2分；&gt;15%得1分</td></tr>
+        </table>
+      </div>
+
+      <!-- Dimension 2 -->
+      <div class="rule-card">
+        <h3><span class="icon" style="background:#fff3e0;color:#e65100;">⚠</span>维度二：投诉密度（20分）</h3>
+        <table>
+          <tr><th>指标</th><th>评分规则</th></tr>
+          <tr><td>投诉/uid比</td><td>0得20分；≤0.05得16分；≤0.1得12分；≤0.2得8分；≤0.3得4分；&gt;0.3得0分</td></tr>
+          <tr><td>严重投诉占比</td><td>无003类（涉嫌欺诈）得5分；有003类扣5分</td></tr>
+          <tr><td>投诉趋势</td><td>2026年无新增得5分；有2026年投诉扣3分/条（最多扣5分）</td></tr>
+        </table>
+      </div>
+
+      <!-- Dimension 3 -->
+      <div class="rule-card">
+        <h3><span class="icon" style="background:#e8f5e9;color:#2e7d32;">💰</span>维度三：商业价值（25分）</h3>
+        <table>
+          <tr><th>指标</th><th>评分规则</th></tr>
+          <tr><td>2025-2026年回款</td><td>≥15万得18分；≥10万得15分；≥5万得12分；≥1万得8分；&gt;0得4分；0得1分</td></tr>
+          <tr><td>在服回款</td><td>≥10万得7分；≥1万得5分；&gt;0得3分；0得0分</td></tr>
+        </table>
+      </div>
+
+      <!-- Dimension 4 -->
+      <div class="rule-card">
+        <h3><span class="icon" style="background:#f3e5f5;color:#7b1fa2;">🤝</span>维度四：合作粘性（15分）</h3>
+        <table>
+          <tr><th>指标</th><th>评分规则</th></tr>
+          <tr><td>框架合作</td><td>有框架合作记录得8分；无得0分</td></tr>
+          <tr><td>当前在服状态</td><td>有在服订单得5分；无得0分</td></tr>
+          <tr><td>合作持续性</td><td>多年连续合作得2分；单次合作得1分；无合作得0分</td></tr>
+        </table>
+      </div>
+
+      <!-- Dimension 5 -->
+      <div class="rule-card" style="grid-column: 1 / -1;">
+        <h3><span class="icon" style="background:#fce4ec;color:#c62828;">⭐</span>维度五：资质信用（15分）</h3>
+        <table>
+          <tr><th>指标</th><th>评分规则</th></tr>
+          <tr><td>成立年限与规模</td><td>≥15年/大型集团得6分；≥10年得4分；≥5年得3分；&lt;5年得2分</td></tr>
+          <tr><td>行业资质评级</td><td>AAAAA/5星/AAA级得5分；省级荣誉得3分；一般资质得2分</td></tr>
+          <tr><td>注册资本</td><td>≥1亿得4分；≥1000万得3分；≥500万得2分；&lt;500万得1分</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Grade System -->
+    <div class="grade-system">
+      <div class="grade-badge s">
+        <div class="grade">S</div>
+        <div class="label">优先合作</div>
+        <div class="range">≥80分</div>
+      </div>
+      <div class="grade-badge a">
+        <div class="grade">A</div>
+        <div class="label">推荐合作</div>
+        <div class="range">65-79分</div>
+      </div>
+      <div class="grade-badge b">
+        <div class="grade">B</div>
+        <div class="label">观察合作</div>
+        <div class="range">50-64分</div>
+      </div>
+      <div class="grade-badge c">
+        <div class="grade">C</div>
+        <div class="label">审慎合作</div>
+        <div class="range">&lt;50分</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Summary Table -->
+  <div class="section">
+    <div class="section-title"><span class="num">2</span>评级结果总览</div>
+    <table class="summary-table" id="summaryTable">
+      <thead>
+        <tr>
+          <th>排名</th>
+          <th>序号</th>
+          <th>机构名称</th>
+          <th>总分</th>
+          <th>风控(25)</th>
+          <th>投诉(20)</th>
+          <th>商业(25)</th>
+          <th>合作(15)</th>
+          <th>资质(15)</th>
+          <th>等级</th>
+          <th>关键风险点</th>
+        </tr>
+      </thead>
+      <tbody id="summaryBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Section 3: Detail with Filter -->
+  <div class="section">
+    <div class="section-title"><span class="num">3</span>客户评级详情</div>
+    <div class="filter-bar">
+      <label>选择客户：</label>
+      <select id="clientSelect"></select>
+      <div class="grade-filter">
+        <button class="grade-btn active" data-grade="ALL" onclick="filterGrade('ALL')">全部</button>
+        <button class="grade-btn s" data-grade="S" onclick="filterGrade('S')">S</button>
+        <button class="grade-btn a" data-grade="A" onclick="filterGrade('A')">A</button>
+        <button class="grade-btn b" data-grade="B" onclick="filterGrade('B')">B</button>
+        <button class="grade-btn c" data-grade="C" onclick="filterGrade('C')">C</button>
+      </div>
+    </div>
+    <div id="detailContainer"></div>
+  </div>
+
+  <!-- Section 4: Strategic Recommendations -->
+  <div class="section">
+    <div class="section-title"><span class="num">4</span>策略建议</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="risk-note info">
+        <b>S级客户（1家）：</b>塞维瑞（80分，2025-2026年回款16.6万+在服12.7万），是唯一达到S级标准的客户。投诉9条可控，4个账号有金牌HR套餐在服中，建议作为核心合作伙伴重点维护，探索深化合作机会。
+      </div>
+      <div class="risk-note info">
+        <b>A级客户（4家）：</b>文都（76分，回款12.3万但框架已到期）、智联（75分，回款1.85万+在服中）、正德（73分，回款12.6万+在服12万）、弘康（73分，回款7万但无在服）。建议重点维护正德和智联（有在服订单），推动文都和弘康框架续约。需重点治理正德（投诉37条）和文都（投诉含欺诈类003）。
+      </div>
+      <div class="risk-note warn">
+        <b>B级客户（8家）：</b>远创、易德、中智、申博、东方英才、上海外服、徽商、德勤。2025-2026年平台均无回款无在服订单，但资质尚可。中智和申博资质评分最高（15分），触达优先级最高；东方英才和上海外服资质优良，可列入观察名单。建议主动触达推动框架签约，先小规模试用合作。
+      </div>
+      <div class="risk-note danger">
+        <b>C级客户（2家）：</b>皖信、外企德科。皖信平台账号数为0，无法评估平台运营能力；外企德科恶意账号占比32%触发风控一票否决。建议暂缓合作，要求补充平台运营数据并完成风控整改后再评估。
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    本报告基于合肥优质人力资源劳务派遣机构提报表及补充风控信息自动生成 · 回款数据仅统计2025-2026年创建订单 · 评级规则及结果仅供决策参考
+  </div>
+</div>
+
+<script>
+// 客户评级数据
+const clients = [
+  {
+    seq: 1, name: "正德人力资源股份有限公司", type: "人力资源服务/劳务派遣/业务外包",
+    scores: { risk: 18, complaint: 4, commercial: 22, cooperation: 15, qualification: 14 },
+    total: 73, grade: "A",
+    metrics: {
+      accountCount: 171, maliciousCount: 5, maliciousRate: "3.0%",
+      complaints: 37, complaintRatio: "0.29", uidCount: 129,
+      frozen: 1, locked: 0, cancelled: 25,
+      totalPayment: 125546, activePayment: 120000,
+      cooperation: "26年3月合作12万框架，仍在服务中",
+      qualification: "2004年创始，注册2亿，年营收45亿，AAA级"
+    },
+    risks: "投诉量37条（全场最高），含多条涉嫌欺诈投诉(003类)；2026年仍有新增投诉；冻结1个、注销25个账号",
+    riskLevel: "warn"
+  },
+  {
+    seq: 2, name: "远创人力资源管理集团有限公司", type: "人力资源服务/劳务派遣",
+    scores: { risk: 25, complaint: 20, commercial: 1, cooperation: 0, qualification: 13 },
+    total: 59, grade: "B",
+    metrics: {
+      accountCount: 3, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 2,
+      frozen: 0, locked: 0, cancelled: 0,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "合肥本土，注册1.1亿，诚信示范机构"
+    },
+    risks: "2025-2026年平台无回款记录，仅3账号2 uid，活跃度极低，无框架合作",
+    riskLevel: "warn"
+  },
+  {
+    seq: 3, name: "外企德科人力资源服务安徽有限公司", type: "人力资源服务/劳务派遣",
+    scores: { risk: 12, complaint: 20, commercial: 1, cooperation: 0, qualification: 12 },
+    total: 45, grade: "C",
+    metrics: {
+      accountCount: 19, maliciousCount: 6, maliciousRate: "32.0%",
+      complaints: 0, complaintRatio: "0", uidCount: 7,
+      frozen: 1, locked: 0, cancelled: 0,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "16年经验，中外合资，500-999人"
+    },
+    risks: "恶意账号占比32%（远超10%红线），存在冻结账号，2025-2026年平台无回款无在服订单",
+    riskLevel: "danger"
+  },
+  {
+    seq: 4, name: "中智安徽经济技术合作有限公司", type: "人力资源服务/劳务派遣/猎头",
+    scores: { risk: 20, complaint: 20, commercial: 1, cooperation: 0, qualification: 15 },
+    total: 56, grade: "B",
+    metrics: {
+      accountCount: 4, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 9,
+      frozen: 0, locked: 0, cancelled: 1,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "央企背景（中智集团），品牌公信力强"
+    },
+    risks: "2025-2026年平台无回款，活跃度低（4账号），有1个注销账号，无框架合作",
+    riskLevel: "warn"
+  },
+  {
+    seq: 5, name: "合肥弘康企业管理有限公司", type: "人力资源服务/劳务派遣/生产线外包",
+    scores: { risk: 18, complaint: 16, commercial: 18, cooperation: 10, qualification: 11 },
+    total: 73, grade: "A",
+    metrics: {
+      accountCount: 100, maliciousCount: 3, maliciousRate: "3.0%",
+      complaints: 4, complaintRatio: "0.03", uidCount: 124,
+      frozen: 5, locked: 1, cancelled: 22,
+      totalPayment: 69803, activePayment: 0,
+      cooperation: "19-24年连续框架合作，最后一份24年9月，2025-2026年无在服订单",
+      qualification: "2016年成立，多地区分公司，京东方/富士康供应商"
+    },
+    risks: "2025-2026年在服回款为0，框架合作已到期未续；冻结5个（4.0%），注销22个（17.7%），注销率偏高",
+    riskLevel: "warn"
+  },
+  {
+    seq: 6, name: "安徽皖信人力资源服务集团有限公司", type: "人力资源服务/咨询/猎头",
+    scores: { risk: 15, complaint: 20, commercial: 1, cooperation: 0, qualification: 10 },
+    total: 46, grade: "C",
+    metrics: {
+      accountCount: 0, maliciousCount: 0, maliciousRate: "—",
+      complaints: 0, complaintRatio: "0", uidCount: 0,
+      frozen: 0, locked: 0, cancelled: 0,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "无服务中订单、无框架合作记录",
+      qualification: "500-999人，合肥本土大型集团"
+    },
+    risks: "平台账号数为0，2025-2026年无任何回款和合作记录，无法评估平台运营能力",
+    riskLevel: "danger"
+  },
+  {
+    seq: 7, name: "合肥东方英才人才有限公司", type: "劳务派遣/委托招聘/薪税服务",
+    scores: { risk: 20, complaint: 20, commercial: 1, cooperation: 0, qualification: 13 },
+    total: 54, grade: "B",
+    metrics: {
+      accountCount: 3, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 6,
+      frozen: 0, locked: 1, cancelled: 0,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "成立24年，AAA级信用企业，行业协会会长单位"
+    },
+    risks: "2025-2026年平台无回款记录，有1个锁定账号，活跃度低（3账号），无合作",
+    riskLevel: "warn"
+  },
+  {
+    seq: 8, name: "安徽易德人力科技股份有限公司", type: "人力资源服务/人才培训/HRO",
+    scores: { risk: 25, complaint: 20, commercial: 1, cooperation: 0, qualification: 13 },
+    total: 59, grade: "B",
+    metrics: {
+      accountCount: 4, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 5,
+      frozen: 0, locked: 0, cancelled: 0,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "19年经验，新三板上市，1000-4999人"
+    },
+    risks: "2025-2026年平台无回款记录，活跃度低（4账号），无合作历史",
+    riskLevel: "warn"
+  },
+  {
+    seq: 9, name: "上海外服安徽人力资源服务有限公司", type: "人力资源服务/劳务派遣",
+    scores: { risk: 20, complaint: 20, commercial: 1, cooperation: 0, qualification: 13 },
+    total: 54, grade: "B",
+    metrics: {
+      accountCount: 7, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 10,
+      frozen: 0, locked: 1, cancelled: 2,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "上海外服集团安徽分支，全国五一劳动奖"
+    },
+    risks: "2025-2026年平台无回款，有1个锁定和2个注销账号，无在服订单",
+    riskLevel: "warn"
+  },
+  {
+    seq: 10, name: "安徽德勤人力资源有限公司", type: "人力资源服务/劳务派遣/业务外包",
+    scores: { risk: 15, complaint: 20, commercial: 1, cooperation: 0, qualification: 14 },
+    total: 50, grade: "B",
+    metrics: {
+      accountCount: 0, maliciousCount: 0, maliciousRate: "—",
+      complaints: 0, complaintRatio: "0", uidCount: 2,
+      frozen: 0, locked: 0, cancelled: 0,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "无服务中订单、无框架合作记录",
+      qualification: "2006年成立，注册1000万，参保53356人，国家级高新"
+    },
+    risks: "平台账号数为0，2025-2026年无任何回款和合作记录，平台活跃度极低",
+    riskLevel: "danger"
+  },
+  {
+    seq: 11, name: "合肥智联人力资源服务有限公司", type: "劳务派遣/技能培训",
+    scores: { risk: 20, complaint: 20, commercial: 12, cooperation: 10, qualification: 13 },
+    total: 75, grade: "A",
+    metrics: {
+      accountCount: 7, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 25,
+      frozen: 1, locked: 1, cancelled: 4,
+      totalPayment: 18500, activePayment: 18500,
+      cooperation: "25年8月合作18500元金牌HR套餐，仍在服务中",
+      qualification: "成立20年，AAA级信用企业"
+    },
+    risks: "有1个冻结和1个锁定账号，注销4个；但2025-2026年零投诉且有在服订单，合作健康",
+    riskLevel: "info"
+  },
+  {
+    seq: 12, name: "安徽徽商人力资源管理有限公司", type: "人力资源服务/服务外包/人事代理",
+    scores: { risk: 20, complaint: 20, commercial: 1, cooperation: 0, qualification: 11 },
+    total: 52, grade: "B",
+    metrics: {
+      accountCount: 8, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 28,
+      frozen: 0, locked: 0, cancelled: 1,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "18年行业经验，招聘增长+415%"
+    },
+    risks: "2025-2026年平台无回款，有1个注销账号，无在服订单和框架合作",
+    riskLevel: "warn"
+  },
+  {
+    seq: 13, name: "安徽文都人力资源管理有限公司", type: "人力资源服务/劳务派遣/业务外包",
+    scores: { risk: 18, complaint: 12, commercial: 22, cooperation: 10, qualification: 14 },
+    total: 76, grade: "A",
+    metrics: {
+      accountCount: 81, maliciousCount: 1, maliciousRate: "1.2%",
+      complaints: 12, complaintRatio: "0.08", uidCount: 145,
+      frozen: 1, locked: 1, cancelled: 26,
+      totalPayment: 123319, activePayment: 18,
+      cooperation: "25年5月合作12万框架，回款123318元，框架已到期",
+      qualification: "2003年创始，注册1000万，AAAAA级，5星级"
+    },
+    risks: "投诉12条含003类涉嫌欺诈投诉5条；注销26个（17.9%）；框架已到期且在服回款仅18元",
+    riskLevel: "warn"
+  },
+  {
+    seq: 14, name: "合肥市塞维瑞人力资源服务有限公司", type: "人力资源服务/劳务派遣/生产线外包",
+    scores: { risk: 18, complaint: 16, commercial: 25, cooperation: 10, qualification: 11 },
+    total: 80, grade: "S",
+    metrics: {
+      accountCount: 40, maliciousCount: 2, maliciousRate: "5.0%",
+      complaints: 9, complaintRatio: "0.12", uidCount: 74,
+      frozen: 0, locked: 1, cancelled: 5,
+      totalPayment: 166400, activePayment: 127200,
+      cooperation: "4个账号合作金牌HR套餐+币，仍在服务中",
+      qualification: "2014年成立，注册500万，A级纳税人，产业园入驻"
+    },
+    risks: "投诉9条，恶意账号占比5%，有1个锁定账号；注册资金仅500万，资质规模偏小",
+    riskLevel: "warn"
+  },
+  {
+    seq: 15, name: "安徽省申博人力资源管理有限公司", type: "人力资源服务/劳务派遣/业务外包",
+    scores: { risk: 20, complaint: 20, commercial: 1, cooperation: 0, qualification: 15 },
+    total: 56, grade: "B",
+    metrics: {
+      accountCount: 7, maliciousCount: 0, maliciousRate: "0%",
+      complaints: 0, complaintRatio: "0", uidCount: 21,
+      frozen: 0, locked: 0, cancelled: 1,
+      totalPayment: 0, activePayment: 0,
+      cooperation: "2025-2026年无服务中订单、无框架合作记录",
+      qualification: "2001年创始，注册2000万，全国诚信示范机构"
+    },
+    risks: "2025-2026年平台无回款，有1个注销账号，无在服订单和框架合作",
+    riskLevel: "warn"
+  }
+];
+
+// 按总分排序
+const sorted = [...clients].sort((a, b) => b.total - a.total);
+
+// 动态统计各等级客户数
+const gradeCounts = { S: 0, A: 0, B: 0, C: 0 };
+clients.forEach(c => gradeCounts[c.grade]++);
+document.getElementById("statS").textContent = gradeCounts.S;
+document.getElementById("statA").textContent = gradeCounts.A;
+document.getElementById("statB").textContent = gradeCounts.B;
+document.getElementById("statC").textContent = gradeCounts.C;
+
+// 渲染总览表
+const gradeColors = { S: "#11998e", A: "#2193b0", B: "#e69500", C: "#e6543b" };
+const gradeClasses = { S: "grade-s", A: "grade-a", B: "grade-b", C: "grade-c" };
+
+const tbody = document.getElementById("summaryBody");
+sorted.forEach((c, i) => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td style="font-weight:700;color:#0f3460;">${i + 1}</td>
+    <td>${c.seq}</td>
+    <td style="font-weight:600;">${c.name}</td>
+    <td style="font-weight:700;font-size:16px;color:${gradeColors[c.grade]};">${c.total}</td>
+    <td>${c.scores.risk}</td>
+    <td>${c.scores.complaint}</td>
+    <td>${c.scores.commercial}</td>
+    <td>${c.scores.cooperation}</td>
+    <td>${c.scores.qualification}</td>
+    <td class="grade-cell ${gradeClasses[c.grade]}">${c.grade}</td>
+    <td style="font-size:12px;color:#8895a7;white-space:normal;word-break:break-all;max-width:260px;line-height:1.5;">${c.risks}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// 渲染详情：筛选 + 单客户展示
+const container = document.getElementById("detailContainer");
+const selectEl = document.getElementById("clientSelect");
+
+let currentGradeFilter = "ALL";
+
+// 填充下拉
+function populateSelect() {
+  const filtered = currentGradeFilter === "ALL"
+    ? sorted
+    : sorted.filter(c => c.grade === currentGradeFilter);
+  selectEl.innerHTML = "";
+  filtered.forEach((c, i) => {
+    const opt = document.createElement("option");
+    opt.value = c.seq;
+    opt.textContent = `[${c.grade}级 | ${c.total}分] ${c.name}`;
+    selectEl.appendChild(opt);
+  });
+  if (filtered.length > 0) {
+    renderDetail(filtered[0].seq);
+  } else {
+    container.innerHTML = `<div class="detail-placeholder"><div class="icon">📋</div>该等级下暂无客户</div>`;
+  }
+}
+
+// 等级筛选
+function filterGrade(grade) {
+  currentGradeFilter = grade;
+  document.querySelectorAll(".grade-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.grade === grade);
+  });
+  populateSelect();
+}
+
+// 下拉切换
+selectEl.addEventListener("change", function() {
+  renderDetail(parseInt(this.value));
+});
+
+// 渲染单个客户详情
+function renderDetail(seq) {
+  const c = clients.find(c => c.seq === seq);
+  if (!c) return;
+
+  const riskClass = c.riskLevel;
+
+  container.innerHTML = `
+    <div class="detail-card">
+      <div class="card-header">
+        <div class="left">
+          <div class="seq">${c.seq}</div>
+          <div>
+            <div class="name">${c.name}</div>
+            <div class="type">${c.type}</div>
+          </div>
+        </div>
+        <div class="grade-tag" style="background:${gradeColors[c.grade]};">${c.grade}级</div>
+      </div>
+      <div class="card-body">
+        <div class="score-section radar-container">
+          <h4>评分雷达图</h4>
+          ${buildRadarChart(c)}
+          <div class="total-score" style="width:100%;">
+            <span class="label">综合得分</span>
+            <span class="score" style="color:${gradeColors[c.grade]};">${c.total}<span style="font-size:14px;color:#8895a7;">/100</span></span>
+          </div>
+        </div>
+        <div class="score-section">
+          <h4>关键指标</h4>
+          <div class="score-rows">
+            <div class="score-row"><span class="label">平台账号数</span><span class="value">${c.metrics.accountCount}</span></div>
+            <div class="score-row"><span class="label">恶意账号占比</span><span class="value ${c.metrics.maliciousRate === '0%' ? 'good' : c.metrics.maliciousRate === '—' ? '' : (parseFloat(c.metrics.maliciousRate) > 10 ? 'bad' : 'warn')}">${c.metrics.maliciousRate}</span></div>
+            <div class="score-row"><span class="label">投诉数 / uid比</span><span class="value ${c.metrics.complaints === 0 ? 'good' : (parseFloat(c.metrics.complaintRatio) > 0.2 ? 'bad' : 'warn')}">${c.metrics.complaints}条 / ${c.metrics.complaintRatio}</span></div>
+            <div class="score-row"><span class="label">冻结/锁定/注销</span><span class="value">${c.metrics.frozen}/${c.metrics.locked}/${c.metrics.cancelled}</span></div>
+            <div class="score-row"><span class="label">总回款（元）</span><span class="value">${c.metrics.totalPayment.toLocaleString()}</span></div>
+            <div class="score-row"><span class="label">在服回款（元）</span><span class="value ${c.metrics.activePayment > 0 ? 'good' : 'bad'}">${c.metrics.activePayment.toLocaleString()}</span></div>
+            <div class="score-row"><span class="label">合作情况</span><span class="value" style="font-size:12px;text-align:right;max-width:220px;">${c.metrics.cooperation}</span></div>
+          </div>
+        </div>
+        <div class="full">
+          <h4 style="font-size:13px;color:#8895a7;margin-bottom:8px;">资质背景</h4>
+          <div style="font-size:13px;color:#5a6473;padding:8px 12px;background:#f4f6f9;border-radius:8px;">${c.metrics.qualification}</div>
+          <div class="risk-note ${riskClass}" style="margin-top:12px;">
+            <b>风险提示：</b>${c.risks}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 构建SVG雷达图
+function buildRadarChart(c) {
+  const dims = [
+    { label: "风控健康度", score: c.scores.risk, max: 25 },
+    { label: "投诉密度", score: c.scores.complaint, max: 20 },
+    { label: "商业价值", score: c.scores.commercial, max: 25 },
+    { label: "合作粘性", score: c.scores.cooperation, max: 15 },
+    { label: "资质信用", score: c.scores.qualification, max: 15 }
+  ];
+
+  const cx = 150, cy = 150, radius = 110;
+  const n = dims.length;
+  const angleStep = (2 * Math.PI) / n;
+  const startAngle = -Math.PI / 2;
+
+  // 满分多边形（灰色背景圈，3层）
+  let bgPolygons = "";
+  for (let layer = 1; layer <= 4; layer++) {
+    const r = (radius * layer) / 4;
+    let pts = "";
+    for (let i = 0; i < n; i++) {
+      const angle = startAngle + i * angleStep;
+      pts += `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)} `;
+    }
+    bgPolygons += `<polygon points="${pts.trim()}" fill="none" stroke="#e8ecf1" stroke-width="1"/>`;
+  }
+
+  // 满分参照多边形
+  let fullPts = "";
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    fullPts += `${cx + radius * Math.cos(angle)},${cy + radius * Math.sin(angle)} `;
+  }
+
+  // 实际得分多边形
+  let scorePts = "";
+  const scoreColor = gradeColors[c.grade];
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const ratio = dims[i].score / dims[i].max;
+    const r = radius * ratio;
+    scorePts += `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)} `;
+  }
+
+  // 轴线
+  let axes = "";
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const x2 = cx + radius * Math.cos(angle);
+    const y2 = cy + radius * Math.sin(angle);
+    axes += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#e8ecf1" stroke-width="1"/>`;
+  }
+
+  // 得分点
+  let scoreDots = "";
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const ratio = dims[i].score / dims[i].max;
+    const r = radius * ratio;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    scoreDots += `<circle cx="${x}" cy="${y}" r="4" fill="${scoreColor}" stroke="#fff" stroke-width="1.5"/>`;
+  }
+
+  // 标签
+  let labels = "";
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const labelR = radius + 22;
+    const x = cx + labelR * Math.cos(angle);
+    const y = cy + labelR * Math.sin(angle);
+    const scoreText = `${dims[i].score}/${dims[i].max}`;
+    labels += `
+      <text x="${x}" y="${y - 6}" text-anchor="middle" font-size="11" fill="#5a6473" font-weight="600">${dims[i].label}</text>
+      <text x="${x}" y="${y + 8}" text-anchor="middle" font-size="11" fill="${scoreColor}" font-weight="700">${scoreText}</text>
+    `;
+  }
+
+  return `
+    <svg class="radar-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+      ${bgPolygons}
+      ${axes}
+      <polygon points="${fullPts.trim()}" fill="none" stroke="#d0d6e0" stroke-width="1" stroke-dasharray="3,3"/>
+      <polygon points="${scorePts.trim()}" fill="${scoreColor}" fill-opacity="0.2" stroke="${scoreColor}" stroke-width="2"/>
+      ${scoreDots}
+      ${labels}
+    </svg>
+    <div class="radar-legend">
+      <span><span class="dot" style="background:${scoreColor};"></span>实际得分</span>
+      <span><span class="dot" style="background:#d0d6e0;"></span>满分参照</span>
+    </div>
+  `;
+}
+
+// 初始化
+populateSelect();
+</script>
+</body>
+</html>
