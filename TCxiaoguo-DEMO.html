@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2027 会员套餐效果预期调控 - 管理后台 (线框 DEMO)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --wire: #4a5568;
+  --wire-light: #a0aec0;
+  --bg: #f7fafc;
+  --card-bg: #ffffff;
+  --accent: #2b6cb0;
+  --accent-light: #ebf4ff;
+  --green: #276749;
+  --green-light: #f0fff4;
+  --orange: #c05621;
+  --orange-light: #fffaf0;
+  --red: #c53030;
+  --red-light: #fff5f5;
+  --mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+  --sans: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+body { font-family: var(--sans); background: var(--bg); color: #1a202c; min-height: 100vh; }
+
+/* Top Bar */
+.topbar { background: #1a202c; color: #fff; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+.topbar .logo { font-weight: 700; font-size: 14px; letter-spacing: 1px; }
+.topbar .env-badge { border: 1px solid #4a5568; padding: 2px 8px; font-family: var(--mono); font-size: 11px; color: #a0aec0; }
+
+/* Navigation */
+.nav-tabs { background: var(--card-bg); border-bottom: 2px solid var(--wire); padding: 0 24px; display: flex; gap: 0; overflow-x: auto; }
+.nav-tab { padding: 12px 18px; font-size: 13px; font-weight: 500; color: #718096; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.nav-tab:hover { color: var(--accent); background: var(--accent-light); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+
+/* Page */
+.page { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* Page Header */
+.page-header { border: 2px dashed var(--wire-light); padding: 16px 20px; margin-bottom: 20px; background: var(--card-bg); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.page-header h1 { font-size: 16px; font-weight: 700; }
+.page-header .subtitle { font-size: 12px; color: #718096; font-family: var(--mono); margin-top: 4px; }
+
+/* Section */
+.section { border: 1.5px dashed var(--wire-light); background: var(--card-bg); margin-bottom: 20px; }
+.section-header { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 10px; }
+.section-num { background: var(--wire); color: #fff; font-family: var(--mono); font-size: 11px; font-weight: 700; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.section-title { font-size: 14px; font-weight: 600; }
+.section-title .en { font-family: var(--mono); font-size: 11px; color: #a0aec0; margin-left: 8px; }
+.section-body { padding: 16px; }
+
+/* Table */
+.config-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.config-table th { background: #edf2f7; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; border: 1px solid #e2e8f0; white-space: nowrap; }
+.config-table td { padding: 10px 12px; border: 1px solid #e2e8f0; vertical-align: middle; }
+.config-table tr:hover td { background: #f7fafc; }
+
+/* Inputs */
+.wire-input { border: 1.5px solid var(--wire-light); padding: 4px 8px; font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--accent); background: #fff; width: 70px; text-align: center; transition: border-color 0.2s; }
+.wire-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(43,108,176,0.15); }
+.wire-input.wide { width: 120px; }
+.wire-input.narrow { width: 50px; }
+
+/* Tags */
+.tag { display: inline-block; border: 1px solid var(--wire-light); padding: 2px 6px; font-size: 11px; font-family: var(--mono); background: #f7fafc; margin: 1px 2px; }
+.tag.accent { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.tag.green { border-color: var(--green); color: var(--green); background: var(--green-light); }
+.tag.orange { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+.tag.red { border-color: var(--red); color: var(--red); background: var(--red-light); }
+
+/* Formula box */
+.formula-box { background: #1a202c; color: #68d391; font-family: var(--mono); font-size: 12px; padding: 12px 16px; line-height: 1.8; margin-top: 12px; }
+.formula-box .comment { color: #718096; }
+.formula-box .highlight { color: #fbd38d; font-weight: 700; }
+
+/* Node cards */
+.node-card { border: 1px solid #e2e8f0; margin-bottom: 16px; transition: border-color 0.2s; }
+.node-card:hover { border-color: var(--accent); }
+.node-card-header { padding: 12px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e2e8f0; background: #fafbfc; }
+.node-icon { width: 32px; height: 32px; border: 2px solid var(--wire); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.node-card-header .node-name { font-size: 14px; font-weight: 600; }
+.node-card-header .node-en { font-family: var(--mono); font-size: 11px; color: #a0aec0; }
+.node-card-body { padding: 16px; }
+.node-desc { font-size: 12px; color: #4a5568; margin-bottom: 12px; padding: 8px 12px; border-left: 3px solid var(--wire-light); background: #f7fafc; line-height: 1.6; }
+
+/* Param grid */
+.param-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.param-item { display: flex; align-items: center; gap: 8px; }
+.param-label { font-size: 12px; color: #718096; white-space: nowrap; min-width: 80px; }
+.param-unit { font-size: 11px; color: #a0aec0; font-family: var(--mono); }
+
+/* Priority chain */
+.priority-chain { display: flex; align-items: center; gap: 0; margin: 12px 0; flex-wrap: wrap; }
+.priority-item { border: 1.5px solid var(--wire); padding: 6px 12px; font-size: 12px; font-weight: 600; font-family: var(--mono); background: #fff; }
+.priority-item.risk { border-color: var(--red); color: var(--red); background: var(--red-light); }
+.priority-item.cap { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+.priority-arrow { padding: 0 6px; color: var(--wire-light); font-size: 16px; }
+
+/* Footer actions */
+.page-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 0; border-top: 1px dashed var(--wire-light); margin-top: 20px; }
+.btn { padding: 8px 20px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--wire); background: #fff; transition: all 0.2s; }
+.btn:hover { background: #edf2f7; }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn.primary:hover { background: #2c5282; }
+
+/* Status */
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.status-dot.online { background: #48bb78; }
+.status-dot.draft { background: #ecc94b; }
+.annotation { font-size: 11px; color: #a0aec0; font-family: var(--mono); margin-top: 6px; }
+.annotation sup { color: var(--accent); font-weight: 700; }
+
+/* ===== Dashboard (实时看板) specific ===== */
+.dash-header { border: 2px dashed var(--wire); padding: 14px 20px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); flex-wrap: wrap; gap: 8px; }
+.dash-header h2 { font-size: 15px; font-weight: 700; }
+.dash-meta { font-family: var(--mono); font-size: 11px; color: #718096; }
+.dash-badge { display: inline-block; border: 1px solid var(--wire); padding: 2px 8px; font-size: 11px; font-family: var(--mono); margin-left: 8px; }
+.grid { display: grid; grid-template-columns: 260px 1fr 280px; grid-template-rows: auto auto auto; gap: 14px; }
+.zone { border: 1.5px dashed var(--wire-light); background: var(--card-bg); padding: 14px; position: relative; }
+.zone::before { content: attr(data-zone); position: absolute; top: -10px; left: 12px; background: var(--wire); color: #fff; font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 1px 7px; }
+.zone-title { font-size: 12px; font-weight: 600; color: #4a5568; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; font-family: var(--mono); }
+.zone-a { grid-column: 1; grid-row: 1 / 3; }
+.zone-b { grid-column: 2; grid-row: 1 / 3; }
+.zone-c { grid-column: 3; grid-row: 1; }
+.zone-d { grid-column: 3; grid-row: 2; }
+.zone-e { grid-column: 1 / 3; grid-row: 3; }
+.zone-f { grid-column: 3; grid-row: 3; }
+.field-group { margin-bottom: 10px; }
+.field-label { font-size: 10px; color: #718096; font-family: var(--mono); margin-bottom: 2px; }
+.field-value { font-size: 14px; font-weight: 600; font-family: var(--mono); }
+.field-value.hl { color: var(--accent); font-size: 16px; }
+.divider { border: none; border-top: 1px dashed #cbd5e0; margin: 10px 0; }
+.calc-layers { display: flex; flex-direction: column; gap: 8px; }
+.calc-layer { border: 1px solid #e2e8f0; padding: 10px 12px; display: flex; align-items: center; gap: 10px; transition: all 0.2s; cursor: pointer; }
+.calc-layer:hover, .calc-layer.active-layer { border-color: var(--accent); background: var(--accent-light); }
+.calc-layer .layer-id { font-family: var(--mono); font-size: 10px; font-weight: 700; color: #fff; background: var(--wire); width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.calc-layer .layer-name { font-size: 12px; font-weight: 600; min-width: 60px; }
+.calc-layer .layer-formula { font-family: var(--mono); font-size: 10px; color: #718096; flex: 1; }
+.calc-layer .layer-result { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.calc-arrow { text-align: center; color: var(--wire-light); font-size: 12px; }
+.calc-final { border: 2px solid var(--accent); background: var(--accent-light); padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; }
+.calc-final .formula { font-family: var(--mono); font-size: 11px; color: #4a5568; }
+.calc-final .result { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--accent); }
+.risk-gate { border: 1.5px solid var(--green); background: var(--green-light); padding: 8px 12px; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+.risk-gate .gate-label { font-size: 11px; font-weight: 600; color: var(--green); }
+.risk-gate .gate-value { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--green); margin-left: auto; }
+.output-status { text-align: center; padding: 12px 0; }
+.output-tier { font-size: 20px; font-weight: 700; color: var(--accent); border: 2px solid var(--accent); display: inline-block; padding: 6px 16px; margin-bottom: 8px; }
+.output-sub { font-size: 11px; color: #718096; font-family: var(--mono); }
+.output-detail { margin-top: 10px; font-size: 12px; line-height: 1.7; }
+.output-detail dt { color: #718096; font-family: var(--mono); font-size: 10px; }
+.output-detail dd { font-weight: 600; margin-bottom: 4px; }
+.env-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.env-item { border: 1px solid #e2e8f0; padding: 6px 8px; text-align: center; }
+.env-item .env-label { font-size: 9px; color: #718096; font-family: var(--mono); }
+.env-item .env-val { font-size: 13px; font-weight: 600; margin-top: 1px; }
+.env-item.active { border-color: var(--orange); background: var(--orange-light); }
+.env-item.active .env-val { color: var(--orange); }
+.monitor-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.monitor-card { flex: 1; min-width: 120px; border: 1px solid #e2e8f0; padding: 10px; text-align: center; }
+.monitor-card .m-label { font-size: 10px; color: #718096; font-family: var(--mono); margin-bottom: 3px; }
+.monitor-card .m-value { font-size: 18px; font-weight: 700; font-family: var(--mono); }
+.monitor-card .m-unit { font-size: 10px; color: #a0aec0; }
+.m-value.up { color: var(--green); }
+.m-value.warn { color: var(--orange); }
+.m-value.neutral { color: var(--accent); }
+.progress-bar { height: 6px; background: #e2e8f0; margin-top: 10px; overflow: hidden; }
+.progress-bar .fill { height: 100%; background: var(--accent); width: 64%; }
+.progress-label { font-size: 10px; color: #718096; font-family: var(--mono); margin-top: 3px; display: flex; justify-content: space-between; }
+.suggest-list { list-style: none; }
+.suggest-list li { font-size: 11px; padding: 7px 0; border-bottom: 1px dashed #e2e8f0; line-height: 1.5; display: flex; gap: 7px; }
+.suggest-list li:last-child { border-bottom: none; }
+.suggest-list .s-icon { flex-shrink: 0; width: 16px; height: 16px; border: 1px solid var(--wire-light); display: flex; align-items: center; justify-content: center; font-size: 9px; margin-top: 1px; }
+.suggest-list .s-text { color: #4a5568; }
+.suggest-list .s-text strong { color: #1a202c; }
+.dash-footer { margin-top: 16px; border: 1px dashed var(--wire-light); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #718096; font-family: var(--mono); background: var(--card-bg); flex-wrap: wrap; gap: 6px; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+.live-dot { width: 8px; height: 8px; background: #48bb78; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; margin-right: 6px; }
+
+/* Attribution charts (CSS-only) */
+.chart-row { display: flex; gap: 20px; flex-wrap: wrap; }
+.chart-box { flex: 1; min-width: 280px; border: 1px solid #e2e8f0; padding: 16px; }
+.chart-box h4 { font-size: 12px; font-weight: 600; margin-bottom: 12px; font-family: var(--mono); color: #4a5568; }
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.bar-label { font-size: 11px; font-family: var(--mono); width: 70px; text-align: right; color: #4a5568; }
+.bar-track { flex: 1; height: 20px; background: #edf2f7; position: relative; }
+.bar-fill { height: 100%; display: flex; align-items: center; padding-left: 6px; font-size: 10px; font-family: var(--mono); color: #fff; font-weight: 700; }
+.bar-fill.c1 { background: var(--accent); }
+.bar-fill.c2 { background: #4299e1; }
+.bar-fill.c3 { background: #63b3ed; }
+.bar-fill.c4 { background: #90cdf4; }
+.bar-fill.c5 { background: #bee3f8; color: #2a4365; }
+.donut-wrap { display: flex; align-items: center; gap: 16px; }
+.donut { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--accent) 0% 45%, #4299e1 45% 70%, #63b3ed 70% 85%, #90cdf4 85% 95%, #bee3f8 95% 100%); position: relative; flex-shrink: 0; }
+.donut::after { content: ''; position: absolute; top: 25%; left: 25%; width: 50%; height: 50%; background: #fff; border-radius: 50%; }
+.donut-legend { font-size: 11px; line-height: 2; }
+.donut-legend .dot { display: inline-block; width: 10px; height: 10px; margin-right: 6px; }
+
+/* Overview stats */
+.stat-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.stat-card { flex: 1; min-width: 160px; border: 1px solid #e2e8f0; padding: 12px 16px; text-align: center; background: var(--card-bg); }
+.stat-card .s-label { font-size: 11px; color: #718096; font-family: var(--mono); }
+.stat-card .s-value { font-size: 22px; font-weight: 700; font-family: var(--mono); margin-top: 4px; }
+.stat-card .s-delta { font-size: 11px; margin-top: 2px; }
+.s-delta.up { color: var(--green); }
+.s-delta.down { color: var(--red); }
+
+/* Risk level colors */
+.risk-normal { color: var(--green); }
+.risk-watch { color: var(--orange); }
+.risk-limit { color: #d69e2e; }
+.risk-close { color: var(--red); font-weight: 700; }
+
+/* Alert list */
+.alert-item { border: 1px solid #e2e8f0; padding: 12px 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; transition: border-color 0.2s; }
+.alert-item:hover { border-color: var(--accent); }
+.alert-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 8px; flex-shrink: 0; margin-top: 1px; }
+.alert-badge.p0 { background: var(--red); color: #fff; }
+.alert-badge.p1 { background: var(--orange); color: #fff; }
+.alert-badge.p2 { background: #d69e2e; color: #fff; }
+.alert-content { flex: 1; }
+.alert-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.alert-desc { font-size: 12px; color: #4a5568; line-height: 1.5; }
+.alert-meta { font-size: 11px; color: #a0aec0; font-family: var(--mono); margin-top: 4px; }
+.alert-status { font-size: 11px; font-family: var(--mono); padding: 2px 6px; border: 1px solid; flex-shrink: 0; margin-top: 2px; }
+.alert-status.critical { color: var(--red); border-color: var(--red); background: var(--red-light); }
+.alert-status.warning { color: var(--orange); border-color: var(--orange); background: var(--orange-light); }
+.alert-status.info { color: #d69e2e; border-color: #d69e2e; background: #fffff0; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .zone-a,.zone-b,.zone-c,.zone-d,.zone-e,.zone-f { grid-column: 1; grid-row: auto; }
+}
+@media (max-width: 768px) {
+  .param-grid { grid-template-columns: 1fr; }
+  .nav-tabs { padding: 0 12px; }
+  .page { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="logo">58CORP / 会员套餐效果调控管理后台</div>
+  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <span class="env-badge"><span class="status-dot draft"></span>DEMO / DRAFT</span>
+    <span class="env-badge">STRATEGY v2027-Q1-RC3</span>
+    <span class="env-badge">OPERATOR: admin@58corp</span>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav-tabs">
+  <div class="nav-tab active" data-page="dashboard">客户效果归因看板</div>
+  <div class="nav-tab" data-page="sku">SKU基准配置</div>
+  <div class="nav-tab" data-page="node">关键节点干预配置</div>
+  <div class="nav-tab" data-page="industry">行业扶持配置</div>
+  <div class="nav-tab" data-page="risk">风险规则管理</div>
+  <div class="nav-tab" data-page="attribution">调控策略看板</div>
+</div>
+
+<!-- ==================== PAGE: 客户效果调控实时看板 ==================== -->
+<div class="page active" id="page-dashboard">
+  <div class="dash-header">
+    <div>
+      <h2>2027 会员套餐效果预期调控 - 系统诊断看板</h2>
+      <div class="dash-meta">DIAGNOSTIC DASHBOARD / CONTRACT-LEVEL TRACE <span class="dash-badge">WIREFRAME v1.0</span><span class="dash-badge">DEMO DATA</span></div>
+    </div>
+    <div style="text-align:right;">
+      <div class="dash-meta"><span class="live-dot"></span>STRATEGY: 2027-Q1-RC3</div>
+      <div class="dash-meta" style="margin-top:3px;">TRACE ID: KJ-2026-SZ-MFG-0042</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Zone A -->
+    <div class="zone zone-a" data-zone="ZONE-A">
+      <div class="zone-title">CONTRACT INPUT / 合同录入</div>
+      <div class="field-group"><div class="field-label">contract_type</div><div class="field-value">框架合同</div></div>
+      <div class="field-group"><div class="field-label">contract_net_paid_amount</div><div class="field-value hl">50,000 元</div></div>
+      <div class="field-group"><div class="field-label">coin_paid_amount</div><div class="field-value">20,000 元</div></div>
+      <div class="field-group"><div class="field-label">effective_account_count</div><div class="field-value">6 账号</div></div>
+      <hr class="divider">
+      <div class="field-group"><div class="field-label">derived: coin_ratio</div><div class="field-value" style="color:var(--orange);">40%</div></div>
+      <div class="field-group"><div class="field-label">derived: anchor_paid_amount</div><div class="field-value">30,000 元</div></div>
+      <div class="field-group"><div class="field-label">derived: account_arpu</div><div class="field-value hl">5,000 元/账号</div></div>
+      <hr class="divider">
+      <div class="field-group"><div class="field-label">tags</div><div><span class="tag">多人版</span><span class="tag">定制/框架</span><span class="tag">币占比&lt;50%</span></div></div>
+    </div>
+
+    <!-- Zone B -->
+    <div class="zone zone-b" data-zone="ZONE-B">
+      <div class="zone-title">CALCULATION ENGINE / 四层系数计算</div>
+      <div class="calc-layers">
+        <div class="calc-layer active-layer" onclick="highlightLayer(this)"><div class="layer-id">1</div><div class="layer-name">K_price</div><div class="layer-formula">arpu=5000 → [3500,5500) → 3980档</div><div class="layer-result">= 1.0</div></div>
+        <div class="calc-arrow">|</div>
+        <div class="calc-layer" onclick="highlightLayer(this)"><div class="layer-id">2</div><div class="layer-name">K_coin</div><div class="layer-formula">ratio=40% &lt; 50%(框架) → 不卷档</div><div class="layer-result">= 1.2</div></div>
+        <div class="calc-arrow">|</div>
+        <div class="calc-layer" onclick="highlightLayer(this)"><div class="layer-id">3</div><div class="layer-name">K_ind</div><div class="layer-formula">苏州 x 制造业 x 旺季 → 扶持</div><div class="layer-result">= 1.1</div></div>
+        <div class="calc-arrow">|</div>
+        <div class="calc-layer" onclick="highlightLayer(this)"><div class="layer-id">4</div><div class="layer-name">K_qual</div><div class="layer-formula">quality=88 x activity=HIGH</div><div class="layer-result">= 1.05</div></div>
+      </div>
+      <div class="calc-final"><div class="formula">K_final = min(K_base x K_adjust, K_cap) x K_risk</div><div class="result">= 1.386</div></div>
+      <div class="risk-gate" id="riskGate"><span style="font-size:14px;">&#9632;</span><div class="gate-label">RISK GATE / 风控闸门</div><div class="gate-value">PASS / K_risk = 1.0</div></div>
+      <div style="margin-top:8px; font-family:var(--mono); font-size:10px; color:#718096; line-height:1.8;">
+        <div>K_base = 1.0 x 1.2 x 1.0 = <strong>1.2</strong></div>
+        <div>K_adjust = 1.1 x 1.05 = <strong>1.155</strong></div>
+        <div>K_cap = 1.5 | min(1.386, 1.5) x 1.0 = <strong style="color:var(--accent);">1.386</strong></div>
+      </div>
+    </div>
+
+    <!-- Zone C -->
+    <div class="zone zone-c" data-zone="ZONE-C">
+      <div class="zone-title">OUTPUT / 效果输出</div>
+      <div class="output-status"><div class="output-tier">增强预期档</div><div class="output-sub">ENHANCED / K_final=1.386</div></div>
+      <dl class="output-detail">
+        <dt>effect_tier</dt><dd>增强 (ENHANCED)</dd>
+        <dt>tier_range</dt><dd>[1.2, 1.5)</dd>
+        <dt>cap_headroom</dt><dd>距上限剩余 0.114</dd>
+        <dt>valid_window</dt><dd>14天 (旺季扶持)</dd>
+        <dt>fallback</dt><dd>窗口结束 → 回落基线</dd>
+      </dl>
+    </div>
+
+    <!-- Zone D -->
+    <div class="zone zone-d" data-zone="ZONE-D">
+      <div class="zone-title">ENVIRONMENT / 环境参数</div>
+      <div class="env-grid">
+        <div class="env-item"><div class="env-label">city</div><div class="env-val">苏州</div></div>
+        <div class="env-item"><div class="env-label">industry_l4</div><div class="env-val">制造业</div></div>
+        <div class="env-item active"><div class="env-label">season</div><div class="env-val">旺季</div></div>
+        <div class="env-item"><div class="env-label">job_quality</div><div class="env-val">88分</div></div>
+        <div class="env-item"><div class="env-label">activity</div><div class="env-val">HIGH</div></div>
+        <div class="env-item"><div class="env-label">supply_demand</div><div class="env-val">供给不足</div></div>
+      </div>
+    </div>
+
+    <!-- Zone E -->
+    <div class="zone zone-e" data-zone="ZONE-E">
+      <div class="zone-title">MONITORING / 效果监控 (14天窗口)</div>
+      <div class="monitor-row">
+        <div class="monitor-card"><div class="m-label">increment_leads</div><div class="m-value up">+15%</div><div class="m-unit">增量线索</div></div>
+        <div class="monitor-card"><div class="m-label">unit_cost</div><div class="m-value neutral" id="costVal">6.2元</div><div class="m-unit">线索成本</div></div>
+        <div class="monitor-card"><div class="m-label">reply_rate</div><div class="m-value up">92%</div><div class="m-unit">回复率</div></div>
+        <div class="monitor-card"><div class="m-label">complaint</div><div class="m-value neutral">0</div><div class="m-unit">投诉</div></div>
+        <div class="monitor-card"><div class="m-label">window_left</div><div class="m-value warn">5天</div><div class="m-unit">剩余窗口</div></div>
+      </div>
+      <div class="progress-bar"><div class="fill"></div></div>
+      <div class="progress-label"><span>DAY 9 / 14</span><span>FALLBACK: cost>8 OR reply<70% OR complaint>2</span></div>
+    </div>
+
+    <!-- Zone F -->
+    <div class="zone zone-f" data-zone="ZONE-F">
+      <div class="zone-title">SALES ACTION / 销售建议</div>
+      <ul class="suggest-list">
+        <li><div class="s-icon">1</div><div class="s-text"><strong>引导充值招聘币</strong> - 币占比40%低于阈值50%，提升可解锁加成</div></li>
+        <li><div class="s-icon">2</div><div class="s-text"><strong>维持职位质量</strong> - 88分高质量区间，保持薪资竞争力</div></li>
+        <li><div class="s-icon">3</div><div class="s-text"><strong>旺季窗口提醒</strong> - 扶持剩余5天，提前沟通续费</div></li>
+        <li><div class="s-icon">4</div><div class="s-text"><strong>话术</strong> - "平台有阶段性资源支持，效果与供需和职位竞争力有关"</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dash-footer">
+    <div><span class="live-dot"></span>SYSTEM: NORMAL | RISK ENGINE: ONLINE | DATA: T+0</div>
+    <div>PRIORITY: RISK > K_CAP > SCENARIO > BASE</div>
+    <div>V1.2 | DEMO ONLY</div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: SKU基准配置 ==================== -->
+<div class="page" id="page-sku">
+  <div class="page-header">
+    <div><h1>2027 会员套餐 - SKU 效果基准配置</h1><div class="subtitle">SKU & K_price Strategy / 价格档位映射与商业价值因子调节基准</div></div>
+    <div style="text-align:right;"><div class="annotation">LAST MODIFIED: 2027-01-15 14:32</div><div class="annotation">VERSION: RC3</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">1</div><div class="section-title">商业基准锚定配置 <span class="en">(K_price)</span></div></div>
+    <div class="section-body">
+      <table class="config-table">
+        <thead><tr><th>价格区间 (单账号回款)</th><th>对齐档位</th><th>K_price</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><strong>&lt; 3,980 元</strong></td><td><span class="tag">基础预期档</span></td><td><input class="wire-input" value="1.00" readonly></td><td class="annotation">默认安全基线 <sup>[1]</sup></td></tr>
+          <tr><td><strong>3,980 - 6,179 元</strong></td><td><span class="tag accent">标准预期档</span></td><td><input class="wire-input" value="1.15"></td><td class="annotation">3980锚点，占销量44.9% <sup>[1,2]</sup></td></tr>
+          <tr><td><strong>6,180 - 8,799 元</strong></td><td><span class="tag accent">增强预期档</span></td><td><input class="wire-input" value="1.30"></td><td class="annotation">6180/8800档位 <sup>[2,3]</sup></td></tr>
+          <tr><td><strong>&ge; 8,800 元</strong></td><td><span class="tag orange">重点预期档</span></td><td><input class="wire-input" value="1.50"></td><td class="annotation">受K_cap约束 <sup>[3]</sup></td></tr>
+        </tbody>
+      </table>
+      <div class="annotation" style="margin-top:10px;">* 多人/框架: account_arpu = (contract_net_paid - coin_amount) / effective_accounts</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">2</div><div class="section-title">招聘币占比激励配置 <span class="en">(K_coin)</span></div></div>
+    <div class="section-body">
+      <table class="config-table">
+        <thead><tr><th>客户类型</th><th>激励阈值</th><th>加成系数</th><th>适用范围</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><strong>直招客户</strong></td><td><input class="wire-input" value="≥ 50%"></td><td><input class="wire-input narrow" value="+0.2"></td><td>实际消耗职位</td><td class="annotation">套餐阈值60% <sup>[2,4]</sup></td></tr>
+          <tr><td><strong>代招客户</strong></td><td><input class="wire-input" value="≥ 33%"></td><td><input class="wire-input narrow" value="+0.1"></td><td>指定消耗币职位</td><td class="annotation">行业差异化 <sup>[5]</sup></td></tr>
+          <tr><td><strong>定制/框架</strong></td><td><input class="wire-input" value="≥ 50%"></td><td><input class="wire-input narrow" value="+0.2"></td><td>全部有效职位</td><td class="annotation">统一阈值 <sup>[4,6]</sup></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">3</div><div class="section-title">计算逻辑说明 <span class="en">(PRD Logic)</span></div></div>
+    <div class="section-body">
+      <div class="formula-box">
+        <div class="comment">// 最终系数公式</div>
+        <div>K_final = min(<span class="highlight">K_base</span> x K_adjust, <span class="highlight">K_cap</span>) x <span class="highlight">K_risk</span></div>
+        <div>K_base = K_price x K_coin x K_product</div>
+        <div>K_adjust = K_ind x K_qual x K_scenario</div>
+      </div>
+      <div style="margin-top:14px;">
+        <div style="font-size:12px; font-weight:600; margin-bottom:8px;">优先级逻辑:</div>
+        <div class="priority-chain">
+          <div class="priority-item risk">K_risk 风险覆盖</div><div class="priority-arrow">&gt;</div>
+          <div class="priority-item cap">K_cap 策略上限</div><div class="priority-arrow">&gt;</div>
+          <div class="priority-item">K_adjust 场景修正</div><div class="priority-arrow">&gt;</div>
+          <div class="priority-item">K_base 商业基线</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><button class="btn">取消</button><button class="btn primary" onclick="showToast('SKU基准配置已保存')">保存策略</button></div>
+</div>
+
+<!-- ==================== PAGE: 关键节点干预配置 ==================== -->
+<div class="page" id="page-node">
+  <div class="page-header">
+    <div><h1>2027 会员套餐 - 关键节点干预策略配置</h1><div class="subtitle">Key Node Regulation / 售前、服务中、续费三大付费节点干预参数</div></div>
+    <div style="text-align:right;"><div class="annotation">LAST MODIFIED: 2027-01-14 09:18</div><div class="annotation">VERSION: RC3</div></div>
+  </div>
+
+  <div class="node-card">
+    <div class="node-card-header"><div class="node-icon">1</div><div><div class="node-name">售前体验与新签探索</div><div class="node-en">New Signup Strategy</div></div><span class="tag green" style="margin-left:auto;">ACTIVE</span></div>
+    <div class="node-card-body">
+      <div class="node-desc">为新签客户提供短周期有限探索流量，绑定经营动作，降低"付了钱没反应"的焦虑。</div>
+      <div class="param-grid">
+        <div class="param-item"><span class="param-label">扶持周期</span><input class="wire-input narrow" value="7"><span class="param-unit">天</span></div>
+        <div class="param-item"><span class="param-label">检查时间点</span><span class="param-unit">第</span><input class="wire-input narrow" value="2"><span class="param-unit">天检查回复率</span></div>
+        <div class="param-item"><span class="param-label">加权系数</span><input class="wire-input narrow" value="1.3"><span class="param-unit">x</span></div>
+        <div class="param-item"><span class="param-label">降级触发</span><span class="param-unit">回复率&lt;</span><input class="wire-input narrow" value="60"><span class="param-unit">%</span></div>
+      </div>
+      <div class="annotation" style="margin-top:10px;">* 降级: 暂停增量 → 推经营任务 → 恢复后重启 <sup>[4,11]</sup></div>
+    </div>
+  </div>
+
+  <div class="node-card">
+    <div class="node-card-header"><div class="node-icon">2</div><div><div class="node-name">服务中充值实时加成</div><div class="node-en">In-service Top-up Strategy</div></div><span class="tag green" style="margin-left:auto;">ACTIVE</span></div>
+    <div class="node-card-body">
+      <div class="node-desc">在线单购招聘币后，在上限内提高对应职位资源占比，强化付费-效果正反馈。</div>
+      <div class="param-grid">
+        <div class="param-item"><span class="param-label">调控窗口</span><input class="wire-input narrow" value="14"><span class="param-unit">天</span></div>
+        <div class="param-item"><span class="param-label">调控对象</span><input class="wire-input wide" value="实际消耗币职位" readonly></div>
+        <div class="param-item"><span class="param-label">加成系数</span><input class="wire-input narrow" value="1.2"><span class="param-unit">x</span></div>
+        <div class="param-item"><span class="param-label">回落条件</span><span class="param-unit">连续</span><input class="wire-input narrow" value="3"><span class="param-unit">天成本超阈值</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="node-card">
+    <div class="node-card-header"><div class="node-icon">3</div><div><div class="node-name">续费观察与保障加成</div><div class="node-en">Renewal Strategy</div></div><span class="tag orange" style="margin-left:auto;">PENDING</span></div>
+    <div class="node-card-body">
+      <div class="node-desc">针对续费客户，依据历史履约质量给予增量支持，降低流失风险。</div>
+      <div class="param-grid">
+        <div class="param-item"><span class="param-label">观察周期</span><input class="wire-input narrow" value="14"><span class="param-unit">天</span></div>
+        <div class="param-item"><span class="param-label">准入条件</span><input class="wire-input wide" value="回复率稳定+无违规" readonly></div>
+        <div class="param-item"><span class="param-label">调控动作</span><input class="wire-input wide" value="重点观察档" readonly></div>
+        <div class="param-item"><span class="param-label">未达标</span><input class="wire-input wide" value="自动回归基线" readonly></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">!</div><div class="section-title">动态回落与风险兜底 <span class="en">(Fallback)</span></div></div>
+    <div class="section-body">
+      <div class="formula-box">
+        <div>IF (window_expired OR cost_breach OR reply_drop) THEN K_scenario → <span class="highlight">1.0</span></div>
+        <div>IF risk_level == <span class="highlight">"关闭"</span> THEN K_risk = <span class="highlight">0</span> <span class="comment">// 立即停止</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><button class="btn">取消</button><button class="btn primary" onclick="showToast('节点策略已保存')">保存策略</button></div>
+</div>
+
+<!-- ==================== PAGE: 行业扶持配置 ==================== -->
+<div class="page" id="page-industry">
+  <div class="page-header">
+    <div><h1>2027 会员套餐 - 重点行业扶持策略管理</h1><div class="subtitle">Industry Support / 按城市、类目、周期的阶段性 K_ind 叠加</div></div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button class="btn primary" onclick="showToast('新增扶持计划 (DEMO)')">+ 新增扶持计划</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">1</div><div class="section-title">活跃扶持计划列表 <span class="en">(Active Plans)</span></div></div>
+    <div class="section-body">
+      <table class="config-table">
+        <thead><tr><th>计划名称</th><th>目标城市</th><th>目标类目 (L4)</th><th>供需指数</th><th>扶持系数</th><th>有效期</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td><strong>制造业旺季扶持</strong></td><td>苏州市</td><td>普工/技工</td><td><span class="tag orange">供给不足</span></td><td><input class="wire-input narrow" value="+0.1"></td><td>08/01 - 08/21</td><td><span class="tag green">运行中</span></td></tr>
+          <tr><td><strong>春招服务业冲刺</strong></td><td>全省</td><td>餐饮/配送</td><td><span class="tag red">极度短缺</span></td><td><input class="wire-input narrow" value="+0.15"></td><td>08/15 - 09/15</td><td><span class="tag orange">待审批</span></td></tr>
+          <tr><td><strong>物流年末保障</strong></td><td>全国</td><td>货运/仓储</td><td><span class="tag orange">供给不足</span></td><td><input class="wire-input narrow" value="+0.1"></td><td>11/01 - 12/31</td><td><span class="tag">计划中</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">2</div><div class="section-title">扶持准入/回落规则配置 <span class="en">(Entry & Fallback Rules)</span></div></div>
+    <div class="section-body">
+      <div class="param-grid" style="grid-template-columns: 1fr;">
+        <div class="param-item" style="margin-bottom:10px;">
+          <span class="param-label" style="min-width:100px;">1. 准入门槛</span>
+          <span class="param-unit">职位质量分 ≥</span><input class="wire-input narrow" value="80">
+          <span class="param-unit">且 活跃度</span><input class="wire-input narrow" value="高/中">
+          <span class="param-unit">且 风险等级</span><input class="wire-input narrow" value="正常">
+        </div>
+        <div class="param-item" style="margin-bottom:10px;">
+          <span class="param-label" style="min-width:100px;">2. 自动回落</span>
+          <span class="param-unit">周期结束 或 回复率连续</span><input class="wire-input narrow" value="3">
+          <span class="param-unit">天低于</span><input class="wire-input narrow" value="20"><span class="param-unit">%</span>
+          <span class="param-unit">→ 回归基线</span>
+        </div>
+        <div class="param-item">
+          <span class="param-label" style="min-width:100px;">3. 策略冲突</span>
+          <span class="param-unit">同时命中多项时</span>
+          <input class="wire-input wide" value="取最大值">
+          <span class="param-unit">(受K_cap约束)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><button class="btn">重置</button><button class="btn primary" onclick="showToast('行业扶持配置已保存')">保存配置</button></div>
+</div>
+
+<!-- ==================== PAGE: 风险规则管理 ==================== -->
+<div class="page" id="page-risk">
+  <div class="page-header">
+    <div><h1>2027 会员套餐 - 风险等级与一票否决规则</h1><div class="subtitle">Risk Rule Management / 风控分层与 K_risk 系数定义</div></div>
+    <div style="text-align:right;"><div class="annotation">RISK ENGINE: ONLINE</div><div class="annotation">优先级: 最高 (不可覆盖)</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">1</div><div class="section-title">风险分层与系数定义 <span class="en">(K_risk Levels)</span></div></div>
+    <div class="section-body">
+      <table class="config-table">
+        <thead><tr><th>风险等级</th><th>商业调控处理动作</th><th>K_risk</th><th>对客动作</th></tr></thead>
+        <tbody>
+          <tr><td><span class="risk-normal"><strong>&#9632; 正常</strong></span></td><td>允许所有商业加成</td><td><input class="wire-input narrow" value="1.0" readonly></td><td>常规服务提示</td></tr>
+          <tr><td><span class="risk-watch"><strong>&#9632; 关注</strong></span></td><td>冻结增量加成，仅保留基准</td><td><input class="wire-input narrow" value="0.8"></td><td>提示优化建议 (回复率/分)</td></tr>
+          <tr><td><span class="risk-limit"><strong>&#9632; 限制</strong></span></td><td>强制降权，基础调控减半</td><td><input class="wire-input narrow" value="0.5"></td><td>告知限制原因与申诉口径</td></tr>
+          <tr><td><span class="risk-close"><strong>&#9632; 关闭</strong></span></td><td><strong>系数归零，停止一切调控</strong></td><td><input class="wire-input narrow" value="0.0" readonly></td><td>明确依据、告知退费/关停</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">2</div><div class="section-title">自动触发规则管理 <span class="en">(Auto-trigger Rules)</span></div></div>
+    <div class="section-body">
+      <table class="config-table">
+        <thead><tr><th>触发事件类别</th><th>指标阈值</th><th>自动判定等级</th><th>冷却/申诉期</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td>回复表现极差</td><td>回复率连续 3 天 &lt; <input class="wire-input narrow" value="10">%</td><td><span class="tag orange">关注</span></td><td>无 (达标即恢复)</td><td><button class="btn" style="padding:3px 10px; font-size:11px;" onclick="showToast('编辑规则 (DEMO)')">编辑</button></td></tr>
+          <tr><td>虚假职位投诉</td><td>有效投诉单数 &gt; <input class="wire-input narrow" value="3"></td><td><span class="tag" style="border-color:#d69e2e; color:#d69e2e;">限制</span></td><td>7 天</td><td><button class="btn" style="padding:3px 10px; font-size:11px;" onclick="showToast('编辑规则 (DEMO)')">编辑</button></td></tr>
+          <tr><td>严重违规欺诈</td><td>系统识别欺诈/黑产命中</td><td><span class="tag red">关闭</span></td><td>永久 (人工复评)</td><td><button class="btn" style="padding:3px 10px; font-size:11px;" onclick="showToast('编辑规则 (DEMO)')">编辑</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">3</div><div class="section-title">风控执行审计 <span class="en">(Audit Trail)</span></div></div>
+    <div class="section-body">
+      <div class="formula-box">
+        <div class="comment">// 每一笔 K_risk=0 的记录必须包含:</div>
+        <div>[ <span class="highlight">命中规则ID</span> ] [ <span class="highlight">证据快照</span> ] [ <span class="highlight">执行人</span> ] [ <span class="highlight">申诉入口</span> ]</div>
+        <br>
+        <div class="comment">// 风险规则与商业规则完全解耦，风控一票否决不可被商业系数覆盖</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><button class="btn">取消</button><button class="btn primary" onclick="showToast('风险规则已保存')">保存规则</button></div>
+</div>
+
+<!-- ==================== PAGE: 调控策略看板 ==================== -->
+<div class="page" id="page-attribution">
+  <div class="page-header">
+    <div><h1>2027 会员套餐 - 调控策略看板</h1><div class="subtitle">Regulation Strategy Dashboard / 预警监控 + 因子增量归因 + 贡献度分布</div></div>
+    <div style="text-align:right;"><div class="annotation">DATA AS OF: 2027-01-15 09:00</div><div class="annotation">REFRESH: REAL-TIME + T+1</div></div>
+  </div>
+
+  <!-- Overview stats -->
+  <div class="stat-row">
+    <div class="stat-card"><div class="s-label">调控增量线索</div><div class="s-value" style="color:var(--accent);">12,500</div><div class="s-delta up">+15%</div></div>
+    <div class="stat-card"><div class="s-label">活跃账号</div><div class="s-value">8,751</div><div class="s-delta up">82%</div></div>
+    <div class="stat-card"><div class="s-label">风险拦截</div><div class="s-value" style="color:var(--red);">604</div><div class="s-delta down">4.7%</div></div>
+    <div class="stat-card"><div class="s-label">策略健康度</div><div class="s-value" style="color:var(--green);">92%</div><div class="s-delta up">稳定</div></div>
+  </div>
+
+  <!-- Section 1: Real-time Alerts -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">1</div><div class="section-title">实时预警列表 <span class="en">(Real-time Alerts)</span></div></div>
+    <div class="section-body">
+      <div class="alert-item">
+        <div class="alert-badge p0">P0</div>
+        <div class="alert-content">
+          <div class="alert-title">数据质量：合同金额拆分异常</div>
+          <div class="alert-desc">HT-2027-08832 实收金额 &lt; 各金额合计，已暂停并核查</div>
+          <div class="alert-meta">2027-01-15 08:42 | 影响客户：苏州某制造企业</div>
+        </div>
+        <div class="alert-status critical">处理中</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge p0">P0</div>
+        <div class="alert-content">
+          <div class="alert-title">风险服务不可用</div>
+          <div class="alert-desc">风控引擎响应超时(&gt;5s)，已启用保守系数并禁新增，持续12min</div>
+          <div class="alert-meta">2027-01-15 07:15 | 影响范围：全量客户</div>
+        </div>
+        <div class="alert-status critical">已恢复</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge p1">P1</div>
+        <div class="alert-content">
+          <div class="alert-title">效果骤降：配送行业(杭州)</div>
+          <div class="alert-desc">有效线索率较7日均值下降23%，疑似C端供给异常</div>
+          <div class="alert-meta">2027-01-15 06:30 | 影响客户：186户</div>
+        </div>
+        <div class="alert-status warning">排查中</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge p1">P1</div>
+        <div class="alert-content">
+          <div class="alert-title">异常消耗：单账号消耗超阈值</div>
+          <div class="alert-desc">ACC-2847 币消耗达均值4.2倍，触发防损预警</div>
+          <div class="alert-meta">2027-01-14 22:18 | 客户：某代招公司</div>
+        </div>
+        <div class="alert-status warning">已限流</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge p1">P1</div>
+        <div class="alert-content">
+          <div class="alert-title">高投诉集群：保安行业(北京)</div>
+          <div class="alert-desc">近3天投诉率8.7%(基线2.1%)，触发行业关注</div>
+          <div class="alert-meta">2027-01-14 18:05 | 影响客户：42户</div>
+        </div>
+        <div class="alert-status warning">观察中</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge p2">P2</div>
+        <div class="alert-content">
+          <div class="alert-title">策略失效：K_cap触顶率高</div>
+          <div class="alert-desc">上海制造业触顶率67%，调控空间不足，建议调优</div>
+          <div class="alert-meta">2027-01-14 15:22 | 影响：策略有效性</div>
+        </div>
+        <div class="alert-status info">待评估</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge p2">P2</div>
+        <div class="alert-content">
+          <div class="alert-title">续费预警：客户即将到期</div>
+          <div class="alert-desc">未来7天328户到期，意向率41%(基线55%)</div>
+          <div class="alert-meta">2027-01-14 09:00 | 影响：收入预测</div>
+        </div>
+        <div class="alert-status info">已推送</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Factor Increment Attribution -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">2</div><div class="section-title">结果监控：调控因子增量归因 <span class="en">(Factor Increment Attribution)</span></div></div>
+    <div class="section-body">
+      <table class="config-table">
+        <thead><tr><th>因子名称</th><th>触发次数</th><th>覆盖客户</th><th>平均增量线索</th><th>增量成本</th><th>ROI</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td><strong>价格档 K_price</strong></td><td>12,847</td><td>100%</td><td>+8.2%</td><td>—</td><td>—</td><td><span class="tag">基准正常</span></td></tr>
+          <tr><td><strong>招聘币 K_coin</strong></td><td>6,231</td><td>48.5%</td><td>+12.6%</td><td>3.2元</td><td>2.8</td><td><span class="tag green">&#8593; 加成中</span></td></tr>
+          <tr><td><strong>行业供需 K_supply</strong></td><td>3,892</td><td>30.3%</td><td>+15.1%</td><td>4.1元</td><td>2.3</td><td><span class="tag green">&#8593; 补给中</span></td></tr>
+          <tr><td><strong>旺季系数 K_season</strong></td><td>2,156</td><td>16.8%</td><td>+18.4%</td><td>5.0元</td><td>2.1</td><td><span class="tag green">&#8593; 扶持中</span></td></tr>
+          <tr><td><strong>职位质量 K_quality</strong></td><td>8,412</td><td>65.5%</td><td>+9.7%</td><td>2.8元</td><td>3.4</td><td><span class="tag accent">效率稳定</span></td></tr>
+          <tr><td><strong>账号活跃 K_activ</strong></td><td>7,893</td><td>61.4%</td><td>+7.3%</td><td>2.1元</td><td>3.9</td><td><span class="tag accent">效率稳定</span></td></tr>
+          <tr><td><strong>新发职位 K_new</strong></td><td>4,521</td><td>35.2%</td><td>+11.2%</td><td>3.5元</td><td>2.6</td><td><span class="tag green">&#8593; 探测中</span></td></tr>
+          <tr><td><strong>风险覆盖 K_risk</strong></td><td>604</td><td>4.7%</td><td style="color:var(--red); font-weight:700;">-100%</td><td>—</td><td>—</td><td><span class="tag red">[!] 已拦截</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 3: Contribution Distribution -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">3</div><div class="section-title">调控因子贡献度分布 <span class="en">(Contribution Distribution)</span></div></div>
+    <div class="section-body">
+      <div class="chart-row">
+        <div class="chart-box">
+          <h4>增量线索贡献占比归因</h4>
+          <div class="donut-wrap">
+            <div class="donut" style="background: conic-gradient(var(--accent) 0% 45%, #4299e1 45% 65%, #63b3ed 65% 85%, #90cdf4 85% 100%);"></div>
+            <div class="donut-legend">
+              <div><span class="dot" style="background:var(--accent);"></span>商业价值 (Price+Coin): 65%</div>
+              <div><span class="dot" style="background:#4299e1;"></span>行业/场景加成: 20%</div>
+              <div><span class="dot" style="background:#63b3ed;"></span>经营质量加成: 15%</div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-box">
+          <h4>核心因子线索成本 (CPA) 趋势</h4>
+          <div style="padding:12px 0;">
+            <div class="bar-row"><div class="bar-label">基线</div><div class="bar-track"><div class="bar-fill c3" style="width:75%;">6.0 元</div></div></div>
+            <div class="bar-row"><div class="bar-label">实际</div><div class="bar-track"><div class="bar-fill c1" style="width:60%;">4.8 元</div></div></div>
+            <div style="margin-top:12px; font-family:var(--mono); font-size:11px; color:var(--green); font-weight:600;">&#8595; 20% (实际成本低于基线)</div>
+            <div class="annotation" style="margin-top:8px;">* 高价档非线性成本波动详见 PRD 2.2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="display:none; position:fixed; bottom:24px; right:24px; background:#1a202c; color:#fff; padding:12px 20px; font-size:13px; font-family:var(--mono); z-index:999; border-left:4px solid #48bb78;"></div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('page-' + this.dataset.page).classList.add('active');
+  });
+});
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+
+// Dashboard: layer highlight
+function highlightLayer(el) {
+  document.querySelectorAll('.calc-layer').forEach(l => l.classList.remove('active-layer'));
+  el.classList.add('active-layer');
+}
+let layers = document.querySelectorAll('.calc-layer'), li = 0;
+setInterval(() => { li = (li + 1) % layers.length; highlightLayer(layers[li]); }, 3000);
+
+// Dashboard: live cost tick
+setInterval(() => {
+  const el = document.getElementById('costVal');
+  if (el) el.textContent = (6.2 + (Math.random()-0.5)*0.4).toFixed(1) + '元';
+}, 5000);
+
+// Dashboard: risk gate hover
+const rg = document.getElementById('riskGate');
+if (rg) {
+  rg.addEventListener('mouseenter', () => { rg.style.borderColor='#c53030'; rg.style.background='#fff5f5'; rg.querySelector('.gate-label').textContent='RISK GATE (若关闭 → K_risk=0)'; });
+  rg.addEventListener('mouseleave', () => { rg.style.borderColor=''; rg.style.background=''; rg.querySelector('.gate-label').textContent='RISK GATE / 风控闸门'; });
+}
+
+// Input focus highlight
+document.querySelectorAll('.wire-input').forEach(inp => {
+  if (inp.readOnly) return;
+  inp.addEventListener('focus', function(){ this.style.background='#ebf4ff'; });
+  inp.addEventListener('blur', function(){ this.style.background='#fff'; });
+});
+</script>
+</body>
+</html>
