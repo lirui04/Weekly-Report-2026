@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>58锚定套餐 · 26 vs 27年对比</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #ccc; --dash: #bbb;
+    --text: #222; --muted: #888; --accent: #1a6dff;
+    --red: #d63031; --green: #00a854; --orange: #e67e22;
+    --blue-bg: #eef4ff; --red-bg: #fff3f3; --green-bg: #f0fff4;
+    --tag-new: #1a6dff; --tag-renew: #6c5ce7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 13px; color: var(--text); background: var(--bg);
+    line-height: 1.6; padding: 24px;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    border: 2px dashed var(--border); padding: 20px 28px;
+    margin-bottom: 20px; background: var(--card);
+  }
+  .header h1 { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+  .header .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 0; margin-bottom: 0;
+    border-bottom: 2px solid var(--border);
+  }
+  .tab {
+    padding: 10px 24px; cursor: pointer; font-size: 13px;
+    font-weight: 600; border: 1px solid transparent;
+    border-bottom: none; background: transparent; color: var(--muted);
+    transition: all .15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--card); border-color: var(--border);
+    border-bottom: 2px solid var(--card); margin-bottom: -2px;
+    color: var(--accent);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Sections */
+  .section {
+    border: 1px dashed var(--dash); padding: 20px;
+    margin: 16px 0; background: var(--card);
+  }
+  .section-title {
+    font-size: 14px; font-weight: 700; margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 1px solid #eee;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 3px;
+    font-weight: 600;
+  }
+  .badge-plan1 { background: #fff3e0; color: #e65100; }
+  .badge-plan2 { background: #e8eaf6; color: #283593; }
+  .badge-local { background: #e0f2f1; color: #00695c; }
+
+  /* Tables */
+  table {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+  }
+  th, td {
+    padding: 8px 10px; text-align: center;
+    border: 1px solid #e0e0e0;
+  }
+  th {
+    background: #f5f5f5; font-weight: 600; font-size: 11px;
+    color: #555; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  th.col-26 { background: #f0f0f0; }
+  th.col-27-1 { background: #fff8e1; }
+  th.col-27-2 { background: #e8eaf6; }
+  td.label-cell {
+    text-align: left; font-weight: 600; background: #fafafa;
+    min-width: 120px; white-space: nowrap;
+  }
+  td .val { font-weight: 600; }
+  .change-up { color: var(--red); }
+  .change-down { color: var(--green); }
+  .change-neutral { color: var(--muted); }
+  .change-badge {
+    display: inline-block; font-size: 10px; padding: 1px 5px;
+    border-radius: 2px; margin-left: 4px; font-weight: 700;
+  }
+  .badge-up { background: #ffebee; color: var(--red); }
+  .badge-down { background: #e8f5e9; color: var(--green); }
+  .badge-same { background: #f5f5f5; color: #999; }
+  .badge-type-change { background: #fff3e0; color: #e65100; }
+
+  /* Tags */
+  .tag {
+    display: inline-block; font-size: 10px; padding: 1px 6px;
+    border-radius: 2px; font-weight: 600; margin-right: 3px;
+  }
+  .tag-new { background: #e3f2fd; color: var(--tag-new); }
+  .tag-renew { background: #f3e5f5; color: var(--tag-renew); }
+
+  /* Summary cards */
+  .summary-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-top: 16px;
+  }
+  .summary-card {
+    border: 1px dashed var(--dash); padding: 16px;
+    background: var(--card);
+  }
+  .summary-card h4 {
+    font-size: 13px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .summary-card .pros { color: var(--green); font-size: 12px; margin-bottom: 6px; }
+  .summary-card .cons { color: var(--red); font-size: 12px; margin-bottom: 6px; }
+  .summary-card .note { color: var(--muted); font-size: 11px; }
+
+  /* Bar chart */
+  .bar-group { margin: 8px 0; }
+  .bar-label {
+    font-size: 11px; color: #555; margin-bottom: 3px;
+    display: flex; justify-content: space-between;
+  }
+  .bar-track {
+    height: 18px; background: #f0f0f0; border-radius: 2px;
+    overflow: hidden; position: relative;
+  }
+  .bar-fill {
+    height: 100%; border-radius: 2px; transition: width .3s;
+    display: flex; align-items: center; padding-left: 6px;
+    font-size: 10px; color: #fff; font-weight: 600;
+  }
+  .bar-26 { background: #90a4ae; }
+  .bar-27-1 { background: #ff9800; }
+  .bar-27-2 { background: #5c6bc0; }
+
+  /* Impact section */
+  .impact-row {
+    display: flex; gap: 12px; margin: 10px 0;
+    font-size: 12px;
+  }
+  .impact-item {
+    flex: 1; padding: 10px; border: 1px dashed var(--dash);
+  }
+  .impact-item .metric { font-weight: 700; font-size: 16px; }
+  .impact-item .desc { color: var(--muted); font-size: 11px; margin-top: 4px; }
+
+  /* Divider */
+  .divider {
+    border: none; border-top: 1px dashed var(--border);
+    margin: 20px 0;
+  }
+
+  /* Key change highlight */
+  .key-change {
+    background: #fffde7; border-left: 3px solid #ffc107;
+    padding: 10px 14px; margin: 10px 0; font-size: 12px;
+  }
+  .key-change strong { color: #e65100; }
+
+  /* Footer */
+  .footer {
+    text-align: center; color: var(--muted); font-size: 11px;
+    padding: 16px; border-top: 1px dashed var(--border);
+    margin-top: 24px;
+  }
+
+  /* Full-width summary */
+  .full-summary {
+    border: 2px dashed var(--accent); padding: 20px;
+    margin-top: 16px; background: #f8faff;
+  }
+  .full-summary h3 {
+    font-size: 14px; color: var(--accent); margin-bottom: 12px;
+  }
+
+  /* Comparison arrows */
+  .arrow { font-size: 14px; margin: 0 2px; }
+  .arrow-up::before { content: "▲"; color: var(--red); font-size: 10px; }
+  .arrow-down::before { content: "▼"; color: var(--green); font-size: 10px; }
+  .arrow-flat::before { content: "■"; color: var(--muted); font-size: 10px; }
+
+  /* Mini stat */
+  .stat-row {
+    display: flex; gap: 12px; margin: 12px 0;
+  }
+  .stat-box {
+    flex: 1; text-align: center; padding: 12px 8px;
+    border: 1px solid #e0e0e0; background: #fafafa;
+  }
+  .stat-box .num {
+    font-size: 20px; font-weight: 700; color: var(--accent);
+  }
+  .stat-box .unit { font-size: 11px; color: var(--muted); }
+  .stat-box .lbl { font-size: 10px; color: #777; margin-top: 2px; }
+  .stat-box.red .num { color: var(--red); }
+  .stat-box.green .num { color: var(--green); }
+  .stat-box.orange .num { color: var(--orange); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>58锚定套餐 · 26年 vs 27年方案对比</h1>
+  <div class="sub">
+    数据来源：27年锚定套餐变化对比.xlsx → 58锚定套餐&nbsp;&nbsp;|&nbsp;&nbsp;
+    对比维度：全国版（¥3,980）+ 本地版（¥3,000）&nbsp;&nbsp;|&nbsp;&nbsp;
+    方案1=减量降币&nbsp;&nbsp;方案2=保职位补币
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('national')">58通用 · 全国版 ¥3,980</div>
+  <div class="tab" onclick="switchTab('local')">58通用 · 本地版 ¥3,000</div>
+  <div class="tab" onclick="switchTab('analysis')">综合分析 · 影响评估</div>
+</div>
+
+<!-- ==================== TAB 1: 全国版 ==================== -->
+<div id="tab-national" class="tab-content active">
+
+  <!-- 方案1 全国 -->
+  <div class="section">
+    <div class="section-title">
+      方案1 · 减量降币 <span class="badge badge-plan1">劲爆↓ + 币↓</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:130px">对比指标</th>
+          <th class="col-26" colspan="2">26年（基准）</th>
+          <th class="col-27-1" colspan="2">27年 方案1</th>
+          <th style="min-width:100px">变化</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th class="col-26"><span class="tag tag-new">新签</span></th>
+          <th class="col-26"><span class="tag tag-renew">续费</span></th>
+          <th class="col-27-1"><span class="tag tag-new">新签</span></th>
+          <th class="col-27-1"><span class="tag tag-renew">续费</span></th>
+          <th>新签 / 续费</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-cell">总价</td>
+          <td>¥3,980</td><td>¥3,980</td>
+          <td>¥3,980</td><td>¥3,980</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">伯小乐劲爆职位</td>
+          <td><span class="val">5</span>个</td>
+          <td><span class="val">8</span>个</td>
+          <td><span class="val">3</span>个</td>
+          <td><span class="val">5</span>个</td>
+          <td>
+            <span class="change-down">5→3 <span class="change-badge badge-down">-2</span></span><br>
+            <span class="change-neutral">8→5 <span class="change-badge badge-down">-3</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">劲爆属性</td>
+          <td>资源</td><td>资源</td>
+          <td><span style="color:#e65100;font-weight:600">容器</span></td>
+          <td><span style="color:#e65100;font-weight:600">容器</span></td>
+          <td><span class="change-badge badge-type-change">资源→容器</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">主动开聊</td>
+          <td>100/日</td><td>100/日</td>
+          <td>100/日</td><td>100/日</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币</td>
+          <td><span class="val">2,600</span></td>
+          <td><span class="val">2,700</span></td>
+          <td><span class="val">2,000</span></td>
+          <td><span class="val">2,100</span></td>
+          <td>
+            <span class="change-down">↓600 <span class="change-badge badge-down">-23%</span></span><br>
+            <span class="change-down">↓600 <span class="change-badge badge-down">-22%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">服务时长</td>
+          <td>365天</td><td>365天</td>
+          <td>365天</td><td>365天</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">赠送职位点</td>
+          <td>15个/92天</td><td>15个/92天</td>
+          <td>15个/92天</td><td>15个/92天</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr style="background:#fffde7">
+          <td class="label-cell">伯小乐/职小乐刊例价</td>
+          <td><span class="val">1,450</span></td>
+          <td><span class="val">1,800</span></td>
+          <td><span class="val" style="color:#d63031">2,400</span></td>
+          <td><span class="val" style="color:#d63031">2,400</span></td>
+          <td>
+            <span class="change-up">↑950 <span class="change-badge badge-up">+66%</span></span><br>
+            <span class="change-up">↑600 <span class="change-badge badge-up">+33%</span></span>
+          </td>
+        </tr>
+        <tr style="background:#fffde7">
+          <td class="label-cell">刊例价(除伯/职)</td>
+          <td><span class="val">2,600</span></td>
+          <td><span class="val">2,700</span></td>
+          <td><span class="val" style="color:#00a854">2,000</span></td>
+          <td><span class="val" style="color:#00a854">2,100</span></td>
+          <td>
+            <span class="change-down">↓600 <span class="change-badge badge-down">-23%</span></span><br>
+            <span class="change-down">↓600 <span class="change-badge badge-down">-22%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币/道具折扣</td>
+          <td>0.969</td><td>0.810</td>
+          <td>0.785</td><td>0.748</td>
+          <td>
+            <span class="change-down">↓0.184</span><br>
+            <span class="change-down">↓0.062</span>
+          </td>
+        </tr>
+        <tr style="background:#fff3e0">
+          <td class="label-cell">招聘币现金</td>
+          <td><span class="val">2,520</span></td>
+          <td><span class="val">2,170</span></td>
+          <td><span class="val" style="color:#00a854">1,570</span></td>
+          <td><span class="val" style="color:#00a854">1,570</span></td>
+          <td>
+            <span class="change-down">↓950 <span class="change-badge badge-down">-38%</span></span><br>
+            <span class="change-down">↓600 <span class="change-badge badge-down">-28%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">币占比</td>
+          <td>63.3%</td><td>54.5%</td>
+          <td><span style="color:#00a854;font-weight:600">39.4%</span></td>
+          <td><span style="color:#00a854;font-weight:600">39.4%</span></td>
+          <td>
+            <span class="change-down">↓23.9pp</span><br>
+            <span class="change-down">↓15.1pp</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">额外赠送</td>
+          <td>—</td>
+          <td>续费专用</td>
+          <td>—</td>
+          <td>续费专用</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-change">
+      <strong>核心变化：</strong>
+      劲爆职位新签 5→3（-40%）、续费 8→5（-37.5%）；
+      属性统一从「资源」切「容器」；
+      招聘币均减600枚；
+      伯小乐刊例价大幅上调（新签+950/续费+600），
+      招聘币现金大幅下降（新签-950/续费-600）。
+    </div>
+  </div>
+
+  <!-- 方案2 全国 -->
+  <div class="section">
+    <div class="section-title">
+      方案2 · 保职位补币 <span class="badge badge-plan2">劲爆= + 币↓</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:130px">对比指标</th>
+          <th class="col-26" colspan="2">26年（基准）</th>
+          <th class="col-27-2" colspan="2">27年 方案2</th>
+          <th style="min-width:100px">变化</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th class="col-26"><span class="tag tag-new">新签</span></th>
+          <th class="col-26"><span class="tag tag-renew">续费</span></th>
+          <th class="col-27-2"><span class="tag tag-new">新签</span></th>
+          <th class="col-27-2"><span class="tag tag-renew">续费</span></th>
+          <th>新签 / 续费</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-cell">总价</td>
+          <td>¥3,980</td><td>¥3,980</td>
+          <td>¥3,980</td><td>¥3,980</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">伯小乐劲爆职位</td>
+          <td><span class="val">5</span>个</td>
+          <td><span class="val">8</span>个</td>
+          <td><span class="val">5</span>个</td>
+          <td><span class="val">5</span>个</td>
+          <td>
+            <span class="change-neutral">5→5 <span class="change-badge badge-same">=</span></span><br>
+            <span class="change-down">8→5 <span class="change-badge badge-down">-3</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">劲爆属性</td>
+          <td>资源</td><td>资源</td>
+          <td><span style="color:#e65100;font-weight:600">容器</span></td>
+          <td><span style="color:#e65100;font-weight:600">容器</span></td>
+          <td><span class="change-badge badge-type-change">资源→容器</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">主动开聊</td>
+          <td>100/日</td><td>100/日</td>
+          <td>100/日</td><td>100/日</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币</td>
+          <td><span class="val">2,600</span></td>
+          <td><span class="val">2,700</span></td>
+          <td><span class="val">2,600</span></td>
+          <td><span class="val">2,700</span></td>
+          <td>
+            <span class="change-neutral">不变</span><br>
+            <span class="change-neutral">不变</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">服务时长</td>
+          <td>365天</td><td>365天</td>
+          <td>365天</td><td>365天</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">赠送职位点</td>
+          <td>15个/92天</td><td>15个/92天</td>
+          <td>15个/92天</td><td>15个/92天</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr style="background:#fffde7">
+          <td class="label-cell">伯小乐/职小乐刊例价</td>
+          <td><span class="val">1,450</span></td>
+          <td><span class="val">1,800</span></td>
+          <td><span class="val" style="color:#d63031">2,400</span></td>
+          <td><span class="val" style="color:#d63031">2,400</span></td>
+          <td>
+            <span class="change-up">↑950 <span class="change-badge badge-up">+66%</span></span><br>
+            <span class="change-up">↑600 <span class="change-badge badge-up">+33%</span></span>
+          </td>
+        </tr>
+        <tr style="background:#fffde7">
+          <td class="label-cell">刊例价(除伯/职)</td>
+          <td><span class="val">2,600</span></td>
+          <td><span class="val">2,700</span></td>
+          <td><span class="val">2,600</span></td>
+          <td><span class="val">2,700</span></td>
+          <td>
+            <span class="change-neutral">不变</span><br>
+            <span class="change-neutral">不变</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币/道具折扣</td>
+          <td>0.969</td><td>0.810</td>
+          <td>0.604</td><td>0.581</td>
+          <td>
+            <span class="change-down">↓0.365</span><br>
+            <span class="change-down">↓0.229</span>
+          </td>
+        </tr>
+        <tr style="background:#fff3e0">
+          <td class="label-cell">招聘币现金</td>
+          <td><span class="val">2,520</span></td>
+          <td><span class="val">2,170</span></td>
+          <td><span class="val" style="color:#00a854">1,570</span></td>
+          <td><span class="val" style="color:#00a854">1,570</span></td>
+          <td>
+            <span class="change-down">↓950 <span class="change-badge badge-down">-38%</span></span><br>
+            <span class="change-down">↓600 <span class="change-badge badge-down">-28%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">币占比</td>
+          <td>63.3%</td><td>54.5%</td>
+          <td><span style="color:#00a854;font-weight:600">39.4%</span></td>
+          <td><span style="color:#00a854;font-weight:600">39.4%</span></td>
+          <td>
+            <span class="change-down">↓23.9pp</span><br>
+            <span class="change-down">↓15.1pp</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">额外赠送</td>
+          <td>—</td>
+          <td>续费专用</td>
+          <td>—</td>
+          <td>续费专用</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-change">
+      <strong>核心变化：</strong>
+      与方案1的关键区别——劲爆职位新签保持5个不变（方案1降至3个），招聘币保持2600/2700不变（方案1降至2000/2100）。
+      但伯小乐刊例价同样上调至2400，招聘币现金同样降至1570，币占比同样降至39.4%。
+      <br><strong>本质差异：</strong>方案2通过「补币」弥补了方案1对劲爆职位和招聘币面额的削减，客户感知变化更小。
+    </div>
+  </div>
+
+  <!-- 方案1 vs 方案2 差异速览 -->
+  <div class="section">
+    <div class="section-title">方案1 vs 方案2 · 全国版差异速览</div>
+    <table>
+      <thead>
+        <tr>
+          <th>差异点</th>
+          <th class="col-27-1">方案1（减量降币）</th>
+          <th class="col-27-2">方案2（保职位补币）</th>
+          <th>差异幅度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-cell">劲爆职位·新签</td>
+          <td><span class="val">3</span>个</td>
+          <td><span class="val">5</span>个</td>
+          <td><span style="color:#d63031;font-weight:600">方案1少2个 (-40%)</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">劲爆职位·续费</td>
+          <td><span class="val">5</span>个</td>
+          <td><span class="val">5</span>个</td>
+          <td><span class="change-neutral">相同</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币·新签</td>
+          <td><span class="val">2,000</span></td>
+          <td><span class="val">2,600</span></td>
+          <td><span style="color:#d63031;font-weight:600">方案1少600 (-23%)</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币·续费</td>
+          <td><span class="val">2,100</span></td>
+          <td><span class="val">2,700</span></td>
+          <td><span style="color:#d63031;font-weight:600">方案1少600 (-22%)</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">伯小乐刊例价</td>
+          <td>2,400</td>
+          <td>2,400</td>
+          <td><span class="change-neutral">相同</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币现金</td>
+          <td>1,570</td>
+          <td>1,570</td>
+          <td><span class="change-neutral">相同</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">币占比</td>
+          <td>39.4%</td>
+          <td>39.4%</td>
+          <td><span class="change-neutral">相同</span></td>
+        </tr>
+        <tr style="background:#f5f5f5">
+          <td class="label-cell" style="font-weight:700">平台单客招聘币现金支出</td>
+          <td style="font-weight:700">1,570</td>
+          <td style="font-weight:700">1,570</td>
+          <td><span style="color:#00a854;font-weight:700">两方案相同，均省950(新签)/600(续费)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: 本地版 ==================== -->
+<div id="tab-local" class="tab-content">
+  <div class="section">
+    <div class="section-title">
+      本地版 · 仅方案1 <span class="badge badge-local">总价↓ ¥3,980→¥3,000</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:130px">对比指标</th>
+          <th class="col-26" colspan="2">26年（基准）</th>
+          <th class="col-27-1" colspan="2">27年 方案1</th>
+          <th style="min-width:100px">变化</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th class="col-26"><span class="tag tag-new">新签</span></th>
+          <th class="col-26"><span class="tag tag-renew">续费</span></th>
+          <th class="col-27-1"><span class="tag tag-new">新签</span></th>
+          <th class="col-27-1"><span class="tag tag-renew">续费</span></th>
+          <th>新签 / 续费</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#e8f5e9">
+          <td class="label-cell">总价</td>
+          <td><span class="val">¥3,980</span></td>
+          <td><span class="val">¥3,980</span></td>
+          <td><span class="val" style="color:#00a854">¥3,000</span></td>
+          <td><span class="val" style="color:#00a854">¥3,000</span></td>
+          <td>
+            <span class="change-down">↓980 <span class="change-badge badge-down">-25%</span></span><br>
+            <span class="change-down">↓980 <span class="change-badge badge-down">-25%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">伯小乐劲爆职位</td>
+          <td><span class="val">8</span>个</td>
+          <td><span class="val">8</span>个</td>
+          <td><span class="val">5</span>个</td>
+          <td><span class="val">5</span>个</td>
+          <td>
+            <span class="change-down">↓3 <span class="change-badge badge-down">-37.5%</span></span><br>
+            <span class="change-down">↓3 <span class="change-badge badge-down">-37.5%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">劲爆属性</td>
+          <td>资源</td><td>资源</td>
+          <td><span style="color:#e65100;font-weight:600">容器</span></td>
+          <td><span style="color:#e65100;font-weight:600">容器</span></td>
+          <td><span class="change-badge badge-type-change">资源→容器</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">主动开聊</td>
+          <td>100/日</td><td>100/日</td>
+          <td>100/日</td><td>100/日</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币</td>
+          <td><span class="val">1,600</span></td>
+          <td><span class="val">1,800</span></td>
+          <td><span class="val">1,100</span></td>
+          <td><span class="val">1,300</span></td>
+          <td>
+            <span class="change-down">↓500 <span class="change-badge badge-down">-31%</span></span><br>
+            <span class="change-down">↓500 <span class="change-badge badge-down">-28%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">服务时长</td>
+          <td>365天</td><td>365天</td>
+          <td>365天</td><td>365天</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">赠送职位点</td>
+          <td>15个/92天</td><td>15个/92天</td>
+          <td>15个/92天</td><td>15个/92天</td>
+          <td><span class="change-neutral">不变</span></td>
+        </tr>
+        <tr style="background:#fffde7">
+          <td class="label-cell">伯小乐/职小乐刊例价</td>
+          <td><span class="val">1,500</span></td>
+          <td><span class="val">1,500</span></td>
+          <td><span class="val" style="color:#d63031">2,000</span></td>
+          <td><span class="val" style="color:#d63031">2,000</span></td>
+          <td>
+            <span class="change-up">↑500 <span class="change-badge badge-up">+33%</span></span><br>
+            <span class="change-up">↑500 <span class="change-badge badge-up">+33%</span></span>
+          </td>
+        </tr>
+        <tr style="background:#fffde7">
+          <td class="label-cell">刊例价(除伯/职)</td>
+          <td><span class="val">1,600</span></td>
+          <td><span class="val">1,800</span></td>
+          <td><span class="val">1,600</span></td>
+          <td><span class="val">1,800</span></td>
+          <td>
+            <span class="change-neutral">不变</span><br>
+            <span class="change-neutral">不变</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">招聘币/道具折扣</td>
+          <td>0.931</td><td>0.828</td>
+          <td>0.900</td><td>0.762</td>
+          <td>
+            <span class="change-down">↓0.031</span><br>
+            <span class="change-down">↓0.066</span>
+          </td>
+        </tr>
+        <tr style="background:#fff3e0">
+          <td class="label-cell">招聘币现金</td>
+          <td><span class="val">1,490</span></td>
+          <td><span class="val">1,490</span></td>
+          <td><span class="val" style="color:#00a854">990</span></td>
+          <td><span class="val" style="color:#00a854">990</span></td>
+          <td>
+            <span class="change-down">↓500 <span class="change-badge badge-down">-34%</span></span><br>
+            <span class="change-down">↓500 <span class="change-badge badge-down">-34%</span></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-cell">币占比</td>
+          <td>49.7%</td><td>49.7%</td>
+          <td><span style="color:#00a854;font-weight:600">49.7%</span></td>
+          <td><span style="color:#00a854;font-weight:600">49.7%</span></td>
+          <td>
+            <span class="change-neutral">不变</span><br>
+            <span class="change-neutral">不变</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-change">
+      <strong>核心变化：</strong>
+      总价直降 ¥980（3980→3000），是三个版本中降幅最大的。
+      但劲爆职位 8→5（-37.5%）、招聘币也减少500枚，招聘币现金减少500。
+      伯小乐刊例价从1500上调至2000（+33%）。
+      本地版币占比维持49.7%不变——说明降价是「等比缩放」，平台单位经济模型未变。
+    </div>
+
+    <div class="key-change" style="border-left-color:#5c6bc0;background:#e8eaf6">
+      <strong>本地版 vs 全国版差异：</strong>
+      本地版仅一个方案（方案1减量），无方案2选项。
+      全国版的方案核心是「总价不变、结构调整」；本地版则是「总价直降、权益缩减」。
+      本地版降价对四线及以下城市客户有直接吸引力，但需关注平台收入下降影响。
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: 综合分析 ==================== -->
+<div id="tab-analysis" class="tab-content">
+
+  <!-- 关键指标变化总览 -->
+  <div class="section">
+    <div class="section-title">关键指标变化总览</div>
+    <div class="stat-row">
+      <div class="stat-box green">
+        <div class="num">-950</div>
+        <div class="unit">元</div>
+        <div class="lbl">全国新签·招聘币现金降幅（方案1&2）</div>
+      </div>
+      <div class="stat-box green">
+        <div class="num">-600</div>
+        <div class="unit">元</div>
+        <div class="lbl">全国续费·招聘币现金降幅（方案1&2）</div>
+      </div>
+      <div class="stat-box orange">
+        <div class="num">+950</div>
+        <div class="unit">元</div>
+        <div class="lbl">全国新签·伯小乐刊例价涨幅</div>
+      </div>
+      <div class="stat-box red">
+        <div class="num">-2</div>
+        <div class="unit">个</div>
+        <div class="lbl">全国新签·劲爆职位减少（方案1）</div>
+      </div>
+      <div class="stat-box">
+        <div class="num">-980</div>
+        <div class="unit">元</div>
+        <div class="lbl">本地版·总价降幅</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 方案1 优劣势 -->
+  <div class="summary-grid">
+    <div class="summary-card" style="border-color:#ff9800">
+      <h4><span class="badge badge-plan1">方案1</span> 减量降币 · 优劣势</h4>
+      <div class="pros">
+        <strong>优势：</strong><br>
+        + 平台招聘币现金支出降幅最大（新签-38%/续费-28%）<br>
+        + 伯小乐刊例价大幅提升，引导客户认知伯小乐价值<br>
+        + 权益全面缩减，为后续迭代留出空间<br>
+        + 新签续费统一刊例价2400，简化定价体系
+      </div>
+      <div class="cons">
+        <strong>劣势：</strong><br>
+        - 新签劲爆职位仅3个（vs 26年5个），客户感知降幅大<br>
+        - 招聘币面额减600，高依赖客户效果明显下降<br>
+        - 资源→容器切换，客户可能质疑权益实质变化<br>
+        - 销售端解释成本高，客户抵触情绪可能较强
+      </div>
+      <div class="note">
+        适用场景：平台希望最大化降本、对客议价能力强、客户对价格敏感度低于效果敏感度时可优先选方案1
+      </div>
+    </div>
+
+    <div class="summary-card" style="border-color:#5c6bc0">
+      <h4><span class="badge badge-plan2">方案2</span> 保职位补币 · 优劣势</h4>
+      <div class="pros">
+        <strong>优势：</strong><br>
+        + 新签劲爆职位保持5个，客户核心权益感知不变<br>
+        + 招聘币面额保持2600/2700，客户无直接损失感<br>
+        + 同样实现招聘币现金下降（-38%/-28%），降本效果与方案1相同<br>
+        + 销售阻力小，客户过渡平稳，续约率影响可控
+      </div>
+      <div class="cons">
+        <strong>劣势：</strong><br>
+        - 续费劲爆职位仍从8降至5（-37.5%），续费客户有感知<br>
+        - 伯小乐刊例价同样大幅上调，可能引发客户质疑「变相涨价」<br>
+        - 资源→容器切换同样存在<br>
+        - 平台「隐性」降本更多（保持面额但降低实际兑现比例）
+      </div>
+      <div class="note">
+        适用场景：客户敏感度高、续约率为核心KPI、希望平稳过渡减少销售阻力时优先选方案2
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 两方案核心差异 -->
+  <div class="section">
+    <div class="section-title">方案1 vs 方案2 · 核心差异分析</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div>
+        <div style="font-weight:700;font-size:12px;margin-bottom:8px;color:#e65100">新签客户感知对比</div>
+        <div class="bar-group">
+          <div class="bar-label"><span>26年·劲爆职位</span><span>5个</span></div>
+          <div class="bar-track"><div class="bar-fill bar-26" style="width:100%">5个</div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-label"><span>27年方案1·劲爆职位</span><span style="color:#d63031">3个</span></div>
+          <div class="bar-track"><div class="bar-fill bar-27-1" style="width:60%">3个</div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-label"><span>27年方案2·劲爆职位</span><span style="color:#5c6bc0">5个</span></div>
+          <div class="bar-track"><div class="bar-fill bar-27-2" style="width:100%">5个</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:12px;margin-bottom:8px;color:#e65100">新签招聘币面额对比</div>
+        <div class="bar-group">
+          <div class="bar-label"><span>26年·招聘币</span><span>2,600</span></div>
+          <div class="bar-track"><div class="bar-fill bar-26" style="width:100%">2,600</div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-label"><span>27年方案1·招聘币</span><span style="color:#d63031">2,000</span></div>
+          <div class="bar-track"><div class="bar-fill bar-27-1" style="width:77%">2,000</div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-label"><span>27年方案2·招聘币</span><span style="color:#5c6bc0">2,600</span></div>
+          <div class="bar-track"><div class="bar-fill bar-27-2" style="width:100%">2,600</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-change" style="border-left-color:#d63031;background:#fff3f3">
+      <strong>关键结论：</strong>
+      两方案对平台的招聘币现金节省完全相同（新签1,570/续费1,570）。
+      差异在于客户感知——方案2通过保持劲爆职位和招聘币面额，将「降本」隐藏在折扣率调整中（招聘币折扣从0.969降至0.604），
+      客户看到的面额不变但实际价值降低。方案1则是「明降」，客户直观感受到权益减少。
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 影响评估 -->
+  <div class="section">
+    <div class="section-title">影响评估</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>影响维度</th>
+          <th class="col-27-1">方案1 · 减量降币</th>
+          <th class="col-27-2">方案2 · 保职位补币</th>
+          <th>评估</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-cell">平台招聘币成本</td>
+          <td>大幅降低</td>
+          <td>大幅降低</td>
+          <td><span style="color:#00a854">两方案等效，均节省约38%现金支出</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">新签客户转化率</td>
+          <td style="color:#d63031">可能下降</td>
+          <td>影响较小</td>
+          <td><span style="color:#e65100">方案1劲爆仅3个，新签感知降幅大</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">续费客户留存</td>
+          <td style="color:#d63031">风险较高</td>
+          <td style="color:#e67e22">有一定风险</td>
+          <td><span>续费劲爆均从8→5，两方案均有影响</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">销售推广难度</td>
+          <td style="color:#d63031">高</td>
+          <td style="color:#e67e22">中等</td>
+          <td><span>方案2话术更简单：「权益不变，结构优化」</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">伯小乐产品渗透</td>
+          <td style="color:#00a854">正向推动</td>
+          <td style="color:#00a854">正向推动</td>
+          <td><span>伯小乐刊例价上调，引导客户重视伯小乐</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">本地版市场</td>
+          <td colspan="2" style="text-align:center">总价降25%（3980→3000），下沉市场吸引力增强</td>
+          <td><span style="color:#00a854">利好四线及以下城市拓客</span></td>
+        </tr>
+        <tr>
+          <td class="label-cell">资源→容器切换</td>
+          <td colspan="2" style="text-align:center">所有方案统一切换，需提前准备话术</td>
+          <td><span style="color:#e67e22">需统一解释口径</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 策略建议 -->
+  <div class="full-summary">
+    <h3>策略建议</h3>
+    <div style="font-size:12px;line-height:1.8">
+      <p style="margin-bottom:10px">
+        <strong>1. 全国版推荐方案2（保职位补币）：</strong>
+        在招聘币现金降本效果与方案1完全一致的前提下，方案2对客户感知冲击最小。
+        新签劲爆保持5个、招聘币面额保持2600，销售端可用「权益不变、体系升级」话术平稳过渡。
+        尤其适合当前招聘市场环境下维护客户续约率。
+      </p>
+      <p style="margin-bottom:10px">
+        <strong>2. 本地版方案1可接受：</strong>
+        本地版总价直降980元（-25%），对四线及以下城市客户有直接价格吸引力。
+        权益缩减（劲爆8→5、招聘币-500）在降价背景下客户接受度较高。
+        建议销售话术强调「总价降了近1000元，核心权益保留」。
+      </p>
+      <p style="margin-bottom:10px">
+        <strong>3. 资源→容器切换需统一应对：</strong>
+        所有27年方案统一从「资源」切为「容器」，这是客户可能追问的变化点。
+        建议提前准备标准话术，强调容器模式的灵活性优势（如可自选职位类别等）。
+      </p>
+      <p>
+        <strong>4. 伯小乐刊例价上调需配合价值传递：</strong>
+        伯小乐刊例价从1450/1800大幅上调至2400（全国版），需要在购买页和权益说明中
+        强化伯小乐的实际效果展示，避免客户产生「变相涨价」的负面感知。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  数据来源：27年锚定套餐变化对比.xlsx · 58锚定套餐&nbsp;&nbsp;|&nbsp;&nbsp;生成时间：2026-08-21
+</div>
+
+</div><!-- /container -->
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
