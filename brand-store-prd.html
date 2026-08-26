@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>品牌门店客户付费提单流程 · PRD 产品需求文档</title>
+<style>
+  :root {
+    --primary: #ff6a00;
+    --primary-soft: #fff7f0;
+    --primary-dark: #d45500;
+    --ink: #1a1a1e;
+    --ink-soft: #3c3c44;
+    --muted: #71717a;
+    --faint: #a1a1aa;
+    --line: #e8e8ec;
+    --line-soft: #f4f4f6;
+    --bg: #f9f9fb;
+    --card: #ffffff;
+    --ok: #16a34a;
+    --ok-soft: #effaf2;
+    --warn: #c2740a;
+    --warn-soft: #fdf6ec;
+    --info: #2563eb;
+    --info-soft: #eef3ff;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --serif: "Songti SC","STSong","SimSun",Georgia,serif;
+    --shadow: 0 1px 2px rgba(24,24,27,.04), 0 6px 18px rgba(24,24,27,.05);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background: var(--bg); color: var(--ink); line-height:1.72;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Cover */
+  .cover {
+    background: linear-gradient(165deg, #ff6a00 0%, #ff8c3a 30%, #1a1a1e 100%);
+    color: #fff; padding: 80px 40px 60px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; inset:0;
+    background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,106,0,.3) 0%, transparent 70%);
+  }
+  .cover-content { position: relative; z-index:1; max-width: 720px; margin:0 auto; }
+  .cover-badge {
+    display: inline-block; padding: 6px 18px; border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: 2px;
+    margin-bottom: 28px;
+  }
+  .cover h1 { font-family: var(--serif); font-size: 44px; font-weight: 700; letter-spacing: 2px; line-height: 1.25; margin-bottom: 14px; }
+  .cover .subtitle { font-size: 16px; opacity: .82; line-height: 1.7; }
+  .cover-meta {
+    margin-top: 36px; display: flex; justify-content: center; gap: 32px;
+    font-size: 13px; opacity: .75;
+  }
+  .cover-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* Navigation */
+  .toc {
+    position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+    padding: 12px 0; overflow-x: auto;
+  }
+  .toc-inner {
+    max-width: 1040px; margin: 0 auto; display: flex; gap: 6px; padding: 0 24px;
+    flex-wrap: nowrap;
+  }
+  .toc a {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none;
+    white-space: nowrap; transition: all .18s;
+  }
+  .toc a:hover, .toc a.active { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+
+  /* Content */
+  .main { max-width: 1040px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Text styles */
+  h2 {
+    font-family: var(--serif); font-size: 28px; font-weight: 700; letter-spacing: 1px;
+    color: var(--ink); margin: 56px 0 20px; padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary); display: inline-block;
+  }
+  h2:first-of-type { margin-top: 0; }
+  h3 {
+    font-size: 19px; font-weight: 700; color: var(--ink-soft);
+    margin: 36px 0 14px;
+  }
+  h4 {
+    font-size: 15px; font-weight: 700; color: var(--ink-soft);
+    margin: 24px 0 10px; padding-left: 12px;
+    border-left: 3px solid var(--primary);
+  }
+  p { margin-bottom: 12px; color: var(--ink-soft); }
+  strong { color: var(--ink); }
+
+  /* Cards */
+  .info-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 24px 28px; margin: 20px 0; box-shadow: var(--shadow);
+  }
+  .info-card h4 { border-left-color: var(--info); }
+
+  /* Tables */
+  table {
+    width: 100%; border-collapse: collapse; margin: 18px 0;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow);
+  }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--line-soft); font-size: 14px; }
+  th { background: #fafafb; font-weight: 700; color: var(--ink-soft); font-size: 13px; letter-spacing: .5px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fbfbfc; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: .5px;
+  }
+  .badge-pri { background: var(--primary-soft); color: var(--primary); }
+  .badge-ok { background: var(--ok-soft); color: var(--ok); }
+  .badge-warn { background: var(--warn-soft); color: var(--warn); }
+  .badge-info { background: var(--info-soft); color: var(--info); }
+
+  /* Code inline */
+  code {
+    background: #f4f4f6; padding: 2px 7px; border-radius: 4px;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px; color: var(--primary-dark);
+  }
+
+  /* Flow chart section */
+  .flow-container { margin: 32px 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
+
+  /* Product comparison */
+  .product-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin: 20px 0;
+  }
+  .product-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s;
+    position: relative; overflow: hidden;
+  }
+  .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(24,24,27,.1); }
+  .product-card.featured { border-color: var(--primary); }
+  .product-card .rec-pill {
+    position: absolute; top: 16px; right: 16px; background: var(--primary);
+    color: #fff; font-size: 11px; padding: 3px 12px; border-radius: 999px; font-weight: 700;
+  }
+  .product-card .name { font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .product-card .price { font-size: 36px; font-weight: 800; color: var(--primary); line-height: 1.1; }
+  .product-card .price.free { color: var(--ok); }
+  .product-card .price-unit { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .product-card .divider { border-top: 1px solid var(--line-soft); margin: 16px 0; }
+  .product-card .features { list-style: none; }
+  .product-card .features li { padding: 5px 0; font-size: 14px; display: flex; align-items: flex-start; gap: 8px; }
+  .product-card .features li .dot { flex-shrink:0; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; margin-top:1px; background:var(--ok-soft); color:var(--ok); }
+
+  /* User journey steps */
+  .journey-steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;
+    margin: 20px 0; counter-reset: step;
+  }
+  .journey-step {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; text-align: center; position: relative; box-shadow: var(--shadow);
+  }
+  .journey-step .step-num {
+    counter-increment: step; display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%; background: var(--primary);
+    color: #fff; font-weight: 700; font-size: 15px; margin: 0 auto 12px;
+  }
+  .journey-step .step-num::before { content: counter(step); }
+  .journey-step h4 { font-size: 14px; border: none; padding: 0; margin: 0 0 6px; text-align: center; }
+  .journey-step p { font-size: 12px; color: var(--muted); margin: 0; }
+
+  .footer { text-align: center; padding: 40px 20px; color: var(--faint); font-size: 13px; border-top: 1px solid var(--line); background: var(--card); margin-top: 40px; }
+
+  @media (max-width: 768px) {
+    .cover { padding: 56px 22px 44px; }
+    .cover h1 { font-size: 32px; }
+    .toc { overflow-x: auto; }
+    .product-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Cover ===== -->
+<section class="cover">
+  <div class="cover-content">
+    <div class="cover-badge">PRODUCT REQUIREMENTS DOCUMENT</div>
+    <h1>品牌门店客户<br>付费提单流程</h1>
+    <p class="subtitle">基于"品牌门店协议"的轻量化自助采购系统<br>覆盖 LBS 认证 → 产品选择 → 支付 → 权益生效全链路</p>
+    <div class="cover-meta">
+      <span>📋 版本 V1.0</span>
+      <span>📅 2026-08-06</span>
+      <span>👤 产品发展部</span>
+      <span>🏷️ 状态：设计评审</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOC ===== -->
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#overview">1. 项目概述</a>
+    <a href="#users">2. 用户画像</a>
+    <a href="#flow">3. 业务流程</a>
+    <a href="#products">4. 产品方案</a>
+    <a href="#features">5. 功能规格</a>
+    <a href="#data">6. 数据模型</a>
+    <a href="#ui">7. 界面设计</a>
+    <a href="#nonfunc">8. 非功能需求</a>
+    <a href="#plan">9. 实施计划</a>
+  </div>
+</nav>
+
+<!-- ===== Main Content ===== -->
+<div class="main">
+
+<!-- 1. 项目概述 -->
+<h2 id="overview">一、项目概述</h2>
+
+<h3>1.1 项目背景</h3>
+<p>58同城面向品牌连锁门店客户推出「品牌门店协议」合作模式。品牌商总部与58签约后，旗下自营门店及加盟门店即可通过专属二维码自助采购招聘产品。当前缺少完整的线上化付费提单流程支撑此业务模式的规模化运营。</p>
+
+<h3>1.2 核心目标</h3>
+<table>
+  <tr><th style="width:120px">目标</th><th>描述</th><th style="width:80px">KPI</th></tr>
+  <tr><td>降低接入门槛</td><td>品牌门店扫码→认证→支付全流程 5 分钟内完成，无需人工销售介入</td><td><span class="badge badge-info">&lt;5min</span></td></tr>
+  <tr><td>财务闭环</td><td>门店独立支付、独立UID，回款自动归属品牌商总部超管母账号</td><td><span class="badge badge-ok">100%</span></td></tr>
+  <tr><td>合规保障</td><td>电子版「58网络服务单」在线签署，LBS 位置认证防止虚假注册</td><td><span class="badge badge-ok">上线</span></td></tr>
+  <tr><td>多产品可扩展</td><td>首期 3 款产品，架构上支持未来品类扩展与价格调整</td><td><span class="badge badge-info">可扩展</span></td></tr>
+</table>
+
+<h3>1.3 项目范围</h3>
+<div class="info-card">
+  <h4>本期范围（MVP）</h4>
+  <p><strong>包含：</strong>扫码入口 · LBS 定位认证 · 新UID生成与品牌关联 · 3款产品选择页 · 微信支付 & 支付宝支付 · 58网络服务单电子确认书 · 支付成功页 · 回款归属逻辑</p>
+  <p><strong>不含：</strong>品牌商总部管理后台（已有） · 退款流程（下期） · 发票开具（对接现有发票系统） · 定向邀约/优惠券（下期）</p>
+</div>
+
+<!-- 2. 用户画像 -->
+<h2 id="users">二、用户画像</h2>
+
+<h3>2.1 主要角色</h3>
+<table>
+  <tr><th>角色</th><th>特征</th><th>核心诉求</th><th>使用场景</th></tr>
+  <tr>
+    <td><strong>门店老板/HR</strong></td>
+    <td>30-50岁，手机操作熟练度中等；连锁店加盟商或自营门店负责人</td>
+    <td>快速上手、花钱见效、不想被销售骚扰</td>
+    <td>收到总部二维码 → 扫码购买 → 发布职位招人</td>
+  </tr>
+  <tr>
+    <td><strong>品牌总部运营</strong></td>
+    <td>管理多家门店，关注整体消耗和回款汇总</td>
+    <td>查看各门店开通情况、回款进度、权益消耗</td>
+    <td>后台查看门店列表、审批特批申请</td>
+  </tr>
+  <tr>
+    <td><strong>58销售/渠道</strong></td>
+    <td>拓展品牌客户，维护门店关系</td>
+    <td>签约后可追踪门店激活率、产品渗透率</td>
+    <td>推送二维码给品牌方、查看门店开通报表</td>
+  </tr>
+</table>
+
+<h3>2.2 用户旅程</h3>
+<div class="journey-steps">
+  <div class="journey-step"><div class="step-num"></div><h4>扫码进入</h4><p>门店老板扫描总部提供的二维码</p></div>
+  <div class="journey-step"><div class="step-num"></div><h4>LBS认证</h4><p>授权定位 → 确认门店地址 → 生成新UID</p></div>
+  <div class="journey-step"><div class="step-num"></div><h4>选产品</h4><p>查看3款产品详情，选择适合的方案</p></div>
+  <div class="journey-step"><div class="step-num"></div><h4>支付签约</h4><p>选支付方式 → 签确认函 → 完成支付</p></div>
+  <div class="journey-step"><div class="step-num"></div><h4>开通生效</h4><p>支付成功 → UID激活 → 回款归属总部</p></div>
+</div>
+
+<!-- 3. 业务流程 -->
+<h2 id="flow">三、业务流程</h2>
+
+<h3>3.1 端到端流程图</h3>
+<div class="flow-container">
+<svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+  <defs>
+    <marker id="arrow-black" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3c3c44"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ff6a00"/>
+    </marker>
+    <linearGradient id="g-brand" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff7f0"/><stop offset="100%" stop-color="#ffe0c8"/></linearGradient>
+    <linearGradient id="g-store" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#eef3ff"/><stop offset="100%" stop-color="#dbe6fe"/></linearGradient>
+    <linearGradient id="g-sys" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f4f4f6"/><stop offset="100%" stop-color="#e8e8ec"/></linearGradient>
+    <linearGradient id="g-pay" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#effaf2"/><stop offset="100%" stop-color="#dcfce7"/></linearGradient>
+    <filter id="shadow-sm"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.08"/></filter>
+  </defs>
+
+  <!-- Swimlanes -->
+  <rect x="20" y="10" width="920" height="160" rx="12" fill="#fafafb" stroke="#e8e8ec" stroke-width="1"/>
+  <text x="40" y="38" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#a1a1aa" letter-spacing="1">品 牌 商 总 部</text>
+
+  <rect x="20" y="182" width="920" height="270" rx="12" fill="#fafafb" stroke="#e8e8ec" stroke-width="1"/>
+  <text x="40" y="210" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#a1a1aa" letter-spacing="1">门 店 + 平 台 系 统</text>
+
+  <rect x="20" y="464" width="920" height="240" rx="12" fill="#fafafb" stroke="#e8e8ec" stroke-width="1"/>
+  <text x="40" y="492" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#a1a1aa" letter-spacing="1">支 付 & 权 益 生 效</text>
+
+  <!-- Swimlane 1: Brand HQ -->
+  <rect x="40" y="55" width="150" height="48" rx="10" fill="url(#g-brand)" stroke="#ff6a00" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="60" y="76" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#c2740a">签署品牌门店协议</text>
+  <text x="60" y="93" font-family="PingFang SC, sans-serif" font-size="11" fill="#92400e">58销售 → 品牌商总部</text>
+
+  <path d="M190 79 L260 79" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="265" y="55" width="150" height="48" rx="10" fill="url(#g-brand)" stroke="#ff6a00" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="285" y="76" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#c2740a">生成专属二维码</text>
+  <text x="285" y="93" font-family="PingFang SC, sans-serif" font-size="11" fill="#92400e">含品牌ID · 渠道参数</text>
+
+  <path d="M415 79 L490 79" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="495" y="55" width="160" height="48" rx="10" fill="url(#g-brand)" stroke="#ff6a00" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="515" y="76" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#c2740a">分发二维码给门店</text>
+  <text x="515" y="93" font-family="PingFang SC, sans-serif" font-size="11" fill="#92400e">微信/线下/内部通知</text>
+
+  <!-- Arrow down to swimlane 2 -->
+  <path d="M575 103 L575 230" stroke="#ff6a00" stroke-width="2" stroke-dasharray="6,4" fill="none" marker-end="url(#arrow-orange)"/>
+
+  <!-- Swimlane 2: Store + System -->
+  <rect x="465" y="230" width="150" height="48" rx="10" fill="url(#g-store)" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="485" y="251" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#1e40af">门店扫码进入</text>
+  <text x="485" y="268" font-family="PingFang SC, sans-serif" font-size="11" fill="#3b82f6">微信扫一扫/H5</text>
+
+  <path d="M615 254 L690 254" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="695" y="230" width="180" height="48" rx="10" fill="url(#g-store)" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="715" y="251" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#1e40af">LBS 位置认证</text>
+  <text x="715" y="268" font-family="PingFang SC, sans-serif" font-size="11" fill="#3b82f6">高德/腾讯地图GPS定位</text>
+
+  <!-- Decision diamond -->
+  <path d="M875 254 L920 290 L875 326 L830 290 Z" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="875" y="287" text-anchor="middle" font-family="PingFang SC, sans-serif" font-size="11" font-weight="600" fill="#dc2626">LBS</text>
+  <text x="875" y="301" text-anchor="middle" font-family="PingFang SC, sans-serif" font-size="11" font-weight="600" fill="#dc2626">匹配?</text>
+
+  <!-- LBS fail path -->
+  <path d="M920 290 L950 290 L950 350 L770 350 L770 336" stroke="#ef4444" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+  <text x="955" y="296" font-family="PingFang SC, sans-serif" font-size="11" fill="#ef4444">否 → 提示手动补充</text>
+
+  <!-- LBS success path -->
+  <path d="M875 326 L875 370" stroke="#16a34a" stroke-width="2" fill="none" marker-end="url(#arrow-black)"/>
+  <text x="882" y="355" font-family="PingFang SC, sans-serif" font-size="11" fill="#16a34a">是</text>
+
+  <rect x="785" y="370" width="180" height="48" rx="10" fill="url(#g-store)" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="805" y="391" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#1e40af">生成门店UID</text>
+  <text x="805" y="408" font-family="PingFang SC, sans-serif" font-size="11" fill="#3b82f6">自动关联品牌总部名称</text>
+
+  <path d="M785 394 L570 394" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <!-- Product selection -->
+  <rect x="370" y="370" width="195" height="48" rx="10" fill="url(#g-store)" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="390" y="391" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#1e40af">产品选择（3选1）</text>
+  <text x="390" y="408" font-family="PingFang SC, sans-serif" font-size="11" fill="#3b82f6">免费试用/月度简历宝/季度职位包</text>
+
+  <path d="M370 394 L300 394" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="140" y="370" width="155" height="48" rx="10" fill="url(#g-store)" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="160" y="391" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#1e40af">确认订单详情</text>
+  <text x="160" y="408" font-family="PingFang SC, sans-serif" font-size="11" fill="#3b82f6">产品内容 · 价格 · 权益</text>
+
+  <!-- Arrow down to swimlane 3 -->
+  <path d="M217 418 L217 540" stroke="#ff6a00" stroke-width="2" stroke-dasharray="6,4" fill="none" marker-end="url(#arrow-orange)"/>
+
+  <!-- Swimlane 3: Payment & Activation -->
+  <rect x="80" y="540" width="170" height="48" rx="10" fill="#fff" stroke="#ff6a00" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="100" y="558" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#c2740a">签署 58 网络服务单</text>
+  <text x="100" y="578" font-family="PingFang SC, sans-serif" font-size="11" fill="#92400e">电子确认函 · 合规必选</text>
+
+  <path d="M250 564 L320 564" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="325" y="540" width="160" height="48" rx="10" fill="#fff" stroke="#059669" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="345" y="558" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#065f46">选择支付方式</text>
+  <text x="345" y="578" font-family="PingFang SC, sans-serif" font-size="11" fill="#059669">微信支付 / 支付宝</text>
+
+  <path d="M485 564 L555 564" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="560" y="540" width="140" height="48" rx="10" fill="url(#g-pay)" stroke="#16a34a" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="580" y="558" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#166534">支付完成</text>
+  <text x="580" y="578" font-family="PingFang SC, sans-serif" font-size="11" fill="#16a34a">回调通知 · 更新状态</text>
+
+  <path d="M700 564 L760 564" stroke="#3c3c44" stroke-width="1.5" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="765" y="540" width="150" height="48" rx="10" fill="url(#g-pay)" stroke="#16a34a" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="785" y="558" font-family="PingFang SC, sans-serif" font-size="13" font-weight="700" fill="#166534">UID 激活</text>
+  <text x="785" y="578" font-family="PingFang SC, sans-serif" font-size="11" fill="#16a34a">产品服务期开始计时</text>
+
+  <!-- Arrow to final node -->
+  <path d="M820 588 L820 643" stroke="#16a34a" stroke-width="2" fill="none" marker-end="url(#arrow-black)"/>
+
+  <rect x="725" y="643" width="195" height="48" rx="10" fill="url(#g-brand)" stroke="#ff6a00" stroke-width="2" filter="url(#shadow-sm)"/>
+  <text x="745" y="661" font-family="PingFang SC, sans-serif" font-size="12" font-weight="700" fill="#c2740a">回款计入总部超管母账号</text>
+  <text x="745" y="680" font-family="PingFang SC, sans-serif" font-size="11" fill="#92400e">服务期内所有消费自动归属</text>
+</svg>
+</div>
+
+<h3>3.2 关键决策点</h3>
+<table>
+  <tr><th style="width:80px">节点</th><th>条件</th><th>是 →</th><th>否 →</th></tr>
+  <tr><td>LBS匹配</td><td>GPS定位与品牌预设城市范围匹配</td><td>生成UID → 进入产品页</td><td>提示手动选择城市 → 人工审核标签</td></tr>
+  <tr><td>UID重复</td><td>同一设备/微信是否已有该品牌下UID</td><td>复用已有UID → 直接进入产品页</td><td>创建新UID → 关联品牌</td></tr>
+  <tr><td>支付结果</td><td>支付回调成功 / 超时 / 取消</td><td>激活产品 → 跳转成功页</td><td>保留订单 → 提示重新支付</td></tr>
+</table>
+
+<!-- 4. 产品方案 -->
+<h2 id="products">四、产品方案</h2>
+
+<h3>4.1 产品矩阵</h3>
+<div class="product-grid">
+  <div class="product-card">
+    <div class="name">免费试用包</div>
+    <div class="price free">¥0</div>
+    <div class="price-unit">7天试用 · 每门店限1次</div>
+    <div class="divider"></div>
+    <ul class="features">
+      <li><span class="dot">✓</span>劲爆职位资源点 × 1个</li>
+      <li><span class="dot">✓</span>发布时长 7 天</li>
+      <li><span class="dot">✓</span>主动开聊 60人/天</li>
+      <li><span class="dot">✓</span>LBS定位附近流量</li>
+    </ul>
+  </div>
+
+  <div class="product-card featured">
+    <span class="rec-pill">🔥 热门</span>
+    <div class="name">月度简历宝</div>
+    <div class="price">¥599</div>
+    <div class="price-unit">/30天</div>
+    <div class="divider"></div>
+    <ul class="features">
+      <li><span class="dot">✓</span>劲爆职位资源点 × 3个</li>
+      <li><span class="dot">✓</span>每资源点 30天</li>
+      <li><span class="dot">✓</span>超级置顶 × 3个（各7天）</li>
+      <li><span class="dot">✓</span>主动开聊 60人/天</li>
+      <li><span class="dot">✓</span>AI代聊工具 30天</li>
+      <li><span class="dot">✓</span>保 25 份简历 / 30天</li>
+    </ul>
+  </div>
+
+  <div class="product-card">
+    <div class="name">季度职位包</div>
+    <div class="price">¥580</div>
+    <div class="price-unit">/92天</div>
+    <div class="divider"></div>
+    <ul class="features">
+      <li><span class="dot">✓</span>劲爆职位资源点 × 3个</li>
+      <li><span class="dot">✓</span>发布时长 92天</li>
+      <li><span class="dot">✓</span>主动开聊 60人/天</li>
+      <li><span class="dot">✓</span>不限类目发布</li>
+    </ul>
+  </div>
+</div>
+
+<h3>4.2 产品对比表</h3>
+<table>
+  <tr><th>维度</th><th>免费试用包</th><th style="background:#fff7f0;">月度简历宝 🔥</th><th>季度职位包</th></tr>
+  <tr><td>价格</td><td><span class="badge badge-ok">¥0 / 7天</span></td><td><span class="badge badge-warn" style="background:#fff7f0;color:#c2740a;">¥599 / 30天</span></td><td><span class="badge badge-info">¥580 / 92天</span></td></tr>
+  <tr><td>日均成本</td><td>¥0</td><td>¥19.97</td><td>¥6.30</td></tr>
+  <tr><td>劲爆资源点</td><td>1个 × 7天</td><td>3个 × 30天</td><td>3个 × 7天</td></tr>
+  <tr><td>超级置顶</td><td>—</td><td>3个 × 7天</td><td>—</td></tr>
+  <tr><td>主动开聊</td><td>60人/天</td><td>60人/天</td><td>60人/天</td></tr>
+  <tr><td>AI代聊工具</td><td>—</td><td><span class="badge badge-info">30天</span></td><td>—</td></tr>
+  <tr><td>简历保障</td><td>—</td><td><span class="badge badge-ok">保25份/30天</span></td><td>—</td></tr>
+  <tr><td>类目限制</td><td>不限类</td><td>不限类</td><td>不限类</td></tr>
+  <tr><td>购买限制</td><td>每门店仅1次</td><td>可叠加3个</td><td>可叠加3个</td></tr>
+  <tr><td>适用场景</td><td>首次体验</td><td>旺季冲刺 · 效果优先</td><td>长期稳定招聘</td></tr>
+</table>
+
+<!-- 5. 功能规格 -->
+<h2 id="features">五、功能规格</h2>
+
+<h3>5.1 扫码入口与参数解析</h3>
+<div class="info-card">
+  <h4>功能描述</h4>
+  <p>门店扫码后进入 H5/小程序页面，URL 携带以下参数：</p>
+  <table>
+    <tr><th>参数</th><th>说明</th><th>示例</th></tr>
+    <tr><td><code>brand_id</code></td><td>品牌商唯一标识</td><td><code>BR20260001</code></td></tr>
+    <tr><td><code>channel</code></td><td>渠道来源（可选）</td><td><code>wechat_qr</code></td></tr>
+    <tr><td><code>sales_id</code></td><td>绑定销售/渠道ID（可选）</td><td><code>S10023</code></td></tr>
+    <tr><td><code>timestamp</code></td><td>生成时间戳，防过期</td><td><code>1722902400</code></td></tr>
+    <tr><td><code>sign</code></td><td>参数签名，防篡改</td><td><code>md5_hash</code></td></tr>
+  </table>
+</div>
+
+<h3>5.2 LBS 位置认证</h3>
+<div class="info-card">
+  <h4>功能描述</h4>
+  <p><strong>流程：</strong>页面加载 → 请求GPS定位权限 → 调用地图API获取省/市/区 → 自动填充门店地址 → 用户确认或手动修正 → 提交认证</p>
+  <p><strong>地图服务：</strong>对接高德地图 JS API / 腾讯位置服务，获取精确地理位置（含省市区三级）</p>
+  <p><strong>异常处理：</strong>定位失败 → 用户可手动搜索地址 → 人工审核标注 → 仍可继续流程</p>
+  <p><strong>UID生成规则：</strong><code>BR_{brand_id}_{city_code}_{timestamp_short}</code>，例如 <code>BR_001_010_240806</code></p>
+</div>
+
+<h3>5.3 产品选择与展示</h3>
+<div class="info-card">
+  <h4>展示逻辑</h4>
+  <p>- 默认以卡片列表形式展示 3 款产品，支持左右滑动切换</p>
+  <p>- 免费试用包仅对「未购买过试用包的门店」展示，"已试用"状态显示为灰色禁用</p>
+  <p>- 推荐标记："月度简历宝"显示「热门」标签</p>
+  <p>- 权益详情展开/收起交互，避免信息过载</p>
+  <p>- 底部固定「立即购买」按钮，选中产品后高亮激活</p>
+</div>
+
+<h3>5.4 支付与签约</h3>
+<div class="info-card">
+  <h4>支付页功能</h4>
+  <p><strong>支付方式：</strong>微信支付（JSAPI/小程序支付）+ 支付宝（手机网站支付），系统自动检测微信环境优先展示微信支付</p>
+  <p><strong>58 网络服务单确认函：</strong></p>
+  <ul style="list-style:disc;padding-left:20px;margin-bottom:12px;color:var(--ink-soft);">
+    <li>展示完整服务协议文本摘要 + 「查看完整协议」链接</li>
+    <li>用户需勾选「我已阅读并同意《58网络服务单》」复选框</li>
+    <li>勾选后方可点击「确认支付」按钮</li>
+    <li>签署记录与UID关联存储，支持事后调取</li>
+  </ul>
+</div>
+
+<h3>5.5 支付成功与权益生效</h3>
+<div class="info-card">
+  <h4>成功后逻辑</h4>
+  <p>- 回调通知后端更新订单状态 → 激活UID对应产品权益 → 服务期开始计时</p>
+  <p>- 回款归属：该UID在服务期内的所有消费/续费产生的回款，自动计入品牌商总部「超管顶级母账号」的业绩统计</p>
+  <p>- 成功页展示：订单号、产品名称、服务有效期、总部名称、下一步引导（发布职位）</p>
+</div>
+
+<!-- 6. 数据模型 -->
+<h2 id="data">六、数据模型</h2>
+
+<table>
+  <tr><th>实体</th><th>核心字段</th><th>说明</th></tr>
+  <tr><td><code>brand_hq</code></td><td>brand_id, company_name, contract_no, master_account_id, contract_status, signed_at</td><td>品牌商总部签约信息</td></tr>
+  <tr><td><code>store_uid</code></td><td>uid, brand_id, store_name, province, city, district, address, lbs_lat, lbs_lng, status</td><td>门店UID，关联品牌总部</td></tr>
+  <tr><td><code>product</code></td><td>product_id, product_name, price, duration_days, resource_points, super_top_count, chat_limit, max_buy</td><td>产品定义（可配置）</td></tr>
+  <tr><td><code>order</code></td><td>order_id, uid, product_id, amount, pay_method, pay_status, service_start, service_end, created_at</td><td>订单记录</td></tr>
+  <tr><td><code>service_agreement</code></td><td>agreement_id, order_id, uid, agreed_at, ip_address, version</td><td>58网络服务单签署记录</td></tr>
+</table>
+
+<!-- 7. 界面设计 -->
+<h2 id="ui">七、界面设计方案</h2>
+
+<p>完整的 UI 原型以独立 HTML 文件交付，包含四屏核心界面：</p>
+<table>
+  <tr><th>页面</th><th>核心内容</th><th>设计要点</th></tr>
+  <tr><td><strong>1. LBS 认证页</strong></td><td>定位授权 → 自动获取地址 → 确认/修正 → 展示品牌信息 → 生成UID</td><td>简洁渐进，降低流失；地图点位可视化</td></tr>
+  <tr><td><strong>2. 产品选择页</strong></td><td>3款产品卡片（推荐标记）→ 权益详情展开 → 选中确认</td><td>卡片式对比，突出性价比；免费试用显眼入口</td></tr>
+  <tr><td><strong>3. 订单确认 & 支付页</strong></td><td>订单摘要 → 支付方式选择 → 服务确认函签署 → 支付按钮</td><td>信息层级清晰，支付安全感强；确认函合规</td></tr>
+  <tr><td><strong>4. 支付成功页</strong></td><td>成功状态动画 → 订单信息 → 服务有效期 → 品牌归属 → 下一步引导</td><td>正向情绪反馈，明确下一步行动指引</td></tr>
+</table>
+
+<!-- 8. 非功能需求 -->
+<h2 id="nonfunc">八、非功能需求</h2>
+
+<h3>8.1 性能</h3>
+<ul style="margin-bottom:14px;color:var(--ink-soft);padding-left:20px;">
+  <li>页面首屏加载 ≤ 2秒（4G网络）</li>
+  <li>支付结果回调延迟 ≤ 3秒</li>
+  <li>接口可用性 99.9%</li>
+</ul>
+
+<h3>8.2 安全</h3>
+<ul style="margin-bottom:14px;color:var(--ink-soft);padding-left:20px;">
+  <li>二维码参数签名校验（MD5 + 时间戳防过期）</li>
+  <li>支付接口全链路 HTTPS 加密</li>
+  <li>服务确认函签署记录不可篡改</li>
+  <li>接口防刷：单门店单日创建订单上限 10 次</li>
+</ul>
+
+<h3>8.3 兼容性</h3>
+<ul style="margin-bottom:14px;color:var(--ink-soft);padding-left:20px;">
+  <li>微信内置浏览器（iOS/Android）</li>
+  <li>Safari / Chrome 最新两个大版本</li>
+  <li>屏幕宽度适配：320px ~ 428px（移动端优先）</li>
+</ul>
+
+<!-- 9. 实施计划 -->
+<h2 id="plan">九、实施计划</h2>
+
+<table>
+  <tr><th>阶段</th><th>内容</th><th>交付物</th><th>预估周期</th></tr>
+  <tr><td>P0 · 设计评审</td><td>PRD评审、UI设计定稿、后端接口定义</td><td>PRD签字版 + UI标注稿 + API文档</td><td>1周</td></tr>
+  <tr><td>P1 · 核心开发</td><td>H5页面开发（4屏）、支付对接、服务确认函、回款归属逻辑</td><td>可测试版本</td><td>2周</td></tr>
+  <tr><td>P2 · 联调测试</td><td>支付联调（微信+支付宝）、LBS定位测试、异常流程覆盖</td><td>测试报告</td><td>1周</td></tr>
+  <tr><td>P3 · 灰度上线</td><td>1-2家品牌商灰度验证，收集反馈</td><td>灰度数据报告</td><td>1周</td></tr>
+  <tr><td>P4 · 全量发布</td><td>全量品牌客户开放使用</td><td>上线公告</td><td>—</td></tr>
+</table>
+
+</div>
+
+<div class="footer">58同城 · 产品发展部 · 品牌门店客户付费提单流程 PRD V1.0 · 2026-08-06 · 内部文档，请勿外传</div>
+
+</body>
+</html>
