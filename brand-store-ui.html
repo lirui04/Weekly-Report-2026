@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>品牌门店 · 自助采购</title>
+<style>
+  :root {
+    --pri: #ff6a00;
+    --pri-soft: #fff7f0;
+    --pri-dark: #d45500;
+    --pri-gradient: linear-gradient(135deg, #ff6a00 0%, #ff8c3a 100%);
+    --ink: #18181b;
+    --ink-soft: #3c3c44;
+    --muted: #71717a;
+    --faint: #a1a1aa;
+    --line: #ececef;
+    --line-soft: #f4f4f6;
+    --bg: #f9f9fb;
+    --card: #ffffff;
+    --ok: #16a34a;
+    --ok-soft: #effaf2;
+    --warn: #c2740a;
+    --warn-soft: #fdf6ec;
+    --info: #2563eb;
+    --info-soft: #eef3ff;
+    --red: #dc2626;
+    --red-soft: #fef2f2;
+    --serif: "Songti SC","STSong","SimSun",Georgia,"Times New Roman",serif;
+    --phone-w: 375px;
+    --radius-lg: 18px;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow: 0 2px 8px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,.08), 0 12px 40px rgba(0,0,0,.08);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background: #e8e8ec;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; padding: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Phone frame */
+  .phone-frame {
+    width: var(--phone-w); height: 780px; background: var(--bg);
+    border-radius: 28px; overflow: hidden; position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 0 0 2px #1a1a1e, 0 0 0 5px #3c3c44, 0 0 0 7px #1a1a1e;
+    display: flex; flex-direction: column;
+  }
+  @media (max-width: 420px) {
+    body { padding: 0; }
+    .phone-frame { width: 100%; height: 100vh; border-radius: 0; box-shadow: none; }
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 44px; background: #fff; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 24px; flex-shrink: 0;
+    font-size: 12px; font-weight: 600; color: var(--ink);
+  }
+  .status-bar .time { font-size: 13px; }
+  .status-icons { display: flex; gap: 6px; align-items: center; font-size: 11px; }
+
+  /* Nav bar */
+  .nav-bar {
+    height: 44px; background: #fff; display: flex; align-items: center;
+    padding: 0 16px; flex-shrink: 0; border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .nav-back {
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    border: none; background: none; cursor: pointer; border-radius: 8px;
+    font-size: 18px; color: var(--ink); transition: background .15s;
+  }
+  .nav-back:hover { background: var(--line-soft); }
+  .nav-back.hidden { visibility: hidden; }
+  .nav-title {
+    flex: 1; text-align: center; font-size: 16px; font-weight: 600;
+    color: var(--ink); margin-right: 32px;
+  }
+
+  /* Screens container */
+  .screens {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; position: relative;
+  }
+  .screen {
+    position: absolute; inset: 0; overflow-y: auto;
+    padding: 0 0 100px; opacity: 0; transform: translateX(40px);
+    transition: opacity .4s var(--ease-out-expo), transform .4s var(--ease-out-expo);
+    pointer-events: none;
+  }
+  .screen.active {
+    opacity: 1; transform: translateX(0); pointer-events: all; position: relative;
+  }
+  .screen.exit-left {
+    opacity: 0; transform: translateX(-40px);
+  }
+
+  /* Progress steps */
+  .progress-bar {
+    display: flex; align-items: center; justify-content: center;
+    padding: 18px 24px 10px; gap: 0;
+  }
+  .progress-step {
+    display: flex; align-items: center; gap: 0;
+  }
+  .step-dot {
+    width: 28px; height: 28px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-size: 12px;
+    font-weight: 700; color: var(--faint); background: #fff;
+    border: 2px solid var(--line); transition: all .35s;
+    flex-shrink: 0;
+  }
+  .step-dot.done { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .step-dot.active { background: var(--pri); border-color: var(--pri); color: #fff; }
+  .step-line {
+    width: 44px; height: 2px; background: var(--line); transition: background .35s;
+  }
+  .step-line.done { background: var(--ok); }
+  .step-label {
+    font-size: 10px; color: var(--faint); text-align: center; margin-top: 5px;
+    transition: color .35s; white-space: nowrap;
+  }
+  .step-label.active { color: var(--pri); font-weight: 600; }
+  .progress-col { display: flex; flex-direction: column; align-items: center; }
+
+  /* ==================== SCREEN 1: LBS ==================== */
+  .lbs-hero {
+    text-align: center; padding: 24px 28px 10px;
+  }
+  .lbs-hero .brand-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 999px;
+    background: var(--pri-soft); color: var(--pri-dark);
+    font-size: 12px; font-weight: 600; margin-bottom: 16px;
+  }
+  .lbs-hero h1 {
+    font-family: var(--serif); font-size: 26px; font-weight: 700;
+    letter-spacing: 1px; color: var(--ink); margin-bottom: 6px;
+  }
+  .lbs-hero .sub {
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+  }
+
+  .lbs-card {
+    margin: 0 16px; background: var(--card); border-radius: var(--radius-lg);
+    border: 1px solid var(--line); box-shadow: var(--shadow); overflow: hidden;
+  }
+  .lbs-card .map-area {
+    height: 160px; background: linear-gradient(135deg, #e8f0fe 0%, #d4e4fc 50%, #fce4d0 100%);
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .map-pin {
+    width: 36px; height: 36px; background: var(--pri); border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg); box-shadow: 0 4px 12px rgba(255,106,0,.35);
+    animation: bounce 1.5s ease infinite;
+  }
+  @keyframes bounce { 0%,100% { transform: rotate(-45deg) translateY(0); } 50% { transform: rotate(-45deg) translateY(-8px); } }
+  .map-ripple {
+    position: absolute; width: 60px; height: 60px; border-radius: 50%;
+    border: 2px solid rgba(255,106,0,.3); animation: ripple 2s ease-out infinite;
+  }
+  @keyframes ripple { 0% { transform: scale(.5); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+  .map-text {
+    position: absolute; bottom: 10px; font-size: 11px; color: var(--muted);
+    font-weight: 500; background: rgba(255,255,255,.8); padding: 3px 10px; border-radius: 999px;
+  }
+  .lbs-details { padding: 18px 20px; }
+  .lbs-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 0; border-bottom: 1px solid var(--line-soft);
+  }
+  .lbs-row:last-child { border-bottom: none; }
+  .lbs-label { font-size: 13px; color: var(--muted); }
+  .lbs-value { font-size: 14px; font-weight: 600; color: var(--ink); text-align: right; }
+  .lbs-value .city { color: var(--pri); }
+  .lbs-actions {
+    padding: 4px 20px 18px; display: flex; gap: 10px;
+  }
+  .lbs-actions button { flex: 1; }
+
+  .btn {
+    padding: 13px 20px; border: none; border-radius: var(--radius-sm);
+    font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s;
+    font-family: inherit;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-primary {
+    background: var(--pri-gradient); color: #fff;
+    box-shadow: 0 4px 14px rgba(255,106,0,.3);
+  }
+  .btn-primary:hover { box-shadow: 0 6px 20px rgba(255,106,0,.4); transform: translateY(-1px); }
+  .btn-primary:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; transform: none; }
+  .btn-outline {
+    background: #fff; color: var(--pri); border: 1.5px solid var(--pri);
+  }
+  .btn-lg { padding: 15px 24px; font-size: 16px; border-radius: 12px; }
+  .btn-block { width: 100%; }
+
+  /* UID generated animation */
+  .uid-reveal {
+    text-align: center; padding: 0 20px; max-height: 0; overflow: hidden;
+    transition: max-height .5s var(--ease-out-expo), padding .5s, opacity .4s;
+    opacity: 0;
+  }
+  .uid-reveal.show { max-height: 120px; padding: 12px 20px; opacity: 1; }
+  .uid-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; background: var(--ok-soft);
+    border: 1px solid #bbf7d0; border-radius: 999px;
+    font-size: 14px; font-weight: 700; color: var(--ok);
+  }
+  .uid-badge .check { font-size: 16px; }
+
+  /* ==================== SCREEN 2: Products ==================== */
+  .products-header {
+    text-align: center; padding: 16px 24px 2px;
+  }
+  .products-header .brand-info {
+    font-size: 12px; color: var(--muted); margin-bottom: 8px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; background: var(--pri-soft);
+    border-radius: 999px; color: var(--pri-dark); font-weight: 600;
+  }
+  .products-header h2 {
+    font-family: var(--serif); font-size: 22px; font-weight: 700;
+    letter-spacing: .5px; margin-bottom: 4px;
+  }
+  .products-header p { font-size: 13px; color: var(--faint); }
+
+  .product-list { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  .product-card {
+    background: var(--card); border: 1.5px solid var(--line);
+    border-radius: var(--radius-lg); padding: 18px 16px;
+    cursor: pointer; transition: all .25s; position: relative;
+    box-shadow: var(--shadow-sm); overflow: hidden;
+  }
+  .product-card:active { transform: scale(.98); }
+  .product-card.selected {
+    border-color: var(--pri); background: var(--pri-soft);
+    box-shadow: 0 0 0 3px rgba(255,106,0,.12);
+  }
+  .product-card .rec-pill {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--pri); color: #fff;
+    font-size: 10px; font-weight: 700; padding: 2px 10px;
+    border-radius: 999px; letter-spacing: .5px;
+  }
+  .product-card .card-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .product-card .p-name {
+    font-family: var(--serif); font-size: 18px; font-weight: 700;
+    color: var(--ink); margin-bottom: 2px;
+  }
+  .product-card .p-tag {
+    font-size: 11px; color: var(--muted); margin-bottom: 8px;
+  }
+  .product-card .p-price {
+    text-align: right; line-height: 1.1;
+  }
+  .product-card .price-num {
+    font-size: 32px; font-weight: 800; color: var(--pri);
+    letter-spacing: -1px;
+  }
+  .product-card .price-num.free { color: var(--ok); }
+  .product-card .price-unit { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .product-card .card-features {
+    display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;
+  }
+  .feature-chip {
+    font-size: 11px; font-weight: 500; padding: 4px 10px;
+    border-radius: 6px; background: #f4f4f6; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .feature-chip .emoji { font-size: 13px; }
+  .product-card .expand-btn {
+    margin-top: 10px; font-size: 12px; color: var(--pri); font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 4px;
+    background: none; border: none; font-family: inherit;
+  }
+  .product-card .detail-expand {
+    max-height: 0; overflow: hidden; transition: max-height .4s ease, margin .4s;
+  }
+  .product-card .detail-expand.open { max-height: 200px; margin-top: 10px; }
+  .detail-row {
+    display: flex; justify-content: space-between; padding: 6px 0;
+    font-size: 12px; border-bottom: 1px dashed var(--line);
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row .d-label { color: var(--muted); }
+  .detail-row .d-value { font-weight: 600; color: var(--ink); }
+
+  .bottom-fixed {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px 16px; background: linear-gradient(180deg, transparent 0%, var(--bg) 30%);
+    z-index: 5;
+  }
+
+  /* ==================== SCREEN 3: Payment ==================== */
+  .pay-header { padding: 8px 24px 2px; text-align: center; }
+  .pay-header h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; }
+
+  .order-summary {
+    margin: 12px 16px; background: var(--card); border-radius: var(--radius);
+    border: 1px solid var(--line); padding: 16px; box-shadow: var(--shadow-sm);
+  }
+  .order-row {
+    display: flex; justify-content: space-between; padding: 8px 0;
+    font-size: 14px;
+  }
+  .order-row .o-label { color: var(--muted); }
+  .order-row .o-value { font-weight: 600; color: var(--ink); }
+  .order-row.total {
+    border-top: 1px solid var(--line); margin-top: 6px; padding-top: 12px;
+    font-size: 17px; font-weight: 700;
+  }
+  .order-row.total .o-value { color: var(--pri); font-size: 22px; }
+
+  .pay-methods {
+    margin: 12px 16px; background: var(--card); border-radius: var(--radius);
+    border: 1px solid var(--line); padding: 4px 0; box-shadow: var(--shadow-sm);
+  }
+  .pay-methods .section-title {
+    padding: 12px 16px 6px; font-size: 13px; font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .pay-method {
+    display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+    cursor: pointer; border-bottom: 1px solid var(--line-soft);
+    transition: background .15s;
+  }
+  .pay-method:last-child { border-bottom: none; }
+  .pay-method:hover { background: #fafafb; }
+  .pay-method.selected { background: var(--pri-soft); }
+  .pay-icon {
+    width: 40px; height: 40px; border-radius: 10px; display: flex;
+    align-items: center; justify-content: center; font-size: 20px;
+    flex-shrink: 0;
+  }
+  .pay-icon.wechat { background: #07c160; color: #fff; }
+  .pay-icon.alipay { background: #1677ff; color: #fff; }
+  .pay-name { flex: 1; font-size: 15px; font-weight: 600; }
+  .pay-radio {
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center; transition: all .2s;
+  }
+  .pay-method.selected .pay-radio {
+    border-color: var(--pri); background: var(--pri);
+  }
+  .pay-radio::after {
+    content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff;
+    opacity: 0; transition: opacity .2s;
+  }
+  .pay-method.selected .pay-radio::after { opacity: 1; }
+
+  .agreement-section {
+    margin: 12px 16px; background: var(--card); border-radius: var(--radius);
+    border: 1px solid var(--line); padding: 16px; box-shadow: var(--shadow-sm);
+  }
+  .agreement-section h4 {
+    font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 8px;
+  }
+  .agreement-text {
+    font-size: 12px; color: var(--muted); line-height: 1.7; max-height: 80px;
+    overflow-y: auto; margin-bottom: 10px; padding: 10px;
+    background: #fafafb; border-radius: 8px;
+  }
+  .agreement-text strong { color: var(--ink); }
+  .agreement-check {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  .checkbox {
+    width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .2s;
+  }
+  .checkbox.checked { background: var(--pri); border-color: var(--pri); }
+  .checkbox::after {
+    content: '✓'; color: #fff; font-size: 12px; font-weight: 700;
+    opacity: 0; transition: opacity .2s;
+  }
+  .checkbox.checked::after { opacity: 1; }
+  .agreement-check a { color: var(--info); text-decoration: none; font-weight: 500; }
+
+  .pay-btn-wrap { padding: 12px 16px; }
+  .btn-pay {
+    width: 100%; padding: 16px; border: none; border-radius: 12px;
+    font-size: 17px; font-weight: 700; color: #fff;
+    background: var(--pri-gradient); cursor: pointer;
+    box-shadow: 0 4px 18px rgba(255,106,0,.35);
+    transition: all .2s; font-family: inherit;
+  }
+  .btn-pay:active { transform: scale(.97); }
+  .btn-pay:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+  .pay-amount { font-size: 13px; text-align: center; color: var(--muted); margin-top: 8px; }
+
+  /* ==================== SCREEN 4: Success ==================== */
+  .success-page { text-align: center; padding: 40px 24px 30px; }
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--ok-soft); margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    animation: success-pop .5s var(--ease-out-expo);
+  }
+  @keyframes success-pop {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .success-icon svg { width: 36px; height: 36px; }
+  .success-page h1 {
+    font-family: var(--serif); font-size: 26px; font-weight: 700;
+    color: var(--ok); margin-bottom: 8px;
+  }
+  .success-page .s-sub {
+    font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6;
+  }
+
+  .order-card {
+    margin: 0 16px 16px; background: var(--card); border-radius: var(--radius-lg);
+    border: 1px solid var(--line); box-shadow: var(--shadow);
+    padding: 20px; text-align: left;
+  }
+  .order-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--ink-soft);
+    margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft);
+  }
+  .order-info-row {
+    display: flex; justify-content: space-between; padding: 7px 0;
+    font-size: 13px;
+  }
+  .order-info-row .oi-label { color: var(--muted); }
+  .order-info-row .oi-value { font-weight: 600; color: var(--ink); text-align: right; }
+
+  .brand-affiliation {
+    margin: 0 16px 16px; background: var(--pri-soft); border-radius: var(--radius);
+    border: 1px solid #fde0c8; padding: 14px 18px; display: flex;
+    align-items: center; gap: 12px;
+  }
+  .brand-affiliation .ba-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--pri); color: #fff; display: flex;
+    align-items: center; justify-content: center; font-size: 18px;
+    flex-shrink: 0;
+  }
+  .brand-affiliation .ba-text { flex: 1; }
+  .brand-affiliation .ba-label { font-size: 11px; color: var(--warn); font-weight: 600; letter-spacing: .5px; }
+  .brand-affiliation .ba-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .brand-affiliation .ba-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .next-actions { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+  .btn-ghost {
+    padding: 14px; border: 1.5px solid var(--pri); border-radius: 12px;
+    background: #fff; color: var(--pri); font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all .2s; font-family: inherit;
+  }
+  .btn-ghost:active { background: var(--pri-soft); }
+
+  /* Confetti particles */
+  .confetti-container {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+    z-index: 20;
+  }
+  .confetti {
+    position: absolute; width: 8px; height: 8px; border-radius: 2px;
+    animation: confetti-fall 2s var(--ease-out-expo) forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-80px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(780px) rotate(720deg); opacity: 0; }
+  }
+
+  /* Decorative elements */
+  .brand-banner {
+    margin: 12px 16px 0; background: var(--pri-gradient);
+    border-radius: var(--radius); padding: 14px 16px;
+    color: #fff; display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 4px 16px rgba(255,106,0,.25);
+  }
+  .brand-banner .bb-icon { font-size: 24px; flex-shrink: 0; }
+  .brand-banner .bb-text { flex: 1; }
+  .brand-banner .bb-title { font-size: 13px; font-weight: 700; }
+  .brand-banner .bb-sub { font-size: 11px; opacity: .82; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame" id="app">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <span class="status-icons">5G ▮▮▮▮ 🔋</span>
+  </div>
+
+  <!-- Nav Bar -->
+  <div class="nav-bar">
+    <button class="nav-back" id="navBack" onclick="goBack()">←</button>
+    <div class="nav-title" id="navTitle">品牌门店采购</div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-col">
+      <div class="step-dot active" id="stepDot1">1</div>
+      <div class="step-label active" id="stepLabel1">LBS认证</div>
+    </div>
+    <div class="step-line" id="stepLine1"></div>
+    <div class="progress-col">
+      <div class="step-dot" id="stepDot2">2</div>
+      <div class="step-label" id="stepLabel2">选择产品</div>
+    </div>
+    <div class="step-line" id="stepLine2"></div>
+    <div class="progress-col">
+      <div class="step-dot" id="stepDot3">3</div>
+      <div class="step-label" id="stepLabel3">确认支付</div>
+    </div>
+  </div>
+
+  <!-- Screens -->
+  <div class="screens" id="screens">
+
+    <!-- ========== SCREEN 1: LBS ========== -->
+    <div class="screen active" id="screen1">
+      <div class="lbs-hero">
+        <div class="brand-tag">
+          <span>🏢</span> 品牌门店采购
+        </div>
+        <h1>确认门店位置</h1>
+        <p class="sub">完成LBS认证，自动关联<br>品牌商「华美餐饮集团」总部</p>
+      </div>
+
+      <div class="lbs-card">
+        <div class="map-area">
+          <div class="map-ripple"></div>
+          <div class="map-pin"></div>
+          <div class="map-text">📍 正在获取您的位置...</div>
+        </div>
+        <div class="lbs-details">
+          <div class="lbs-row">
+            <span class="lbs-label">品牌归属</span>
+            <span class="lbs-value">华美餐饮集团</span>
+          </div>
+          <div class="lbs-row">
+            <span class="lbs-label">定位城市</span>
+            <span class="lbs-value city">北京市 · 朝阳区</span>
+          </div>
+          <div class="lbs-row">
+            <span class="lbs-label">门店地址</span>
+            <span class="lbs-value" style="max-width:180px;text-align:right;">朝阳区望京SOHO T1-1206</span>
+          </div>
+        </div>
+        <div class="lbs-actions">
+          <button class="btn btn-outline" onclick="alert('手动修改地址（演示）')">修改地址</button>
+          <button class="btn btn-primary" onclick="confirmLBS()">确认，下一步</button>
+        </div>
+      </div>
+
+      <div class="uid-reveal" id="uidReveal">
+        <div class="uid-badge">
+          <span class="check">✓</span>
+          <span>账号已创建：BR_HM_010_240806</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 2: Products ========== -->
+    <div class="screen" id="screen2">
+      <div class="products-header">
+        <div class="brand-info">🏢 华美餐饮集团 · 品牌门店</div>
+        <h2>选择招聘产品</h2>
+        <p>根据门店需求，选择适合的方案</p>
+      </div>
+
+      <div class="brand-banner">
+        <span class="bb-icon">🎯</span>
+        <div class="bb-text">
+          <div class="bb-title">新门店专享</div>
+          <div class="bb-sub">首次采购可先免费试用，满意再升级</div>
+        </div>
+      </div>
+
+      <div class="product-list">
+        <!-- Free Trial -->
+        <div class="product-card" id="product0" onclick="selectProduct(0)">
+          <div class="card-top">
+            <div>
+              <div class="p-name">免费试用包</div>
+              <div class="p-tag">首次体验 · 每店限1次</div>
+            </div>
+            <div class="p-price">
+              <div class="price-num free">¥0</div>
+              <div class="price-unit">/ 7天</div>
+            </div>
+          </div>
+          <div class="card-features">
+            <span class="feature-chip"><span class="emoji">📌</span> 1个劲爆资源点</span>
+            <span class="feature-chip"><span class="emoji">📅</span> 发布7天</span>
+            <span class="feature-chip"><span class="emoji">💬</span> 60聊/天</span>
+          </div>
+        </div>
+
+        <!-- Monthly 简历宝 (Recommended) -->
+        <div class="product-card selected" id="product1" onclick="selectProduct(1)">
+          <span class="rec-pill">🔥 热门</span>
+          <div class="card-top">
+            <div>
+              <div class="p-name">月度简历宝</div>
+              <div class="p-tag">效果加持 · 旺季首选</div>
+            </div>
+            <div class="p-price">
+              <div class="price-num">¥599</div>
+              <div class="price-unit">/ 30天</div>
+            </div>
+          </div>
+          <div class="card-features">
+            <span class="feature-chip"><span class="emoji">📌</span> 3个劲爆资源点</span>
+            <span class="feature-chip"><span class="emoji">📅</span> 每资源点30天</span>
+            <span class="feature-chip"><span class="emoji">📌</span> 3个超级置顶</span>
+            <span class="feature-chip"><span class="emoji">💬</span> 60聊/天</span>
+            <span class="feature-chip"><span class="emoji">🤖</span> AI代聊30天</span>
+            <span class="feature-chip"><span class="emoji">📄</span> 保25份简历</span>
+          </div>
+          <button class="expand-btn" onclick="event.stopPropagation();toggleDetail(1)">
+            <span id="expandIcon1">▸</span> 查看完整权益
+          </button>
+          <div class="detail-expand" id="detail1">
+            <div class="detail-row"><span class="d-label">资源点单价</span><span class="d-value">¥200/个</span></div>
+            <div class="detail-row"><span class="d-label">超级置顶</span><span class="d-value">7天×3个</span></div>
+            <div class="detail-row"><span class="d-label">AI代聊工具</span><span class="d-value" style="color:var(--info)">30天</span></div>
+            <div class="detail-row"><span class="d-label">简历保障</span><span class="d-value" style="color:var(--ok)">保25份/30天</span></div>
+            <div class="detail-row"><span class="d-label">日均成本</span><span class="d-value" style="color:var(--pri)">¥19.97</span></div>
+            <div class="detail-row"><span class="d-label">类目限制</span><span class="d-value" style="color:var(--ok)">不限类</span></div>
+          </div>
+        </div>
+
+        <!-- Quarterly 职位包 -->
+        <div class="product-card" id="product2" onclick="selectProduct(2)">
+          <div class="card-top">
+            <div>
+              <div class="p-name">季度职位包</div>
+              <div class="p-tag">长期稳定 · 性价比高</div>
+            </div>
+            <div class="p-price">
+              <div class="price-num">¥580</div>
+              <div class="price-unit">/ 92天</div>
+            </div>
+          </div>
+          <div class="card-features">
+            <span class="feature-chip"><span class="emoji">📌</span> 3个劲爆资源点</span>
+            <span class="feature-chip"><span class="emoji">📅</span> 发布92天</span>
+            <span class="feature-chip"><span class="emoji">💬</span> 60聊/天</span>
+            <span class="feature-chip"><span class="emoji">✅</span> 不限类目</span>
+          </div>
+          <button class="expand-btn" onclick="event.stopPropagation();toggleDetail(2)">
+            <span id="expandIcon2">▸</span> 查看完整权益
+          </button>
+          <div class="detail-expand" id="detail2">
+            <div class="detail-row"><span class="d-label">资源点数量</span><span class="d-value">3个</span></div>
+            <div class="detail-row"><span class="d-label">发布天数</span><span class="d-value">92天</span></div>
+            <div class="detail-row"><span class="d-label">日均成本</span><span class="d-value" style="color:var(--pri)">¥6.30</span></div>
+            <div class="detail-row"><span class="d-label">类目限制</span><span class="d-value" style="color:var(--ok)">不限类</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-fixed">
+        <button class="btn btn-primary btn-lg btn-block" onclick="goToPay()">
+          确认选择 · 去支付 ¥599
+        </button>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 3: Payment ========== -->
+    <div class="screen" id="screen3">
+      <div class="pay-header"><h2>确认订单</h2></div>
+
+      <div class="order-summary">
+        <div class="order-row"><span class="o-label">产品</span><span class="o-value" id="payProduct">月度简历宝</span></div>
+        <div class="order-row"><span class="o-label">时长</span><span class="o-value" id="payDuration">30天</span></div>
+        <div class="order-row"><span class="o-label">门店归属</span><span class="o-value">华美餐饮集团</span></div>
+        <div class="order-row"><span class="o-label">UID</span><span class="o-value" style="font-size:11px;font-family:monospace;">BR_HM_010_240806</span></div>
+        <div class="order-row total"><span class="o-label">应付金额</span><span class="o-value" id="payAmount">¥599.00</span></div>
+      </div>
+
+      <div class="pay-methods">
+        <div class="section-title">支付方式</div>
+        <div class="pay-method selected" id="payWechat" onclick="selectPay('wechat')">
+          <div class="pay-icon wechat">💬</div>
+          <span class="pay-name">微信支付</span>
+          <div class="pay-radio"></div>
+        </div>
+        <div class="pay-method" id="payAlipay" onclick="selectPay('alipay')">
+          <div class="pay-icon alipay">💳</div>
+          <span class="pay-name">支付宝</span>
+          <div class="pay-radio"></div>
+        </div>
+      </div>
+
+      <div class="agreement-section">
+        <h4>58网络服务单确认函</h4>
+        <div class="agreement-text">
+          <strong>58同城网络服务协议</strong><br>
+          本协议由您（"客户"）与北京五八信息技术有限公司（"58同城"）共同缔结。您通过扫码购买招聘产品的行为，即表示您已阅读、理解并接受本协议全部条款。<br><br>
+          <strong>主要条款：</strong><br>
+          1. 服务内容：含劲爆职位资源点发布、主动开聊、超级置顶曝光等服务，以购买页面标注为准。<br>
+          2. 服务期限：以订单载明起止时间为准。<br>
+          3. 退款规则：服务开通后不支持退款。<br>
+          4. 数据归属：门店UID关联品牌总部，服务期回款计入品牌商业绩。
+        </div>
+        <label class="agreement-check" onclick="toggleAgreement()">
+          <div class="checkbox" id="agreementCheckbox"></div>
+          <span>我已阅读并同意<a href="#" onclick="event.preventDefault();alert('完整协议文本（演示）')">《58网络服务单》</a></span>
+        </label>
+      </div>
+
+      <div class="pay-btn-wrap">
+        <button class="btn-pay" id="payBtn" disabled onclick="processPayment()">
+          确认支付 ¥599.00
+        </button>
+        <div class="pay-amount">支付遇到问题？联系客服 400-123-4567</div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 4: Success (hidden, shown after payment) ========== -->
+    <div class="screen" id="screen4">
+      <div class="success-page">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h1>支付成功！</h1>
+        <p class="s-sub">您的招聘产品已开通<br>现在就可以发布职位招人了</p>
+      </div>
+
+      <div class="order-card">
+        <h3>📋 订单详情</h3>
+        <div class="order-info-row"><span class="oi-label">订单编号</span><span class="oi-value" style="font-family:monospace;font-size:12px;">PO20260806001</span></div>
+        <div class="order-info-row"><span class="oi-label">购买产品</span><span class="oi-value" id="successProduct">月度简历宝</span></div>
+        <div class="order-info-row"><span class="oi-label">支付金额</span><span class="oi-value" style="color:var(--pri);font-weight:700;" id="successAmount">¥599.00</span></div>
+        <div class="order-info-row"><span class="oi-label">支付方式</span><span class="oi-value" id="successPayMethod">微信支付</span></div>
+        <div class="order-info-row"><span class="oi-label">服务有效期</span><span class="oi-value" style="color:var(--ok);">2026-08-06 至 2026-09-05</span></div>
+      </div>
+
+      <div class="brand-affiliation">
+        <div class="ba-icon">🏢</div>
+        <div class="ba-text">
+          <div class="ba-label">品牌归属</div>
+          <div class="ba-name">华美餐饮集团 · 超管顶级母账号</div>
+          <div class="ba-note">本次消费回款已自动计入品牌总部业绩</div>
+        </div>
+      </div>
+
+      <div class="next-actions">
+        <button class="btn btn-primary btn-lg btn-block" onclick="alert('跳转至职位发布页面（演示）')">立即发布职位</button>
+        <button class="btn-ghost btn-block" onclick="resetAll()">返回首页</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti container (for success screen) -->
+  <div class="confetti-container" id="confettiContainer"></div>
+</div>
+
+<script>
+  // State
+  let currentScreen = 1;
+  let selectedProduct = 1; // default: 月度简历宝
+  let selectedPay = 'wechat';
+  let agreementChecked = false;
+  const products = [
+    { name: '免费试用包', price: 0, duration: '7天' },
+    { name: '月度简历宝', price: 599, duration: '30天' },
+    { name: '季度职位包', price: 580, duration: '92天' },
+  ];
+
+  function updateProgress() {
+    ['stepDot1','stepDot2','stepDot3'].forEach((id,i) => {
+      const dot = document.getElementById(id);
+      const label = document.getElementById('stepLabel'+(i+1));
+      dot.className = 'step-dot';
+      label.className = 'step-label';
+      if (i+1 < currentScreen) { dot.classList.add('done'); dot.textContent = '✓'; }
+      if (i+1 === currentScreen) { dot.classList.add('active'); dot.textContent = i+1; label.classList.add('active'); }
+    });
+    ['stepLine1','stepLine2'].forEach((id,i) => {
+      const line = document.getElementById(id);
+      line.className = 'step-line';
+      if (i+1 < currentScreen) line.classList.add('done');
+    });
+
+    // Nav
+    const titles = ['LBS门店认证','选择招聘产品','确认支付','支付成功'];
+    document.getElementById('navTitle').textContent = titles[currentScreen-1] || '品牌门店采购';
+    document.getElementById('navBack').classList.toggle('hidden', currentScreen === 1 || currentScreen === 4);
+
+    // Show/hide progress bar
+    document.getElementById('progressBar').style.display = currentScreen === 4 ? 'none' : '';
+  }
+
+  function switchScreen(from, to) {
+    const screens = document.querySelectorAll('.screen');
+    screens[from-1].classList.add('exit-left');
+    screens[from-1].classList.remove('active');
+
+    setTimeout(() => {
+      screens[from-1].classList.remove('exit-left');
+      screens[to-1].classList.add('active');
+      currentScreen = to;
+      updateProgress();
+    }, 300);
+  }
+
+  function goBack() {
+    if (currentScreen > 1 && currentScreen < 4) {
+      switchScreen(currentScreen, currentScreen - 1);
+    }
+  }
+
+  function confirmLBS() {
+    document.getElementById('uidReveal').classList.add('show');
+    setTimeout(() => {
+      switchScreen(1, 2);
+      document.getElementById('uidReveal').classList.remove('show');
+    }, 800);
+  }
+
+  function selectProduct(index) {
+    selectedProduct = index;
+    document.querySelectorAll('.product-card').forEach((c,i) => {
+      c.classList.toggle('selected', i === index);
+    });
+    const p = products[index];
+    const btn = document.querySelector('#screen2 .btn-primary');
+    btn.textContent = p.price === 0 ? '确认选择 · 免费试用' : `确认选择 · 去支付 ¥${p.price}`;
+  }
+
+  function toggleDetail(index) {
+    const detail = document.getElementById('detail'+index);
+    const icon = document.getElementById('expandIcon'+index);
+    const isOpen = detail.classList.contains('open');
+    detail.classList.toggle('open');
+    icon.textContent = isOpen ? '▸' : '▾';
+  }
+
+  function goToPay() {
+    const p = products[selectedProduct];
+    document.getElementById('payProduct').textContent = p.name;
+    document.getElementById('payDuration').textContent = p.duration;
+    document.getElementById('payAmount').textContent = p.price === 0 ? '¥0.00' : `¥${p.price}.00`;
+    document.getElementById('payBtn').textContent = p.price === 0 ? '确认开通（免费）' : `确认支付 ¥${p.price}.00`;
+    switchScreen(2, 3);
+  }
+
+  function selectPay(method) {
+    selectedPay = method;
+    document.getElementById('payWechat').classList.toggle('selected', method === 'wechat');
+    document.getElementById('payAlipay').classList.toggle('selected', method === 'alipay');
+  }
+
+  function toggleAgreement() {
+    agreementChecked = !agreementChecked;
+    document.getElementById('agreementCheckbox').classList.toggle('checked', agreementChecked);
+    document.getElementById('payBtn').disabled = !agreementChecked;
+  }
+
+  function processPayment() {
+    const p = products[selectedProduct];
+    // Update success screen
+    document.getElementById('successProduct').textContent = p.name;
+    document.getElementById('successAmount').textContent = p.price === 0 ? '¥0.00' : `¥${p.price}.00`;
+    document.getElementById('successPayMethod').textContent = selectedPay === 'wechat' ? '微信支付' : '支付宝';
+
+    // Show confetti
+    spawnConfetti();
+
+    // Hide progress bar, go to success
+    document.getElementById('progressBar').style.display = 'none';
+    switchScreen(3, 4);
+  }
+
+  function spawnConfetti() {
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#ff6a00','#ff8c3a','#16a34a','#2563eb','#facc15','#ec4899','#8b5cf6'];
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      el.style.left = Math.random() * 100 + '%';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.animationDelay = Math.random() * 1.5 + 's';
+      el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+      el.style.width = (4 + Math.random() * 8) + 'px';
+      el.style.height = (4 + Math.random() * 8) + 'px';
+      container.appendChild(el);
+    }
+    setTimeout(() => { container.innerHTML = ''; }, 3500);
+  }
+
+  function resetAll() {
+    selectedProduct = 1;
+    selectedPay = 'wechat';
+    agreementChecked = false;
+    document.getElementById('agreementCheckbox').classList.remove('checked');
+    document.getElementById('payBtn').disabled = true;
+    document.querySelectorAll('.product-card').forEach((c,i) => c.classList.toggle('selected', i === 1));
+    const btn = document.querySelector('#screen2 .btn-primary');
+    btn.textContent = '确认选择 · 去支付 ¥599';
+    currentScreen = 4;
+    setTimeout(() => switchScreen(4, 1), 100);
+    document.getElementById('progressBar').style.display = '';
+  }
+
+  // Init
+  updateProgress();
+</script>
+
+</body>
+</html>
